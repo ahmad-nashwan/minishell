@@ -22,3 +22,31 @@ void	add_token(t_token **tokens, char *lexeme, token_type type)
 	ft_lstadd_back(tokens, ft_lstnew(create_token(lexeme, type)));
 }
 
+void	free_token(void *ptr)
+{
+	t_token *token;
+
+	token = (t_token *)ptr;
+	if (!token)
+		return ;
+	if (token->lexeme)
+		free(token->lexeme);
+	free(token);
+}
+
+void	clear_tokens(t_list **tokens)
+{
+	t_list *node;
+	t_token *token;
+	t_list *next;
+
+	if (*tokens == NULL)
+		return ;
+	node = *tokens;
+	while (node)
+	{
+		next = node->next;
+		ft_lstdelone(node, free_token);
+		node = next;
+	}
+}

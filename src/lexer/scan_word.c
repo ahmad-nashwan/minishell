@@ -23,7 +23,6 @@ static void	quoted_mode(t_string *line, t_string *word)
 {
 	int		expand_flag;
 	char	quote;
-	char	*temp;
 
 	expand_flag = 0;
 	quote = line->str[line->index];

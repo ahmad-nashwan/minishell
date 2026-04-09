@@ -7,9 +7,9 @@
 
 typedef enum s_token_type
 {
-	WORD, PIPE, SINGLE_QW, DOUBLE_QW,
+	WORD, PIPE,
 	HEREDOC, OUT_RED, IN_RED, APPEND, 
-	INVALID, END, NONE
+	INVALID, END
 } token_type;
 
 typedef struct s_token 
@@ -30,7 +30,8 @@ typedef struct s_string
 t_token *create_token(char *lexeme, token_type type);
 void	add_token(t_token **tokens, char *lexeme, token_type type);
 
-// Scanners
+// Lexer & Scanners
+t_list	*start_lexer(t_string *line);
 int scan_word(t_token **tokens, t_string *line);
 int	scan_redirection(t_token **tokens, t_string *line);
 int	scan_pipe(t_token **tokens, t_string *line);

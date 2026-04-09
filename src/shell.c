@@ -3,18 +3,23 @@
 int	meowshell()
 {
 	t_string	line;
+	t_token *tokens;
 
-	line.str = readline("meowshell> ");
-	line.index = 0;
-	line.len = ft_strlen(line.str);
-	while (line.str)
+	while (1)
 	{
-		if (ft_strlen(line.str) != 0)
+		line.str = readline("meowshell> ");
+		if (!line.str)
+			break;
+		if (*line.str)
 		{
 			add_history(line.str);
-			start_lexer(&line);
+			line.index = 0;
+			line.len = ft_strlen(line.str);
+			tokens = start_lexer(&line);
+			print_tokens(tokens);
+			clear_tokens(&tokens);
 		}
 		free(line.str);
-		line.str = readline("meowshell> ");
 	}
+	return (0);
 }
