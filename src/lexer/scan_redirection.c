@@ -1,6 +1,6 @@
 # include "../../inc/minishell.h"
 
-int	scan_redirection(t_token **tokens, t_string *line)
+int	scan_redirection(t_list **tokens, t_string *line)
 {
 	if (peek(line) == '>')
 	{

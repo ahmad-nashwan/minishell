@@ -27,17 +27,29 @@ typedef struct s_string
 } t_string;
 
 
-t_token *create_token(char *lexeme, token_type type);
-void	add_token(t_token **tokens, char *lexeme, token_type type);
-
-// Lexer & Scanners
-t_list	*start_lexer(t_string *line);
-int scan_word(t_token **tokens, t_string *line);
-int	scan_redirection(t_token **tokens, t_string *line);
-int	scan_pipe(t_token **tokens, t_string *line);
-
 // t_string Functions
 char	advance(t_string *line);
 char	peek(t_string *line);
 t_string *init_line(char	*str);
 char *realloc_string(t_string *word);
+
+
+// t_token Functions
+t_token *create_token(char *lexeme, token_type type);
+void	add_token(t_list **tokens, char *lexeme, token_type type);
+void	free_token(void *ptr);
+void	clear_tokens(t_list **tokens);
+
+// Lexer & Scanners
+t_list	*start_lexer(t_string *line);
+int scan_word(t_list **tokens, t_string *line);
+int	scan_redirection(t_list **tokens, t_string *line);
+int	scan_pipe(t_list **tokens, t_string *line);
+
+// Helpers
+int	ft_isspace(char c);
+
+// Tests
+void	print_tokens(t_list *tokens);
+
+int	meowshell();

@@ -3,7 +3,7 @@
 int	meowshell()
 {
 	t_string	line;
-	t_token *tokens;
+	t_list *tokens;
 
 	while (1)
 	{

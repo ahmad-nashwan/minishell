@@ -9,9 +9,13 @@ t_list	*start_lexer(t_string *line)
 	{
 		while(ft_isspace(line->str[line->index]))
 			line->index++;
-		if (scan_word(&tokens, line));
-		else if (scan_pipe(&tokens, line));
-		else if (scan_redirection(&tokens, line));
+		if (scan_word(&tokens, line))
+			continue;
+		else if (scan_pipe(&tokens, line))
+			continue;
+		else if (scan_redirection(&tokens, line))
+			continue;
 	}
+	add_token(&tokens, NULL, END);
 	return (tokens);
 }

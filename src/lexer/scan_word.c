@@ -59,7 +59,7 @@ static void	normal_mode(t_string *line, t_string *word)
 	}
 }
 
-int scan_word(t_token **tokens, t_string *line)
+int scan_word(t_list **tokens, t_string *line)
 {
 	t_string	*word;
 
