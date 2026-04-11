@@ -12,14 +12,14 @@ t_token *create_token(char *lexeme, token_type type)
 	return (token);
 }
 
-void	add_token(t_token **tokens, char *lexeme, token_type type)
+void	add_token(t_list **tokens, char *lexeme, token_type type)
 {
 	t_token *token;
 
 	token = create_token(lexeme, type);
 	if (token == NULL)
 		error_exit("Malloc Failure");
-	ft_lstadd_back(tokens, ft_lstnew(create_token(lexeme, type)));
+	ft_lstadd_back(tokens, ft_lstnew(token));
 }
 
 void	free_token(void *ptr)
@@ -29,24 +29,10 @@ void	free_token(void *ptr)
 	token = (t_token *)ptr;
 	if (!token)
 		return ;
-	if (token->lexeme)
-		free(token->lexeme);
+	free(token->lexeme);
 	free(token);
 }
-
-void	clear_tokens(t_list **tokens)
+void clear_tokens(t_list **tokens)
 {
-	t_list *node;
-	t_token *token;
-	t_list *next;
-
-	if (*tokens == NULL)
-		return ;
-	node = *tokens;
-	while (node)
-	{
-		next = node->next;
-		ft_lstdelone(node, free_token);
-		node = next;
-	}
+	ft_lstclear(tokens, free_token);
 }

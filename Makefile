@@ -1,71 +1,56 @@
-# -------------------
-# PROJECT
-# -------------------
 NAME = minishell
+
 CC = cc
-CFLAGS = -Wall -Wextra -Werror -g
+CFLAGS = -Wall -Wextra -Werror
 
-# -------------------
-# DIRECTORIES
-# -------------------
-SRC_DIR = src
-LIBFT_DIR = libft
 INC_DIR = inc
+LIBFT_DIR = libft
 
-# -------------------
-# SOURCES
-# -------------------
-SRCS = $(wildcard $(SRC_DIR)/*.c) \
-       $(wildcard $(SRC_DIR)/lexer/*.c) \
-       $(wildcard $(SRC_DIR)/structs/*.c) \
-       $(wildcard $(SRC_DIR)/tests/*.c) \
-       $(wildcard $(SRC_DIR)/utils/*.c)
+INCLUDES = -I$(INC_DIR) -I$(LIBFT_DIR)
 
-OBJS = $(SRCS:.c=.o)
-
-# -------------------
-# LIBRARIES
-# -------------------
 LIBFT = $(LIBFT_DIR)/libft.a
-READLINE = -lreadline
 
-# -------------------
-# DEFAULT
-# -------------------
-all: $(LIBFT) $(NAME)
+# Linux readline (important)
+READLINE = -lreadline -lhistory -lncurses
 
-# -------------------
-# BUILD LIBFT
-# -------------------
+SRC = \
+	src/main.c \
+	src/shell.c \
+	src/error_handling/error_handling.c \
+	src/structs/tokens.c \
+	src/structs/t_string.c \
+	src/tests/print_tokens.c \
+	src/tokenizer/tokenizer.c \
+	src/tokenizer/expander.c \
+	src/tokenizer/scan_pipe.c \
+	src/tokenizer/scan_redirection.c \
+	src/tokenizer/scan_word.c \
+	src/utils/helpers.c
+
+OBJ = $(SRC:.c=.o)
+
+all: $(NAME)
+
+# Build libft first
 $(LIBFT):
-	$(MAKE) -C $(LIBFT_DIR)
+	$(MAKE) -C $(LIBFT_DIR) bonus
 
-# -------------------
-# BUILD MINISHELL
-# -------------------
-$(NAME): $(OBJS) $(LIBFT)
-	$(CC) $(CFLAGS) $(OBJS) $(LIBFT) $(READLINE) -o $(NAME)
+# Link everything
+$(NAME): $(LIBFT) $(OBJ)
+	$(CC) $(CFLAGS) $(OBJ) $(LIBFT) $(READLINE) -o $(NAME)
 
-# -------------------
-# COMPILE .c -> .o
-# -------------------
+# Compile objects
 %.o: %.c
-	$(CC) $(CFLAGS) -I $(INC_DIR) -I $(LIBFT_DIR) -c $< -o $@
+	$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
 
-# -------------------
-# CLEAN
-# -------------------
 clean:
-	$(MAKE) -C $(LIBFT_DIR) clean
-	rm -f $(OBJS)
+	rm -f $(OBJ)
+	$(MAKE) clean -C $(LIBFT_DIR)
 
 fclean: clean
-	$(MAKE) -C $(LIBFT_DIR) fclean
 	rm -f $(NAME)
+	$(MAKE) fclean -C $(LIBFT_DIR)
 
 re: fclean all
 
-# -------------------
-# PHONY
-# -------------------
 .PHONY: all clean fclean re

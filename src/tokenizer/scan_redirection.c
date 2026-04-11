@@ -1,6 +1,6 @@
 # include "../../inc/minishell.h"
 
-int	scan_redirection(t_list **tokens, t_string *line)
+int	scan_redirection(t_shell *shell, t_string *line)
 {
 	if (peek(line) == '>')
 	{
@@ -8,10 +8,10 @@ int	scan_redirection(t_list **tokens, t_string *line)
 		if (peek(line) == '>')
 		{
 			advance(line);
-			add_token(tokens, NULL, APPEND);
+			add_token(&shell->tokens, NULL, APPEND);
 		}
 		else
-			add_token(tokens,NULL, OUT_RED);
+			add_token(&shell->tokens,NULL, OUT_RED);
 		return (1);
 	}
 	else if (peek(line) == '<')
@@ -20,10 +20,10 @@ int	scan_redirection(t_list **tokens, t_string *line)
 		if (peek(line) == '<')
 		{
 			advance(line); // consume other <
-			add_token(tokens, NULL, HEREDOC);
+			add_token(&shell->tokens, NULL, HEREDOC);
 		}
 		else
-			add_token(tokens, NULL, IN_RED);
+			add_token(&shell->tokens, NULL, IN_RED);
 		return (1);
 	}
 	return (0);

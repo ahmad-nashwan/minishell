@@ -5,7 +5,7 @@ void	print_tokens(t_list *tokens)
 	t_list *node;
 	t_token *token;
 
-	node = *tokens;
+	node = tokens;
 	while (node)
 	{
 		token = (t_token *)node->content;

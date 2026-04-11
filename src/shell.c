@@ -1,25 +1,44 @@
 # include "../inc/minishell.h"
 
-int	meowshell()
+void	reset_shell(t_shell *shell)
 {
-	t_string	line;
-	t_list *tokens;
+	if (shell->tokens)
+		clear_tokens(&shell->tokens);
+}
 
+void	free_env(char **env)
+{
+	int	i;
+
+	i = 0;
+	while (env[i])
+	{
+		free(env[i]);
+		i++;
+	}
+	free(env);
+}
+
+int	start_shell(t_shell *shell)
+{
+	t_string	*line;
 	while (1)
 	{
-		line.str = readline("meowshell> ");
-		if (!line.str)
-			break;
-		if (*line.str)
+		reset_shell(shell);
+		line = init_string(readline("meowshell> "));
+		if (!line)
+		break;
+		if (*line->str)
 		{
-			add_history(line.str);
-			line.index = 0;
-			line.len = ft_strlen(line.str);
-			tokens = start_lexer(&line);
-			print_tokens(tokens);
-			clear_tokens(&tokens);
+			add_history(line->str);
+			tokenizer(shell, line);
+			print_tokens(shell->tokens);
+			printf("\n");
 		}
-		free(line.str);
+		free_t_string(line);
 	}
+	reset_shell(shell);
+	free_env(shell->env);
+	rl_clear_history();
 	return (0);
 }

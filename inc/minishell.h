@@ -32,6 +32,7 @@ typedef struct s_shell
     char    **env;        // environment variables
     int     exit_status;  // for $? expansion
     t_list  *tokens;      // lexer output
+	int		error;
     // optional/nice to have:
     // char *user;
     // char *cwd;
@@ -40,10 +41,12 @@ typedef struct s_shell
 
 // t_string Functions
 t_string *init_string(char *content);
+t_string	*new_string(size_t cap);
 char	advance(t_string *line);
 char	peek(t_string *line);
 char *realloc_string(t_string *word);
-
+void	append(t_string *word, char c);
+void    free_t_string(t_string *str);
 
 // t_token Functions
 t_token *create_token(char *lexeme, token_type type);
@@ -52,21 +55,27 @@ void	free_token(void *ptr);
 void	clear_tokens(t_list **tokens);
 
 // Lexer & Scanners
-t_list	*start_lexer(t_string *line);
-int scan_word(t_list **tokens, t_string *line);
-int	scan_redirection(t_list **tokens, t_string *line);
-int	scan_pipe(t_list **tokens, t_string *line);
+int		tokenizer(t_shell *shell, t_string *line);
+int 	scan_word(t_shell *shell, t_string *line);
+int		scan_redirection(t_shell *shell, t_string *line);
+int		scan_pipe(t_shell *shell, t_string *line);
+void	expand(t_shell *shell, t_string *line, t_string *word);
 
 // Expander
 
 
 // Helpers
 int	ft_isspace(char c);
+char	**copy_env(char **envp);
 
 // Tests
 void	print_tokens(t_list *tokens);
 
 // Error handling
-void	error_report(char *error);
+void	error_report(t_shell *shell, char *error, int state);
+void	error_exit(char *error);
 
-int	meowshell();
+// Shell functions
+int	start_shell(t_shell *shell);
+void	free_env(char **env);
+void	reset_shell(t_shell *shell);
