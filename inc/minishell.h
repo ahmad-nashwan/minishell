@@ -27,10 +27,21 @@ typedef struct s_string
 } t_string;
 
 
+typedef struct s_shell
+{
+    char    **env;        // environment variables
+    int     exit_status;  // for $? expansion
+    t_list  *tokens;      // lexer output
+    // optional/nice to have:
+    // char *user;
+    // char *cwd;
+}   t_shell;
+
+
 // t_string Functions
+t_string *init_string(char *content);
 char	advance(t_string *line);
 char	peek(t_string *line);
-t_string *init_line(char	*str);
 char *realloc_string(t_string *word);
 
 
@@ -46,10 +57,16 @@ int scan_word(t_list **tokens, t_string *line);
 int	scan_redirection(t_list **tokens, t_string *line);
 int	scan_pipe(t_list **tokens, t_string *line);
 
+// Expander
+
+
 // Helpers
 int	ft_isspace(char c);
 
 // Tests
 void	print_tokens(t_list *tokens);
+
+// Error handling
+void	error_report(char *error);
 
 int	meowshell();

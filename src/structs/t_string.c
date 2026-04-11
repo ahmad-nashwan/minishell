@@ -35,16 +35,10 @@ char *realloc_string(t_string *word)
 {
     void *ptr;
 
-    if (word->cap == 0)
-        word->cap = 16;
-
-    if (word->len < word->cap)
-        return word->str;
     word->cap *= 2;
     ptr = realloc(word->str, word->cap);
     if (!ptr)
         return NULL;
-    word->str = ptr;
     return word->str;
 }
 
@@ -60,5 +54,5 @@ char	peek(t_string *line)
 
 char	advance(t_string *line)
 {
-	return (line->index++);
+	return (line->str[line->index++]);
 }
