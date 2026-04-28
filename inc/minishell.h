@@ -44,7 +44,7 @@ t_string *init_string(char *content);
 t_string	*new_string(size_t cap);
 char	advance(t_string *line);
 char	peek(t_string *line);
-char *realloc_string(t_string *word);
+char 	*realloc_string(t_string *word);
 void	append(t_string *word, char c);
 void    free_t_string(t_string *str);
 
@@ -59,7 +59,7 @@ int		tokenizer(t_shell *shell, t_string *line);
 int 	scan_word(t_shell *shell, t_string *line);
 int		scan_redirection(t_shell *shell, t_string *line);
 int		scan_pipe(t_shell *shell, t_string *line);
-void	expand(t_shell *shell, t_string *line, t_string *word);
+void	expand(t_shell *shell, t_string *line, t_string *word, int quoted);
 
 // Expander
 

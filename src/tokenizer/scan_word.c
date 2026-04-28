@@ -15,7 +15,7 @@ static void	quoted_mode(t_shell *shell, t_string *line, t_string *word)
 	while (line->index < line->len && line->str[line->index] != quote)
 	{
 		if (line->str[line->index] == '$' && expand_flag)
-			expand(shell, line, word);
+			expand(shell, line, word, 1);
 		else
 			append(word, advance(line));
 	}
@@ -36,7 +36,7 @@ static void	normal_mode(t_shell *shell, t_string *line, t_string *word)
 		if (c == '\'' || c == '"')
 			quoted_mode(shell, line, word);
 		else if (c == '$')
-			expand(shell, line, word);
+			expand(shell, line, word, 0);
 		else 
 			append(word, advance(line));
 	}
