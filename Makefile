@@ -5,12 +5,12 @@ CFLAGS = -Wall -Wextra -Werror
 
 INC_DIR = inc
 LIBFT_DIR = libft
+LIBFT_REPO = https://github.com/nopresentation/libft.git
 
 INCLUDES = -I$(INC_DIR) -I$(LIBFT_DIR)
 
 LIBFT = $(LIBFT_DIR)/libft.a
 
-# Linux readline (important)
 READLINE = -lreadline -lhistory -lncurses
 
 SRC = \
@@ -31,15 +31,18 @@ OBJ = $(SRC:.c=.o)
 
 all: $(NAME)
 
-# Build libft first
-$(LIBFT):
+# clone libft if it doesn't exist
+$(LIBFT_DIR):
+	git clone $(LIBFT_REPO) $(LIBFT_DIR)
+
+# build libft
+$(LIBFT): $(LIBFT_DIR)
 	$(MAKE) -C $(LIBFT_DIR) bonus
 
-# Link everything
+# build program
 $(NAME): $(LIBFT) $(OBJ)
 	$(CC) $(CFLAGS) $(OBJ) $(LIBFT) $(READLINE) -o $(NAME)
 
-# Compile objects
 %.o: %.c
 	$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
 

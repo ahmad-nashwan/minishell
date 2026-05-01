@@ -1,6 +1,6 @@
 #include "../../inc/minishell.h"
 
-t_token *create_token(char *lexeme, token_type type)
+t_token *create_token(char *lexeme, t_type type)
 {
 	t_token *token;
 
@@ -12,7 +12,7 @@ t_token *create_token(char *lexeme, token_type type)
 	return (token);
 }
 
-void	add_token(t_list **tokens, char *lexeme, token_type type)
+void	add_token(t_list **tokens, char *lexeme, t_type type)
 {
 	t_token *token;
 
