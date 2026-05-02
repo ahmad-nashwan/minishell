@@ -39,6 +39,7 @@ int	start_shell(t_shell *shell)
 			add_history(line->str);
 			tokenizer(shell, line);
 			parse(shell);
+			// print_tokens(shell->tokens);
 			print_cmds(shell->cmds);
 			printf("\n");
 		}

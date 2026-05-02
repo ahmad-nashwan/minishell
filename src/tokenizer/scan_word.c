@@ -24,7 +24,7 @@ static void	quoted_mode(t_shell *shell, t_string *line, t_string *word)
 	advance(line); // Consume the closing quote
 }
 
-static void	normal_mode(t_shell *shell, t_string *line, t_string *word)
+static void	normal_mode(t_shell *shell, t_string *line, t_string *word, int *quoted)
 {
 	char	c;
 
@@ -34,23 +34,32 @@ static void	normal_mode(t_shell *shell, t_string *line, t_string *word)
 		if(c == '|' || c == '<' || c == '>' || ft_isspace(c))
 			break;
 		if (c == '\'' || c == '"')
+		{
+			*quoted = 1;
 			quoted_mode(shell, line, word);
+		}
 		else if (c == '$')
+		{
 			expand(shell, line, word, 0);
-		else 
+		}
+		else
+		{ 
 			append(word, advance(line));
+		}
 	}
 }
 
 int scan_word(t_shell *shell, t_string *line)
 {
 	t_string	*word;
+	int			quoted;
 
+	quoted = 0;
 	word = new_string(1024);
 	if (!word)
 		error_exit("Malloc Failure.");
-	normal_mode(shell, line, word);
-	if (word->len == 0)
+	normal_mode(shell, line, word, &quoted);
+	if (word->len == 0 && !quoted)
 	{
 		free(word->str);
 		free(word);
