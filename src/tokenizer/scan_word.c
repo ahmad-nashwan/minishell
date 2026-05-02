@@ -20,7 +20,7 @@ static void	quoted_mode(t_shell *shell, t_string *line, t_string *word)
 			append(word, advance(line));
 	}
 	if (line->index >= line->len)
-		error_exit("Invalid Quotes.");
+		error_report(shell, "Invalid Quotes.", 1);
 	advance(line); // Consume the closing quote
 }
 

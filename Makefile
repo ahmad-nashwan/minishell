@@ -17,15 +17,21 @@ SRC = \
 	src/main.c \
 	src/shell.c \
 	src/error_handling/error_handling.c \
-	src/structs/tokens.c \
+	src/structs/t_token.c \
 	src/structs/t_string.c \
-	src/tests/print_tokens.c \
+	src/structs/t_cmd.c \
+	src/structs/t_cmd_list.c \
+	src/structs/t_redir.c \
 	src/tokenizer/tokenizer.c \
 	src/tokenizer/expander.c \
 	src/tokenizer/scan_pipe.c \
 	src/tokenizer/scan_redirection.c \
 	src/tokenizer/scan_word.c \
-	src/utils/helpers.c
+	src/parsing/parsing.c \
+	src/utils/helpers.c \
+	src/tests/print_tokens.c \
+	src/tests/print_cmds.c \
+	
 
 OBJ = $(SRC:.c=.o)
 

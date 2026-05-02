@@ -4,6 +4,10 @@ void	reset_shell(t_shell *shell)
 {
 	if (shell->tokens)
 		clear_tokens(&shell->tokens);
+	shell->tokens = NULL;
+	if (shell->cmds)
+		cmd_list_clear(&shell->cmds);
+	shell->cmds = NULL;
 }
 
 void	free_env(char **env)
@@ -22,6 +26,8 @@ void	free_env(char **env)
 int	start_shell(t_shell *shell)
 {
 	t_string	*line;
+	shell->tokens = NULL;
+	shell->cmds = NULL;
 	while (1)
 	{
 		reset_shell(shell);
@@ -32,7 +38,8 @@ int	start_shell(t_shell *shell)
 		{
 			add_history(line->str);
 			tokenizer(shell, line);
-			print_tokens(shell->tokens);
+			parse(shell);
+			print_cmds(shell->cmds);
 			printf("\n");
 		}
 		free_t_string(line);

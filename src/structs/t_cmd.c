@@ -44,8 +44,11 @@ int cmd_add_redir(t_cmd *cmd, t_redir *redir)
     return (0);
 }
 
-void cmd_free(t_cmd *cmd)
+void cmd_free(void *p)
 {
+    t_cmd *cmd;
+
+    cmd = (t_cmd *)p;
     if (!cmd)
         return;
     if (cmd->argv_list)
