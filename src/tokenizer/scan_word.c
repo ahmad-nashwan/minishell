@@ -1,8 +1,6 @@
 # include "../../inc/minishell.h"
 
-
-
-static void	quoted_mode(t_shell *shell, t_string *line, t_string *word)
+static int	quoted_mode(t_shell *shell, t_string *line, t_string *word)
 {
 	int		expand_flag;
 	char	quote;
@@ -19,12 +17,13 @@ static void	quoted_mode(t_shell *shell, t_string *line, t_string *word)
 		else
 			append(word, advance(line));
 	}
-	if (line->index >= line->len)
-		error_report(shell, "Invalid Quotes.", 1);
+	if (line->index >= line->len) // unclosed quotes
+		return (1);
 	advance(line); // Consume the closing quote
+	return (0); // everything is ok
 }
 
-static void	normal_mode(t_shell *shell, t_string *line, t_string *word, int *quoted)
+static int	normal_mode(t_shell *shell, t_string *line, t_string *word, int *quoted)
 {
 	char	c;
 
@@ -36,7 +35,8 @@ static void	normal_mode(t_shell *shell, t_string *line, t_string *word, int *quo
 		if (c == '\'' || c == '"')
 		{
 			*quoted = 1;
-			quoted_mode(shell, line, word);
+			if (quoted_mode(shell, line, word))
+				return (1); // take error upwards to the responsible function
 		}
 		else if (c == '$')
 		{
@@ -47,6 +47,7 @@ static void	normal_mode(t_shell *shell, t_string *line, t_string *word, int *quo
 			append(word, advance(line));
 		}
 	}
+	return (0);
 }
 
 int scan_word(t_shell *shell, t_string *line)
@@ -58,15 +59,16 @@ int scan_word(t_shell *shell, t_string *line)
 	word = new_string(1024);
 	if (!word)
 		error_exit("Malloc Failure.");
-	normal_mode(shell, line, word, &quoted);
+	if (normal_mode(shell, line, word, &quoted))
+		return (-1);
 	if (word->len == 0 && !quoted)
 	{
 		free(word->str);
 		free(word);
-		return (0);
+		return (1);
 	}
 	add_token(&shell->tokens, word->str, WORD);
 	word->str = NULL;
 	free(word);
-	return (1);
+	return (0);
 }

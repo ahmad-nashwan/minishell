@@ -12,7 +12,7 @@ int	scan_redirection(t_shell *shell, t_string *line)
 		}
 		else
 			add_token(&shell->tokens,NULL, OUT_RED);
-		return (1);
+		return (0);
 	}
 	else if (peek(line) == '<')
 	{
@@ -24,7 +24,7 @@ int	scan_redirection(t_shell *shell, t_string *line)
 		}
 		else
 			add_token(&shell->tokens, NULL, IN_RED);
-		return (1);
+		return (0);
 	}
-	return (0);
+	return (1);
 }

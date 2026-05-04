@@ -6,7 +6,7 @@ int	scan_pipe(t_shell *shell, t_string *line)
 	{
 		advance(line);
 		add_token(&shell->tokens, NULL, PIPE);
-		return (1);
+		return (0);
 	}
-	return (0);
+	return (1);
 }

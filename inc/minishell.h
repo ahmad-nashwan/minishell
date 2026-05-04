@@ -12,13 +12,17 @@ typedef enum s_type
 	INVALID, END
 } t_type;
 
-typedef enum s_exit_code
+typedef enum e_error
 {
-    OK = 0,
-    SYNTAX_ERROR = 1,
-    MALLOC_FAILURE = 2,
-	BAD_ARG = 3
-} t_exit_code;
+    ERR_NONE = 0,
+    ERR_SYNTAX = 2,
+    ERR_MALLOC = 1,
+    ERR_CMD_NOT_FOUND = 127,
+    ERR_PERMISSION = 126,
+    ERR_NO_SUCH_FILE = 127,
+    ERR_EXECVE = 1,
+    ERR_BUILTIN = 1
+} t_error;
 
 typedef struct s_token 
 {
@@ -40,8 +44,10 @@ typedef struct s_shell
     int     exit_status;  // for $? expansion
     t_list  *tokens;      // lexer output
 	t_list 	*cmds;
-	int		error;
-    // optional/nice to have:
+	t_error	error_type;
+	int		should_exit;
+	char	*error_msg;
+    // to add
     // char *user;
     // char *cwd;
 }   t_shell;
@@ -103,13 +109,14 @@ char		**copy_env(char **envp);
 
 // Tests
 void		print_tokens(t_list *tokens);
-void    print_cmds(t_list *cmds);
+void    	print_cmds(t_list *cmds);
 
 // Error handling
-void		error_report(t_shell *shell, char *error, int state);
+void		report_error(t_shell *shell, t_error e, char *msg);
 void		error_exit(char *error);
 
 // Shell functions
 int			start_shell(t_shell *shell);
+void 		init_shell(t_shell *shell, char **envp);
 void		free_env(char **env);
 void		reset_shell(t_shell *shell);

@@ -23,6 +23,23 @@ void	free_env(char **env)
 	free(env);
 }
 
+void init_shell(t_shell *shell, char **envp)
+{
+    shell->env = copy_env(envp);
+    if (!shell->env)
+        error_exit("Malloc failure.");
+
+    shell->tokens = NULL;
+    shell->cmds = NULL;
+
+    shell->exit_status = 0;
+
+    shell->error_type = ERR_NONE;
+    shell->error_msg = NULL;
+
+    shell->should_exit = 0;
+}
+
 int	start_shell(t_shell *shell)
 {
 	t_string	*line;
