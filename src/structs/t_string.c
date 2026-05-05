@@ -28,19 +28,22 @@ t_string	*new_string(size_t cap)
     string->cap = cap;
     string->str = malloc(cap);
     if (!string->str)
-        return (free(string), NULL);
+    {
+        free(string);
+        return (NULL);
+    }
     string->str[0] = '\0';
     return (string);
 }
 
 char *realloc_string(t_string *word)
 {
-    void *ptr;
+    size_t new_cap = word->cap * 2;
+    void *ptr = realloc(word->str, new_cap);
 
-    word->cap *= 2;
-    ptr = realloc(word->str, word->cap);
     if (!ptr)
         return NULL;
+    word->cap = new_cap;
     return ptr;
 }
 
@@ -56,10 +59,12 @@ char	peek(t_string *line)
 
 char	advance(t_string *line)
 {
-	return (line->str[line->index++]);
+    if (line->index < line->len && line->str[line->index])
+	    return (line->str[line->index++]);
+    return ('\0');
 }
 
-void	append(t_string *word, char c)
+t_code	append(t_string *word, char c)
 {
 	char	*ptr;
 
@@ -67,15 +72,12 @@ void	append(t_string *word, char c)
 	{
 		ptr = realloc_string(word);
 		if (ptr == NULL)
-		{
-			free(word->str);
-			free(word);
-			error_exit("Malloc Failure");
-		}
+			return (INTERNAL_ERROR);
 		word->str = ptr;
 	}
 	word->str[word->len++] = c;
 	word->str[word->len] = '\0';
+    return (OK);
 }
 
 void    free_t_string(t_string *str)

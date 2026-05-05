@@ -12,36 +12,36 @@ t_cmd *cmd_create()
     return (cmd);
 }
 
-int cmd_add_arg(t_cmd *cmd, char *lexeme)
+t_code cmd_add_arg(t_cmd *cmd, char *lexeme)
 {
     t_list  *node;
     char    *dup;
     if (!cmd || !lexeme)
-        return (1);
+        return (ERR);
     dup = ft_strdup(lexeme);
     if (!dup)
-        return (1);
+        return (INTERNAL_ERROR);
     node = ft_lstnew(dup);
     if (!node)
     {
         free(dup);
-        return (1);
+        return (INTERNAL_ERROR);
     }
     ft_lstadd_back(&cmd->argv_list, node);
-    return (0);
+    return (OK);
 }
 
-int cmd_add_redir(t_cmd *cmd, t_redir *redir)
+t_code cmd_add_redir(t_cmd *cmd, t_redir *redir)
 {
     t_list *node;
 
     if (!cmd || !redir)
-        return (1);
+        return (ERR);
     node = ft_lstnew((void *)redir);
     if (!node)
-        return (1);
+        return (INTERNAL_ERROR);
     ft_lstadd_back(&cmd->redirections, node);
-    return (0);
+    return (OK);
 }
 
 void cmd_free(void *p)

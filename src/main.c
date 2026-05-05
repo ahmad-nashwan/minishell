@@ -2,13 +2,13 @@
 
 int main(int argc, char **argv, char **envp)
 {
-	t_shell shell;
-
+	t_shell 	shell;
+	int			exit_status;
 	if (argc > 1)
 		error_exit("usage: ./minishell");
 	
 	init_shell(&shell, envp);
-	start_shell(&shell);
+	exit_status = start_shell(&shell);
 	(void)argv;
-	return (0);
+	return (exit_status);
 }
