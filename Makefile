@@ -31,8 +31,9 @@ SRC = \
 	src/utils/helpers.c \
 	src/tests/print_tokens.c \
 	src/tests/print_cmds.c \
+	src/excution/excuter.c \
+	src/excution/excute.c
 	
-
 OBJ = $(SRC:.c=.o)
 
 all: $(NAME)

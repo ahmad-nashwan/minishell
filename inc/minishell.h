@@ -4,6 +4,8 @@
 #include <readline/history.h>
 #include <readline/readline.h>
 # include "../libft/libft.h"
+#include <sys/types.h>
+#include <sys/wait.h>
 
 typedef enum s_type
 {
@@ -113,3 +115,7 @@ void		error_exit(char *error);
 int			start_shell(t_shell *shell);
 void		free_env(char **env);
 void		reset_shell(t_shell *shell);
+
+// Excution
+void excute (t_list *cmds);
+void excuter(t_shell *shell);

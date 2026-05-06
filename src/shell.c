@@ -40,7 +40,8 @@ int	start_shell(t_shell *shell)
 			tokenizer(shell, line);
 			parse(shell);
 			// print_tokens(shell->tokens);
-			print_cmds(shell->cmds);
+			// print_cmds(shell->cmds);
+			excuter(shell);
 			printf("\n");
 		}
 		free_t_string(line);
