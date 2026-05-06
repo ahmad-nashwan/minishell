@@ -1,30 +1,51 @@
 # include "../../inc/minishell.h"
 
-int	scan_redirection(t_shell *shell, t_string *line)
+static t_code	scan_append_redir(t_shell *shell, t_string *line)
 {
+	advance(line); // consume first '>'
+
 	if (peek(line) == '>')
 	{
 		advance(line);
-		if (peek(line) == '>')
-		{
-			advance(line);
-			add_token(&shell->tokens, NULL, APPEND);
-		}
-		else
-			add_token(&shell->tokens,NULL, OUT_RED);
-		return (1);
+		if (add_token(&shell->tokens, NULL, APPEND) != OK)
+			return (INTERNAL_ERROR);
 	}
-	else if (peek(line) == '<')
+	else
 	{
-		advance(line); // consume <
-		if (peek(line) == '<')
-		{
-			advance(line); // consume other <
-			add_token(&shell->tokens, NULL, HEREDOC);
-		}
-		else
-			add_token(&shell->tokens, NULL, IN_RED);
-		return (1);
+		if (add_token(&shell->tokens, NULL, OUT_RED) != OK)
+			return (INTERNAL_ERROR);
 	}
-	return (0);
+	return (OK);
+}
+
+static t_code	scan_input_redir(t_shell *shell, t_string *line)
+{
+	advance(line); // consume '<'
+
+	if (peek(line) == '<')
+	{
+		advance(line);
+		if (add_token(&shell->tokens, NULL, HEREDOC) != OK)
+			return (INTERNAL_ERROR);
+	}
+	else
+	{
+		if (add_token(&shell->tokens, NULL, IN_RED) != OK)
+			return (INTERNAL_ERROR);
+	}
+	return (OK);
+}
+
+t_code	scan_redirection(t_shell *shell, t_string *line)
+{
+	char c;
+
+	c = peek(line);
+
+	if (c == '>')
+		return (scan_append_redir(shell, line));
+	else if (c == '<')
+		return (scan_input_redir(shell, line));
+
+	return (NONE);
 }

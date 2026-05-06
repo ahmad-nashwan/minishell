@@ -23,12 +23,16 @@ SRC = \
 	src/structs/t_cmd_list.c \
 	src/structs/t_redir.c \
 	src/tokenizer/tokenizer.c \
-	src/tokenizer/expander.c \
+	src/tokenizer/expander/init_expand.c \
+	src/tokenizer/expander/expand_var.c \
+	src/tokenizer/expander/expand_split.c \
+	src/tokenizer/expander/expand_exit.c \
 	src/tokenizer/scan_pipe.c \
 	src/tokenizer/scan_redirection.c \
 	src/tokenizer/scan_word.c \
 	src/parsing/parsing.c \
 	src/utils/helpers.c \
+	src/utils/shell_utils.c \
 	src/tests/print_tokens.c \
 	src/tests/print_cmds.c \
 	src/excution/excuter.c \

@@ -35,3 +35,15 @@ char	**copy_env(char **envp)
 	env[i] = NULL;
 	return (env);
 }
+
+void	free_split(char **words)
+{
+    size_t i = 0;
+
+    if (!words)
+        return;
+
+    while (words[i])
+        free(words[i++]);
+    free(words);
+}

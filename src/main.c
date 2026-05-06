@@ -2,17 +2,13 @@
 
 int main(int argc, char **argv, char **envp)
 {
-	t_shell shell;
-
-	shell.env = NULL;
-	shell.tokens = NULL;
-	shell.exit_status = 0;
+	t_shell 	shell;
+	int			exit_status;
 	if (argc > 1)
 		error_exit("usage: ./minishell");
-	shell.env = copy_env(envp);
-	if (!shell.env)
-		error_exit("Malloc failure.");
-	start_shell(&shell);
+	
+	init_shell(&shell, envp);
+	exit_status = start_shell(&shell);
 	(void)argv;
-	return (0);
+	return (exit_status);
 }
