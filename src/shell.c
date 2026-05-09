@@ -13,7 +13,7 @@ void	reset_shell(t_shell *shell)
 
 void init_shell(t_shell *shell, char **envp)
 {
-    shell->env = copy_env(envp);
+    shell->env_vars = copy_env(envp);
     if (!shell->env)
         error_exit("Malloc failure.");
 
@@ -66,26 +66,23 @@ int	start_shell(t_shell *shell)
 	while (1)
 	{
 		reset_shell(shell);
-		input = readline("meowshell> ");
+		input = readline("Bytesitters$ ");
 		if (!input)
 			break;
 		if (process_input(shell, input) != OK)
 		{
-<<<<<<< HEAD
 			add_history(line->str);
 			tokenizer(shell, line);
 			parse(shell);
 			// print_tokens(shell->tokens);
-			print_cmds(shell->cmds);
-			excuter(shell);
+			//print_cmds(shell->cmds);
+			excute(shell);
 			printf("\n");
-=======
 			if (handle_error(shell) != OK)
 			{
 				free(input);
 				break;
 			}
->>>>>>> refs/remotes/origin/main
 		}
 		free(input);
 	}

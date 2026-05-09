@@ -46,7 +46,8 @@ typedef struct s_string
 
 typedef struct s_shell
 {
-    char    **env;        // environment variables
+    char    **env_vars;        // environment variables
+    char 	*cwd;
     int     exit_status;  // for $? expansion
     t_list  *tokens;      // lexer output
 	t_list 	*cmds;
@@ -54,12 +55,11 @@ typedef struct s_shell
 	int		should_exit;
     // to add
     // char *user;
-    // char *cwd;
 }   t_shell;
 
 typedef struct s_cmd
 {
-	t_list *argv_list; // the command and its arguments 
+	t_list *argv_list; 
 	t_list *redirections;
 } t_cmd;
 
@@ -136,12 +136,13 @@ void	    report_error(t_shell *shell, t_code e, char *msg);
 void		error_exit(char *error);
 t_code      handle_error(t_shell *shell);
 
-<<<<<<< HEAD
+
 // Shell functions
 int			start_shell(t_shell *shell);
 void		free_env(char **env);
 void		reset_shell(t_shell *shell);
 
 // Excution
-void excute (t_list *cmds);
-void excuter(t_shell *shell);
+
+t_code 		excute(t_shell *shell)
+void 		excuter(t_shell *shell);
