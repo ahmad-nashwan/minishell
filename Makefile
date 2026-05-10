@@ -24,7 +24,7 @@ SRC = \
 	src/structs/t_redir.c \
 	src/tokenizer/tokenizer.c \
 	src/tokenizer/expander/init_expand.c \
-	src/tokenizer/expander/expand_var.c \
+	src/tokenizer/expander/find_expand.c \
 	src/tokenizer/expander/expand_split.c \
 	src/tokenizer/expander/expand_exit.c \
 	src/tokenizer/scan_pipe.c \
@@ -35,8 +35,8 @@ SRC = \
 	src/utils/shell_utils.c \
 	src/tests/print_tokens.c \
 	src/tests/print_cmds.c \
-	src/excution/excuter.c \
-	src/excution/excute.c
+	src/execution/excuter.c \
+	src/execution/excute.c
 	
 OBJ = $(SRC:.c=.o)
 

@@ -136,12 +136,11 @@ void	    report_error(t_shell *shell, t_code e, char *msg);
 void		error_exit(char *error);
 t_code      handle_error(t_shell *shell);
 
-<<<<<<< HEAD
 // Shell functions
 int			start_shell(t_shell *shell);
 void		free_env(char **env);
 void		reset_shell(t_shell *shell);
 
 // Excution
-void excute (t_list *cmds);
-void excuter(t_shell *shell);
+void execute (t_list *cmds);
+void executer(t_shell *shell);

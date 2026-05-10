@@ -42,8 +42,7 @@ t_code process_input(t_shell *shell, char *input)
 		}
 		if (rc == OK)
 		{	
-			print_tokens(shell->tokens);
-			printf("\n");
+			rc = parse(shell);
 		}
 		// if (rc == OK)
         // 	rc = parse(shell);
@@ -71,21 +70,11 @@ int	start_shell(t_shell *shell)
 			break;
 		if (process_input(shell, input) != OK)
 		{
-<<<<<<< HEAD
-			add_history(line->str);
-			tokenizer(shell, line);
-			parse(shell);
-			// print_tokens(shell->tokens);
-			print_cmds(shell->cmds);
-			excuter(shell);
-			printf("\n");
-=======
 			if (handle_error(shell) != OK)
 			{
 				free(input);
 				break;
 			}
->>>>>>> refs/remotes/origin/main
 		}
 		free(input);
 	}
