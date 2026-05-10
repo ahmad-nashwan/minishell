@@ -24,12 +24,12 @@ t_code get_var_value(t_shell *shell, t_string *name, t_string **value)
     size_t len = ft_strlen(name->str);
     char   *dup;
 
-    while (shell->env[i])
+    while (shell->env_vars[i])
     {
-        if (ft_strncmp(shell->env[i], name->str, len) == 0
-            && shell->env[i][len] == '=')
+        if (ft_strncmp(shell->env_vars[i], name->str, len) == 0
+            && shell->env_vars[i][len] == '=')
         {
-            dup = ft_strdup(shell->env[i] + len + 1); // MALLOC_CHECK[OK]
+            dup = ft_strdup(shell->env_vars[i] + len + 1); // MALLOC_CHECK[OK]
             if (!dup)
                 return (INTERNAL_ERROR);
             *value = init_string(dup); // MALLOC_CHECK[OK]

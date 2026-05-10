@@ -1,14 +1,15 @@
 #include "../../inc/minishell.h"
 
-void builtins()
+void env(t_shell shell)
 {
-	if (ft_strcmp(args[0], "pwd"))
-	else if (ft_strcmp(args[0], "pwd"))
-	else if (ft_strcmp(args[0], "pwd"))
-	else if (ft_strcmp(args[0], "pwd"))
-	else if (ft_strcmp(args[0], "pwd"))
-	else if (ft_strcmp(args[0], "pwd"))
-	else if (ft_strcmp(args[0], "pwd"))
-	else if (ft_strcmp(args[0], "pwd"))
-	else if (ft_strcmp(args[0], "pwd"))
+	char **tmp_env_vars;
+	char *env_var;
+
+	tmp_env_vars = shell.env_vars;
+	while (tmp_env_vars)
+	{
+		env_var = *tmp_env_vars;
+		ft_printf("%s\n",env_var);
+		tmp_env_vars++;
+	}
 }

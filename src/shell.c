@@ -13,8 +13,8 @@ void	reset_shell(t_shell *shell)
 
 void init_shell(t_shell *shell, char **envp)
 {
-    shell->env = copy_env(envp);
-    if (!shell->env)
+    shell->env_vars = copy_env(envp);
+    if (!shell->env_vars)
         error_exit("Malloc failure.");
 
     shell->tokens = NULL;
@@ -44,15 +44,6 @@ t_code process_input(t_shell *shell, char *input)
 		{	
 			rc = parse(shell);
 		}
-		// if (rc == OK)
-        // 	rc = parse(shell);
-		// if (rc == OK) // for testing only
-		// {
-		// 	print_cmds(shell->cmds);
-		// 	printf("\n");
-		// }
-        // if (rc == OK)
-        //     rc = execute(shell);
     }
     free_t_string(line);
     return rc;
@@ -65,7 +56,7 @@ int	start_shell(t_shell *shell)
 	while (1)
 	{
 		reset_shell(shell);
-		input = readline("meowshell> ");
+		input = readline("meowshell$ ");
 		if (!input)
 			break;
 		if (process_input(shell, input) != OK)
@@ -79,7 +70,7 @@ int	start_shell(t_shell *shell)
 		free(input);
 	}
 	reset_shell(shell);
-	free_env(shell->env);
+	free_env(shell->env_vars);
 	rl_clear_history();
 	return (shell->exit_status);
 }
