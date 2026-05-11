@@ -60,7 +60,7 @@ int	start_shell(t_shell *shell)
 	while (1)
 	{
 		reset_shell(shell);
-		input = readline("meowshell$ ");
+		input = readline("minishell$ ");
 		if (!input)
 			break;
 		if (process_input(shell, input) != OK)
@@ -73,6 +73,7 @@ int	start_shell(t_shell *shell)
 		}
 		free(input);
 	}
+	printf("exit\n");
 	reset_shell(shell);
 	free_env(shell->env_vars);
 	rl_clear_history();

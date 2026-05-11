@@ -5,7 +5,6 @@ CFLAGS = -Wall -Wextra -Werror
 
 INC_DIR = inc
 LIBFT_DIR = libft
-LIBFT_REPO = https://github.com/nopresentation/libft.git
 
 INCLUDES = -I$(INC_DIR) -I$(LIBFT_DIR)
 
@@ -31,6 +30,8 @@ SRC = \
 	src/tokenizer/scan_redirection.c \
 	src/tokenizer/scan_word.c \
 	src/parsing/parsing.c \
+	src/parsing/syntax_errors.c \
+	src/builtins/pwd.c \
 	src/utils/helpers.c \
 	src/utils/shell_utils.c \
 	src/tests/print_tokens.c \
@@ -41,10 +42,6 @@ SRC = \
 OBJ = $(SRC:.c=.o)
 
 all: $(NAME)
-
-# clone libft if it doesn't exist
-$(LIBFT_DIR):
-	git clone $(LIBFT_REPO) $(LIBFT_DIR)
 
 # build libft
 $(LIBFT): $(LIBFT_DIR)

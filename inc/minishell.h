@@ -135,6 +135,8 @@ void    	print_cmds(t_list *cmds);
 void	    report_error(t_shell *shell, t_code e, char *msg);
 void		error_exit(char *error);
 t_code      handle_error(t_shell *shell);
+t_code      report_syntax_error(char *bad_token);
+t_code      parse_error(t_shell* shell, t_cmd *cmd, t_list **cmd_list, t_code error);
 
 // Shell functions
 int			start_shell(t_shell *shell);
@@ -145,3 +147,6 @@ void		reset_shell(t_shell *shell);
 
 t_code 		excute(t_shell *shell);
 void 		excuter(t_shell *shell);
+
+// built-in functions
+t_code    pwd(int fd_out);
