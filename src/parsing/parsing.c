@@ -1,6 +1,5 @@
 # include "../../inc/minishell.h"
 
-
 static t_code parse_redir(t_cmd *cmd, t_token *redir, t_token *target)
 {
     t_redir *redirection;
@@ -13,7 +12,7 @@ static t_code parse_redir(t_cmd *cmd, t_token *redir, t_token *target)
     return (cmd_add_redir(cmd, redirection));
 }
 
-static t_code build_cmd(t_cmd *cmd, t_list **node)
+t_code build_cmd(t_cmd *cmd, t_list **node)
 {
     t_token *token;
     t_token *next_token;
@@ -26,19 +25,19 @@ static t_code build_cmd(t_cmd *cmd, t_list **node)
         if (token->type != WORD)
         {
             if (!(*node)->next)
-                return (SYNTAX_ERROR);
+                return (report_syntax_error("newline")); 
             next_token = (t_token *)(*node)->next->content;
             if (next_token->type != WORD)
-                return (SYNTAX_ERROR);
+                return (report_syntax_error(next_token->lexeme));
             if (parse_redir(cmd, token, next_token)) 
                 return (INTERNAL_ERROR);
-            (*node) = (*node)->next->next;; // consuming the redirection token, safe because we have a check before
+            (*node) = (*node)->next->next; // consuming the redirection token, safe because we have a check before
         }
         else
         {
             if (cmd_add_arg(cmd, token->lexeme) != OK)
 				return (INTERNAL_ERROR);
-            (*node) =(*node)->next; // consume arg
+            (*node) =(*node)->next;
         }
     }
     return (OK);
@@ -57,33 +56,47 @@ static t_code  consume_pipe(t_list **node)
     if (token->type == PIPE) // real work
     {
         if (!n->next)
-            return (SYNTAX_ERROR); // Syntax error, pipe at the end
+            return (report_syntax_error("|")); // Syntax error, pipe at the end
         next_token = (t_token *)n->next->content;
         if (next_token->type == END || next_token->type == PIPE)
-            return (SYNTAX_ERROR); // Syntax error
+            return (report_syntax_error("|")); // Syntax error
         (*node) = (*node)->next; // consume pipe
     }
     return (OK);
 }
 
-static t_code parse_error(t_shell* shell, t_cmd *cmd, t_list **cmd_list, t_code error)
+static t_code process_pipeline(t_shell *shell, t_list **node)
 {
-	if (cmd)
-		cmd_free(cmd);
-	if (error == INTERNAL_ERROR)
-		report_error(shell, error, "Internal error. Exitting.");
-	else if (error == SYNTAX_ERROR)
-		report_error(shell, error, "Syntax Error");
-    cmd_list_clear(cmd_list);
-    return (error);
-}
-
-t_code	parse(t_shell *shell)
-{
-    t_list  *node; // for traversal over the tokens list
     t_cmd   *cmd;
     t_token *token;
-    t_code	rc;
+    t_code  rc;
+
+    token = (t_token *)(*node)->content;
+    if (token->type == PIPE)
+    {
+        report_syntax_error("|");
+        return (parse_error(shell, NULL, &shell->cmds, SYNTAX_ERROR));
+    }
+    cmd = cmd_create();
+    if (!cmd)
+        return (parse_error(shell, NULL, &shell->cmds, INTERNAL_ERROR));
+    rc = build_cmd(cmd, node);
+    if (rc != OK)
+        return (parse_error(shell, cmd, &shell->cmds, rc));
+    rc = consume_pipe(node);
+    if (rc != OK)
+        return (parse_error(shell, cmd, &shell->cmds, rc));
+    rc = cmd_list_add(&shell->cmds, cmd);
+    if (rc != OK)
+        return (parse_error(shell, cmd, &shell->cmds, rc));
+    return (OK);
+}
+
+t_code  parse(t_shell *shell)
+{
+    t_list  *node; 
+    t_token *token;
+    t_code  rc;
 
     node = shell->tokens;
     while (node)
@@ -91,20 +104,10 @@ t_code	parse(t_shell *shell)
         token = (t_token *) node->content;
         if (token->type == END)
             break;
-        if (token->type == PIPE)
-            return (parse_error(shell, NULL, &shell->cmds, SYNTAX_ERROR));
-        cmd = cmd_create();
-        if (!cmd)
-            return (parse_error(shell, NULL, &shell->cmds, INTERNAL_ERROR));
-		rc = build_cmd(cmd, &node);
+            
+        rc = process_pipeline(shell, &node);
         if (rc != OK)
-            return (parse_error(shell, cmd, &shell->cmds, rc));
-		rc = consume_pipe(&node);
-        if (rc != OK)
-            return (parse_error(shell, cmd, &shell->cmds, rc));
-		rc = cmd_list_add(&shell->cmds, cmd);
-        if (rc != OK)
-            return (parse_error(shell, cmd, &shell->cmds, rc));
+            return (rc);
     }
     return (OK);
 }

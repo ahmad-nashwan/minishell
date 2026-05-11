@@ -44,6 +44,10 @@ t_code process_input(t_shell *shell, char *input)
 		{	
 			rc = parse(shell);
 		}
+		if (rc == OK)
+		{
+			print_cmds(shell->cmds);
+		}
     }
     free_t_string(line);
     return rc;
