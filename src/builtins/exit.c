@@ -21,12 +21,12 @@ void  shell_exit(t_shell *shell, char **args)
     if (!args[1])
     {
         shell->should_exit = 1;
-        return ;
+        return (ERR);
     }
     if (!is_number(args[1]) || !safe_atol(args[1], &code))
     {
         exit_non_numerial(shell);
-        return ;
+        return (ERR);
     }
     if (args[2])
     {
@@ -35,4 +35,5 @@ void  shell_exit(t_shell *shell, char **args)
     }
     shell->exit_status = (unsigned char)code;
     shell->should_exit = 1;
+    return (OK);
 }

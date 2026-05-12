@@ -155,4 +155,4 @@ void 		excuter(t_shell *shell);
 // built-in functions
 t_code      pwd(int fd_out);
 t_code      echo(char **args, int fd_out);
-void        shell_exit(t_shell *shell, char **args);
+t_code      shell_exit(t_shell *shell, char **args);
