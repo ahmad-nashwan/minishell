@@ -57,7 +57,7 @@ int	start_shell(t_shell *shell)
 {
 	char		*input;
 
-	while (1)
+	while (shell->should_exit != 1)
 	{
 		reset_shell(shell);
 		input = readline("minishell$ ");

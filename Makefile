@@ -32,7 +32,10 @@ SRC = \
 	src/parsing/parsing.c \
 	src/parsing/syntax_errors.c \
 	src/builtins/pwd.c \
+	src/builtins/echo.c \
+	src/builtins/exit.c \
 	src/utils/helpers.c \
+	src/utils/safe_atol.c \
 	src/utils/shell_utils.c \
 	src/tests/print_tokens.c \
 	src/tests/print_cmds.c \

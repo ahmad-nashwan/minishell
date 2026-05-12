@@ -1,6 +1,7 @@
 # include <unistd.h>
 # include <stdlib.h>
 # include <stdio.h>
+# include <limits.h>
 #include <readline/history.h>
 #include <readline/readline.h>
 # include "../libft/libft.h"
@@ -16,18 +17,18 @@ typedef enum s_type
 
 typedef enum e_code
 {
-    OK = 0,
-    NONE = 1,
-    SYNTAX_ERROR = 3,
-    UNCLOSED_QUOTES = 4,
-    PIPE_ERROR = 5,
-    REDIR_ERROR = 6,
-    INTERNAL_ERROR = 7,
-    CMD_NOT_FOUND = 8,
-    PERMISSION_DENIED = 9,
-    EXEC_ERROR = 10,
-    BUILTIN_ERROR = 11,
-    ERR
+    OK,
+    ERR,
+    NONE,
+    SYNTAX_ERROR,
+    UNCLOSED_QUOTES,
+    PIPE_ERROR,
+    REDIR_ERROR,
+    INTERNAL_ERROR,
+    CMD_NOT_FOUND,
+    PERMISSION_DENIED,
+    EXEC_ERROR,
+    BUILTIN_ERROR,
 } t_code;
 
 typedef struct s_token 
@@ -75,6 +76,7 @@ int			start_shell(t_shell *shell);
 void 		init_shell(t_shell *shell, char **envp);
 void		free_env(char **env);
 void		reset_shell(t_shell *shell);
+
 
 // t_string Functions
 t_string 	*init_string(char *content);
@@ -126,6 +128,8 @@ t_code      parse(t_shell *shell);
 int			ft_isspace(char c);
 char		**copy_env(char **envp);
 void	    free_split(char **words);
+int         safe_atol(const char *str, long *out);
+int         is_number(char *arg);
 
 // Tests
 void		print_tokens(t_list *tokens);
@@ -149,4 +153,6 @@ t_code 		excute(t_shell *shell);
 void 		excuter(t_shell *shell);
 
 // built-in functions
-t_code    pwd(int fd_out);
+t_code      pwd(int fd_out);
+t_code      echo(char **args, int fd_out);
+void        shell_exit(t_shell *shell, char **args);

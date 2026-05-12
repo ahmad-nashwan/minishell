@@ -47,3 +47,19 @@ void	free_split(char **words)
         free(words[i++]);
     free(words);
 }
+
+int  is_number(char *arg)
+{
+    int i;
+
+    i = 0;
+    if (arg[i] == '-')
+        i++;
+    while (arg[i])
+    {
+        if (!ft_isdigit(arg[i]))
+            return (0);
+        i++;
+    }
+    return (1);
+}
