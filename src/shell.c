@@ -46,7 +46,8 @@ t_code process_input(t_shell *shell, char *input)
 		}
 		if (rc == OK)
 		{
-			print_cmds(shell->cmds);
+			//print_cmds(shell->cmds);
+			excute_cmds(shell);
 		}
     }
     free_t_string(line);

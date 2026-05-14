@@ -2,14 +2,10 @@
 
 void env(t_shell shell)
 {
-	char **tmp_env_vars;
-	char *env_var;
-
-	tmp_env_vars = shell.env_vars;
-	while (tmp_env_vars)
-	{
-		env_var = *tmp_env_vars;
-		ft_printf("%s\n",env_var);
-		tmp_env_vars++;
-	}
+    void **envp = (void **) shell.env_vars;
+    while (*envp)
+    {
+        ft_putendl_fd((char *) *envp, STDOUT_FILENO);
+        envp++;
+    }
 }

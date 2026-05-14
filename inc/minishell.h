@@ -145,8 +145,19 @@ void		reset_shell(t_shell *shell);
 
 // Excution
 
-t_code 		excute(t_shell *shell);
-void 		excuter(t_shell *shell);
+t_code 		excute_cmds(t_shell *shell);
+t_code      excuter(t_shell *shell);
+t_code      child_process(t_shell *shell);
+char        *find_cmd_path(t_shell *shell);
+t_code      exec_absolute_path(char **argv);
 
 // built-in functions
-t_code    pwd(int fd_out);
+void		env(t_shell shell);
+t_code		pwd(int fd_out);
+
+
+//temp
+char    **argv_list_to_array(t_list *argv_list);
+char    *build_full_path(char *dir, char *cmd);
+t_code  search_and_exec(t_shell *shell, char **argv);
+t_code  exec_from_path(t_shell *shell, char **argv, char **path_list);

@@ -31,13 +31,17 @@ SRC = \
 	src/tokenizer/scan_word.c \
 	src/parsing/parsing.c \
 	src/parsing/syntax_errors.c \
+	src/builtins/builtins.c \
+	src/builtins/echo.c \
 	src/builtins/pwd.c \
+	src/utils/excution_utils.c \
 	src/utils/helpers.c \
 	src/utils/shell_utils.c \
 	src/tests/print_tokens.c \
 	src/tests/print_cmds.c \
+	src/execution/excute.c \
 	src/execution/excuter.c \
-	src/execution/excute.c
+	src/execution/handle_redirections.c
 	
 OBJ = $(SRC:.c=.o)
 
