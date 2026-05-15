@@ -147,6 +147,9 @@ char        **argv_list_to_array(t_list *argv_list);
 char        *build_full_path(char *dir, char *cmd);
 t_code      search_and_exec(t_shell *shell, char **argv);
 t_code      exec_from_path(t_shell *shell, char **argv, char **path_list);
+int         is_builtin(char *name);
+t_code      run_builtin(t_shell *shell, t_cmd *cmd);
+
 
 // Built-in functions
 void		env(t_shell shell);

@@ -34,6 +34,7 @@ SRC = \
 	src/builtins/builtins.c \
 	src/builtins/echo.c \
 	src/builtins/pwd.c \
+	src/builtins/env.c \
 	src/builtins/exit.c \
 	src/utils/excution_utils.c \
 	src/utils/helpers.c \
