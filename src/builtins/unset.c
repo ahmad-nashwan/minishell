@@ -1,35 +1,30 @@
 #include "../../inc/minishell.h"
 
-t_code unset(t_shell *shell, char **args)
+static void	remove_env_var(char **env_vars, size_t index)
+{
+	free(env_vars[index]);
+	while (env_vars[index])
+	{
+		env_vars[index] = env_vars[index + 1];
+		index++;
+	}
+}
+
+t_code	unset(t_shell *shell, char **args)
 {
 	int		i;
-	int		j;
 	size_t	name_len;
-	size_t	env_count;
+	size_t	index;
 
 	if (!shell || !shell->env_vars || !args)
-		return (OK);
+		return (INTERNAL_ERROR);
 	i = 1;
-	while (args && args[i])
+	while (args[i])
 	{
 		name_len = ft_strlen(args[i]);
-		j = 0;
-		while (shell->env_vars[j])
-		{
-			if (ft_strncmp(shell->env_vars[j], args[i], name_len) == 0
-				&& shell->env_vars[j][name_len] == '=')
-			{
-				free(shell->env_vars[j]);
-				env_count = j;
-				while (shell->env_vars[env_count])
-				{
-					shell->env_vars[env_count] = shell->env_vars[env_count + 1];
-					env_count++;
-				}
-				break;
-			}
-			j++;
-		}
+		index = find_env_var(shell->env_vars, args[i], name_len);
+		if (shell->env_vars[index])
+			remove_env_var(shell->env_vars, index);
 		i++;
 	}
 	return (OK);

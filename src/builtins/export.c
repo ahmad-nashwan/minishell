@@ -1,77 +1,110 @@
 #include "../../inc/minishell.h"
 
-t_code export(t_shell *shell, char **args)
+static char	*build_env_entry(char *name, char *value)
 {
-    int i = 1;
-    while (args && args[i])
-    {
-        char *arg = args[i];
-        char *equal_sign = ft_strchr(arg, '=');
-        if (!equal_sign)
-        {
-            report_error(shell, BUILTIN_ERROR, "export: invalid argument");
-            return BUILTIN_ERROR;
-        }
-        size_t name_len = equal_sign - arg;
-        char *name = ft_substr(arg, 0, name_len);
-        char *value = ft_strdup(equal_sign + 1);
-        if (!name || !value)
-        {
-            free(name);
-            free(value);
-            report_error(shell, INTERNAL_ERROR, "export: memory allocation failed");
-            return INTERNAL_ERROR;
-        }
-        // Check if variable already exists
-        char *existing_value = get_env_value(shell->env_vars, name);
-        if (existing_value)
-        {
-            // Update existing variable
-            size_t existing_index = 0;
-            while (shell->env_vars[existing_index])
-            {
-                if (ft_strncmp(shell->env_vars[existing_index], name, name_len) == 0
-                    && shell->env_vars[existing_index][name_len] == '=')
-                {
-                    free(shell->env_vars[existing_index]);
-                    char *temp = ft_strjoin(name, "=");
-                    char *temp1 = ft_strjoin(temp, value);
-                    shell->env_vars[existing_index] = ft_strdup(temp1);
-                    free(temp1);
-                    free(temp);
-                    break;
-                }
-                existing_index++;
-            }
-        }
-        else
-        {
-            // Add new variable
-            size_t env_count = 0;
-            while (shell->env_vars && shell->env_vars[env_count])
-                env_count++;
-            char **new_env = malloc(sizeof(char *) * (env_count + 2));
-            if (!new_env)
-            {
-                free(name);
-                free(value);
-                report_error(shell, INTERNAL_ERROR, "export: memory allocation failed");
-                return INTERNAL_ERROR;
-            }
-            for (size_t j = 0; j < env_count; j++)
-                new_env[j] = shell->env_vars[j];
-            char *temp = ft_strjoin(name, "=");
-            char *temp1 = ft_strjoin(temp, value);
-            new_env[env_count] = ft_strdup(temp1);
-            new_env[env_count + 1] = NULL;
-            free(temp);
-            free(temp1);
-            free(shell->env_vars);
-            shell->env_vars = new_env;
-        }
-        free(name);
-        free(value);
-        i++;
-    }
-    return OK;
+	char	*temp;
+	char	*entry;
+
+	temp = ft_strjoin(name, "=");
+	if (!temp)
+		return (NULL);
+	entry = ft_strjoin(temp, value);
+	free(temp);
+	return (entry);
+}
+
+static t_code	update_env_var(t_shell *shell, char *name, char *value,
+		size_t name_len)
+{
+	size_t	i;
+	char	*entry;
+
+	i = 0;
+	while (shell->env_vars[i])
+	{
+		if (ft_strncmp(shell->env_vars[i], name, name_len) == 0
+			&& shell->env_vars[i][name_len] == '=')
+		{
+			entry = build_env_entry(name, value);
+			if (!entry)
+				return (INTERNAL_ERROR);
+			free(shell->env_vars[i]);
+			shell->env_vars[i] = entry;
+			return (OK);
+		}
+		i++;
+	}
+	return (OK);
+}
+
+static t_code	add_env_var(t_shell *shell, char *name, char *value,
+		size_t env_count)
+{
+	char	**new_env;
+	char	*entry;
+	size_t	j;
+
+	new_env = malloc(sizeof(char *) * (env_count + 2));
+	if (!new_env)
+		return (INTERNAL_ERROR);
+	j = 0;
+	while (j < env_count)
+	{
+		new_env[j] = shell->env_vars[j];
+		j++;
+	}
+	entry = build_env_entry(name, value);
+	if (!entry)
+		return (free(new_env), INTERNAL_ERROR);
+	new_env[env_count] = entry;
+	new_env[env_count + 1] = NULL;
+	free(shell->env_vars);
+	shell->env_vars = new_env;
+	return (OK);
+}
+
+static t_code	process_export_arg(t_shell *shell, char *arg)
+{
+	char	*equal_sign;
+	char	*name;
+	char	*value;
+	size_t	name_len;
+	size_t	env_count;
+
+	equal_sign = ft_strchr(arg, '=');
+	if (!equal_sign)
+		return (report_error(shell, BUILTIN_ERROR, "export: invalid argument"),
+			BUILTIN_ERROR);
+	name_len = equal_sign - arg;
+	name = ft_substr(arg, 0, name_len);
+	value = ft_strdup(equal_sign + 1);
+	if (!name || !value)
+		return (free(name), free(value), INTERNAL_ERROR);
+	env_count = 0;
+	while (shell->env_vars[env_count])
+		env_count++;
+	if (find_env_var(shell->env_vars, name, name_len) < env_count)
+		update_env_var(shell, name, value, name_len);
+	else
+		add_env_var(shell, name, value, env_count);
+	free(name);
+	free(value);
+	return (OK);
+}
+
+t_code	export(t_shell *shell, char **args)
+{
+	int		i;
+	t_code	rc;
+
+	if (!shell || !shell->env_vars || !args)
+		return (INTERNAL_ERROR);
+	i = 1;
+	rc = OK;
+	while (args[i] && rc == OK)
+	{
+		rc = process_export_arg(shell, args[i]);
+		i++;
+	}
+	return (rc);
 }

@@ -1,35 +1,41 @@
-# Changes Report
+#Changes Report
 
-## Summary
+##Summary
 
-Fixed the `cd` (change directory) builtin command that was not functioning. The original implementation only printed paths instead of actually changing the directory. Two separate tasks were completed:
+			Fixed the `cd` (change directory)builtin command that was not functioning.The original implementation only printed paths instead of actually changing the directory.Two separate tasks were completed :
 
-1. **Generated `get_env_value` function** - utility to retrieve environment variables
-2. **Fixed `cd` builtin command** - to actually change the directory
+		1. *
+		*Generated `get_env_value` function
+			* *-utility to retrieve environment variables 2.
+			* *Fixed `cd` builtin command *
+		*-to actually change the directory
 
----
+			-- -
 
-## Task 1: Generated `get_env_value` Function
+	##Task 1 : Generated `get_env_value` Function
 
-### Files Modified
+				## #Files Modified
 
-- `inc/minishell.h`
-- `src/utils/shell_utils.c`
+				- `inc / minishell.h` - `src / utils /
+					shell_utils.c`
 
-### What Was Added
+					## #What Was Added
 
-#### In `inc/minishell.h` (Helpers section):
+					####In `inc
+					/
+					minishell.h` (Helpers section)
+	:
 
-```c
-char    *get_env_value(char **env_vars, const char *key);
+```c char * get_env_value(char **env_vars, const char *key);
 ```
 
-**Location:** Added to function declarations in the Helpers section
+		**Location : **Added to function declarations in the Helpers section
 
-#### In `src/utils/shell_utils.c`:
+						####In `src /
+						utils /
+						shell_utils.c`:
 
-```c
-char	*get_env_value(char **env_vars, const char *key)
+```c char *get_env_value(char **env_vars, const char *key)
 {
 	size_t	key_len;
 	int		i;
@@ -55,7 +61,8 @@ char	*get_env_value(char **env_vars, const char *key)
 
 - **Purpose:** Search through the environment variable array and return the value for a given key
 - **Parameters:**
-  - `char **env_vars`: pointer to environment variable array (format: "KEY=VALUE")
+ 
+	- `char **env_vars`: pointer to environment variable array (format: "KEY=VALUE")
   - `const char *key`: the environment variable name to find
 - **Process:**
   1. Validate inputs (check for NULL pointers)
@@ -65,7 +72,8 @@ char	*get_env_value(char **env_vars, const char *key)
   5. Check if the character after the key is '=' (ensuring exact match)
   6. If found, return pointer to value (everything after the '=')
   7. If not found, return NULL
-- **Use Case:** Used to retrieve HOME, PATH, and other environment variables during shell operations
+- **Use Case:** Used to retrieve HOME, PATH,
+	and other environment variables during shell operations
 
 ---
 
@@ -84,23 +92,26 @@ char	*get_env_value(char **env_vars, const char *key)
 **Old broken implementation:**
 
 ```c
-void cd(t_shell shell)
+void	cd(t_shell shell)
 {
-    char *home = NULL;
-    char *target = NULL;
-    if (!shell.env_vars)
-        return;
-    home = get_env_value(shell.env_vars, "HOME");
-    if (!home)
-    {
-        report_error(&shell, ERR, "cd: HOME not set");
-        return;
-    }
-    target = get_env_value(shell.env_vars, "CDPATH");
-    if (target)
-        ft_putendl_fd(target, STDOUT_FILENO);
-    else
-        ft_putendl_fd(home, STDOUT_FILENO);
+	char	*home;
+	char	*target;
+
+	home = NULL;
+	target = NULL;
+	if (!shell.env_vars)
+		return ;
+	home = get_env_value(shell.env_vars, "HOME");
+	if (!home)
+	{
+		report_error(&shell, ERR, "cd: HOME not set");
+		return ;
+	}
+	target = get_env_value(shell.env_vars, "CDPATH");
+	if (target)
+		ft_putendl_fd(target, STDOUT_FILENO);
+	else
+		ft_putendl_fd(home, STDOUT_FILENO);
 }
 ```
 
@@ -119,59 +130,59 @@ void cd(t_shell shell)
 #### In `inc/minishell.h` (Built-in functions section):
 
 ```c
-t_code      cd(t_shell *shell, char **args);
+t_code	cd(t_shell *shell, char **args);
 ```
 
-**Location:** Added after `shell_exit` declaration
+		**Location : **Added after `shell_exit` declaration
 
-#### In `src/builtins/builtins.c`:
+						####In `src /
+						builtins /
+						builtins.c`:
 
-```c
-t_code cd(t_shell *shell, char **args)
+```c t_code cd(t_shell *shell, char **args)
 {
-    char *target = NULL;
-    char *home = NULL;
+	char	*target;
+	char	*home;
 
-    if (!shell || !shell->env_vars)
-        return INTERNAL_ERROR;
-
-    // If an argument is provided, use it; otherwise use HOME
-    if (args && args[1])
-        target = args[1];
-    else
-    {
-        home = get_env_value(shell->env_vars, "HOME");
-        if (!home)
-        {
-            report_error(shell, ERR, "cd: HOME not set");
-            return BUILTIN_ERROR;
-        }
-        target = home;
-    }
-
-    // Change directory
-    if (chdir(target) == -1)
-    {
-        report_error(shell, ERR, target);
-        return BUILTIN_ERROR;
-    }
-
-    // Update shell.cwd with the new directory
-    if (shell->cwd)
-        free(shell->cwd);
-    shell->cwd = getcwd(NULL, 0);
-
-    return OK;
+	target = NULL;
+	home = NULL;
+	if (!shell || !shell->env_vars)
+		return (INTERNAL_ERROR);
+	// If an argument is provided, use it; otherwise use HOME
+	if (args && args[1])
+		target = args[1];
+	else
+	{
+		home = get_env_value(shell->env_vars, "HOME");
+		if (!home)
+		{
+			report_error(shell, ERR, "cd: HOME not set");
+			return (BUILTIN_ERROR);
+		}
+		target = home;
+	}
+	// Change directory
+	if (chdir(target) == -1)
+	{
+		report_error(shell, ERR, target);
+		return (BUILTIN_ERROR);
+	}
+	// Update shell.cwd with the new directory
+	if (shell->cwd)
+		free(shell->cwd);
+	shell->cwd = getcwd(NULL, 0);
+	return (OK);
 }
 ```
 
-#### In `src/execution/excute.c` (`run_builtin` function):
+	####In `src /
+	execution /
+	excute.c` (`run_builtin` function)
+	:
 
-**Added `cd` case:**
+		**Added `cd` case : **
 
-```c
-else if (ft_strncmp(name, "cd", 3) == 0)
-    cd(shell, argv);
+```c else if (ft_strncmp(name, "cd", 3) == 0) cd(shell, argv);
 ```
 
 **Location:** Added between echo and exit cases in the if-else chain
@@ -246,15 +257,18 @@ pwd                  # Shows new directory (if cd was successful)
 | -------------------------- | ---------------------------------------------------- |
 | No shell pointer           | Returns INTERNAL_ERROR                               |
 | No env_vars                | Returns INTERNAL_ERROR                               |
-| No argument & HOME not set | Reports error, returns BUILTIN_ERROR                 |
-| Invalid directory path     | Reports error, returns BUILTIN_ERROR                 |
+| No argument & HOME not set | Reports error,
+	returns BUILTIN_ERROR                 |
+| Invalid directory path     | Reports error,
+	returns BUILTIN_ERROR                 |
 | getcwd() fails             | shell->cwd may be NULL (should be handled elsewhere) |
 
 ---
 
 ## Memory Management
 
-- **Allocated:** `shell->cwd` is allocated by `getcwd(NULL, 0)` (returns dynamically allocated string)
+- **Allocated:** `shell->cwd` is allocated by `getcwd(NULL,
+	0)` (returns dynamically allocated string)
 - **Freed:** Old `shell->cwd` is freed before assigning new value (prevents memory leak)
 - **Cleanup:** Should be freed in shell's cleanup routine when exiting
 

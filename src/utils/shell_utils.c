@@ -1,4 +1,4 @@
-# include "../../inc/minishell.h"
+#include "../../inc/minishell.h"
 
 void	free_env(char **env)
 {
@@ -16,7 +16,7 @@ void	free_env(char **env)
 char	*get_env_value(char **env_vars, const char *key)
 {
 	size_t	key_len;
-	int	i;
+	int		i;
 
 	if (!env_vars || !key)
 		return (NULL);

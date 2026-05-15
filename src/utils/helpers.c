@@ -2,15 +2,15 @@
 
 int	ft_isspace(char c)
 {
-	if (c == ' ' || c == '\t' || c =='\r')
+	if (c == ' ' || c == '\t' || c == '\r')
 		return (1);
 	return (0);
 }
 
 char	**copy_env(char **envp)
 {
-	int	var;
-	int	i;
+	int		var;
+	int		i;
 	char	**env;
 
 	var = 0;
@@ -38,28 +38,28 @@ char	**copy_env(char **envp)
 
 void	free_split(char **words)
 {
-    size_t i = 0;
+	size_t	i;
 
-    if (!words)
-        return;
-
-    while (words[i])
-        free(words[i++]);
-    free(words);
+	i = 0;
+	if (!words)
+		return ;
+	while (words[i])
+		free(words[i++]);
+	free(words);
 }
 
-int  is_number(char *arg)
+int	is_number(char *arg)
 {
-    int i;
+	int	i;
 
-    i = 0;
-    if (arg[i] == '-')
-        i++;
-    while (arg[i])
-    {
-        if (!ft_isdigit(arg[i]))
-            return (0);
-        i++;
-    }
-    return (1);
+	i = 0;
+	if (arg[i] == '-')
+		i++;
+	while (arg[i])
+	{
+		if (!ft_isdigit(arg[i]))
+			return (0);
+		i++;
+	}
+	return (1);
 }

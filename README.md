@@ -1,2 +1,3 @@
-# minishell
-This is the beginning of this journey!
+#minishell
+
+This is the beginning of this journey !
