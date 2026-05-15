@@ -13,7 +13,7 @@ static void exit_many_args(t_shell *shell)
     report_error(shell, ERR, "exit: too many arguments");
 } 
 
-void  shell_exit(t_shell *shell, char **args)
+t_code shell_exit(t_shell *shell, char **args)
 {
     long    code;
 
@@ -31,7 +31,7 @@ void  shell_exit(t_shell *shell, char **args)
     if (args[2])
     {
         exit_many_args(shell);
-        return ;
+        return (ERR);
     }
     shell->exit_status = (unsigned char)code;
     shell->should_exit = 1;

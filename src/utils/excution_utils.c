@@ -14,23 +14,6 @@ char* find_cmd_path(t_shell *shell)
 	return NULL;
 }
 
-t_code exec_absolute_path(char **argv)
-{
-    if (ft_strchr(argv[0], '/'))
-    {
-		if (access(argv[0], F_OK) == 0)
-        {   	
-			if (access(argv[0], X_OK) == 0)
-				return execve(argv[0], argv, NULL);
-			else
-				return PERMISSION_DENIED;
-		}
-		else
-			return CMD_NOT_FOUND;
-	}
-	return INTERNAL_ERROR;
-}
-
 char    *build_full_path(char *dir, char *cmd)
 {
     char    *temp;

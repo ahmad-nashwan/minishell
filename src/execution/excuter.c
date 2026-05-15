@@ -34,7 +34,7 @@ t_code child_process(t_shell *shell)
     if (!argv || !argv[0])
         return INTERNAL_ERROR;
     if (ft_strchr(argv[0], '/'))
-        return exec_absolute_path(argv);
+        return exec_absolute_path(shell, argv);
     return search_and_exec(shell, argv);
 }
 
@@ -49,13 +49,14 @@ t_code exec_from_path(t_shell *shell, char **argv, char **path_list)
         full_path = build_full_path(path_list[i], argv[0]);
         if (full_path && access(full_path, X_OK) == 0)
         {
-            execv(full_path, argv);
+            execve(full_path, argv, shell->env_vars);
             return INTERNAL_ERROR;
         }
 		if ( access(full_path, F_OK) == 0 && access(full_path, X_OK) != 0)
         free(full_path);
         i++;
     }
+    return CMD_NOT_FOUND;
 }
 
 t_code search_and_exec(t_shell *shell, char **argv)
@@ -76,5 +77,22 @@ t_code search_and_exec(t_shell *shell, char **argv)
         exit(EXIT_FAILURE);
     }
     return exec_from_path(shell, argv, path_list);
+}
+
+t_code exec_absolute_path(t_shell *shell, char **argv)
+{
+    if (ft_strchr(argv[0], '/'))
+    {
+		if (access(argv[0], F_OK) == 0)
+        {   	
+			if (access(argv[0], X_OK) == 0)
+				return execve(argv[0], argv, shell->env_vars);
+			else
+				return PERMISSION_DENIED;
+		}
+		else
+			return CMD_NOT_FOUND;
+	}
+	return INTERNAL_ERROR;
 }
 
