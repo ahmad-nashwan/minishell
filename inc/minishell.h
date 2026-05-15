@@ -122,6 +122,7 @@ t_code      parse(t_shell *shell);
 // Helpers
 int			ft_isspace(char c);
 char		**copy_env(char **envp);
+char		*get_env_value(char **env_vars, const char *key);
 void	    free_split(char **words);
 int         safe_atol(const char *str, long *out);
 int         is_number(char *arg);
@@ -156,3 +157,6 @@ void		env(t_shell shell);
 t_code		pwd(int fd_out);
 t_code      echo(char **args, int fd_out);
 t_code      shell_exit(t_shell *shell, char **args);
+t_code      cd(t_shell *shell, char **args);
+t_code      export(t_shell *shell, char **args);
+t_code      unset(t_shell *shell, char **args);

@@ -52,6 +52,12 @@ t_code run_builtin(t_shell *shell, t_cmd *cmd)
         pwd(STDOUT_FILENO);
     else if (ft_strncmp(name, "echo", 5) == 0)
         echo(argv, STDOUT_FILENO);
+    else if (ft_strncmp(name, "cd", 3) == 0)
+        cd(shell, argv);
+    else if (ft_strncmp(name, "export", 7) == 0)
+        export(shell, argv);
+    else if (ft_strncmp(name, "unset", 6) == 0)
+        unset(shell, argv);
     else if (ft_strncmp(name, "exit", 5) == 0)
         shell_exit(shell, argv);
     free(argv);
