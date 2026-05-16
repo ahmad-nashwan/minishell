@@ -160,6 +160,11 @@ t_code		exec_from_path(t_shell *shell, char **argv, char **path_list);
 int			is_builtin(char *name);
 t_code		run_builtin(t_shell *shell, t_cmd *cmd);
 size_t		find_env_var(char **env_vars, char *name, size_t name_len);
+t_code		update_env_var(t_shell *shell, char *name, char *value,
+				size_t name_len);
+t_code		add_env_var(t_shell *shell, char *name, char *value,
+				size_t env_count);
+size_t		count_env(char **env_vars);
 
 // Built-in functions
 void		env(t_shell shell);

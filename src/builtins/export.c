@@ -1,65 +1,59 @@
 #include "../../inc/minishell.h"
 
-static char	*build_env_entry(char *name, char *value)
+static void	swap_env(char **a, char **b)
 {
 	char	*temp;
-	char	*entry;
 
-	temp = ft_strjoin(name, "=");
-	if (!temp)
-		return (NULL);
-	entry = ft_strjoin(temp, value);
-	free(temp);
-	return (entry);
+	temp = *a;
+	*a = *b;
+	*b = temp;
 }
 
-static t_code	update_env_var(t_shell *shell, char *name, char *value,
-		size_t name_len)
+static void	sort_env(char **sorted, size_t count)
 {
 	size_t	i;
-	char	*entry;
+	size_t	j;
 
 	i = 0;
-	while (shell->env_vars[i])
+	while (i < count - 1)
 	{
-		if (ft_strncmp(shell->env_vars[i], name, name_len) == 0
-			&& shell->env_vars[i][name_len] == '=')
+		j = 0;
+		while (j < count - i - 1)
 		{
-			entry = build_env_entry(name, value);
-			if (!entry)
-				return (INTERNAL_ERROR);
-			free(shell->env_vars[i]);
-			shell->env_vars[i] = entry;
-			return (OK);
+			if (ft_strncmp(sorted[j], sorted[j + 1], INT_MAX) > 0)
+				swap_env(&sorted[j], &sorted[j + 1]);
+			j++;
 		}
 		i++;
 	}
-	return (OK);
 }
 
-static t_code	add_env_var(t_shell *shell, char *name, char *value,
-		size_t env_count)
+static t_code	print_export(t_shell *shell)
 {
-	char	**new_env;
-	char	*entry;
-	size_t	j;
+	char	**sorted;
+	size_t	count;
+	size_t	i;
 
-	new_env = malloc(sizeof(char *) * (env_count + 2));
-	if (!new_env)
+	count = count_env(shell->env_vars);
+	sorted = malloc(sizeof(char *) * (count + 1));
+	if (!sorted)
 		return (INTERNAL_ERROR);
-	j = 0;
-	while (j < env_count)
+	i = 0;
+	while (i < count)
 	{
-		new_env[j] = shell->env_vars[j];
-		j++;
+		sorted[i] = shell->env_vars[i];
+		i++;
 	}
-	entry = build_env_entry(name, value);
-	if (!entry)
-		return (free(new_env), INTERNAL_ERROR);
-	new_env[env_count] = entry;
-	new_env[env_count + 1] = NULL;
-	free(shell->env_vars);
-	shell->env_vars = new_env;
+	sorted[count] = NULL;
+	sort_env(sorted, count);
+	i = 0;
+	while (sorted[i])
+	{
+		ft_putstr_fd("declare -x ", STDOUT_FILENO);
+		ft_putendl_fd(sorted[i], STDOUT_FILENO);
+		i++;
+	}
+	free(sorted);
 	return (OK);
 }
 
@@ -99,6 +93,8 @@ t_code	export(t_shell *shell, char **args)
 
 	if (!shell || !shell->env_vars || !args)
 		return (INTERNAL_ERROR);
+	if (!args[1])
+		return (print_export(shell));
 	i = 1;
 	rc = OK;
 	while (args[i] && rc == OK)

@@ -39,6 +39,7 @@ SRC = \
 	src/builtins/cd.c \
 	src/builtins/export.c \
 	src/builtins/unset.c \
+	src/utils/env_utils.c \
 	src/utils/excution_utils.c \
 	src/utils/helpers.c \
 	src/utils/safe_atol.c \

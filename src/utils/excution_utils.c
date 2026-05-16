@@ -51,18 +51,3 @@ char	**argv_list_to_array(t_list *argv_list)
 	argv[i] = NULL;
 	return (argv);
 }
-
-size_t	find_env_var(char **env_vars, char *name, size_t name_len)
-{
-	size_t j;
-
-	j = 0;
-	while (env_vars[j])
-	{
-		if (ft_strncmp(env_vars[j], name, name_len) == 0
-			&& env_vars[j][name_len] == '=')
-			return (j);
-		j++;
-	}
-	return (j);
-}
