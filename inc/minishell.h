@@ -165,6 +165,9 @@ t_code		update_env_var(t_shell *shell, char *name, char *value,
 t_code		add_env_var(t_shell *shell, char *name, char *value,
 				size_t env_count);
 size_t		count_env(char **env_vars);
+void		sort_env(char **sorted, size_t count);
+void		print_env_entry(char *entry);
+t_code		print_export(t_shell *shell);
 
 // Built-in functions
 void		env(t_shell shell);

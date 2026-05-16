@@ -5,6 +5,8 @@ static char	*build_env_entry(char *name, char *value)
 	char	*temp;
 	char	*entry;
 
+	if (!value)
+		return (ft_strdup(name));
 	temp = ft_strjoin(name, "=");
 	if (!temp)
 		return (NULL);
@@ -15,17 +17,17 @@ static char	*build_env_entry(char *name, char *value)
 
 size_t	find_env_var(char **env_vars, char *name, size_t name_len)
 {
-	size_t	j;
+	size_t	i;
 
-	j = 0;
-	while (env_vars[j])
+	i = 0;
+	while (env_vars[i])
 	{
-		if (ft_strncmp(env_vars[j], name, name_len) == 0
-			&& env_vars[j][name_len] == '=')
-			return (j);
-		j++;
+		if (ft_strncmp(env_vars[i], name, name_len) == 0
+			&& (env_vars[i][name_len] == '=' || env_vars[i][name_len] == '\0'))
+			return (i);
+		i++;
 	}
-	return (j);
+	return (i);
 }
 
 t_code	update_env_var(t_shell *shell, char *name, char *value, size_t name_len)
