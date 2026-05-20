@@ -20,30 +20,25 @@ t_string *get_var_name(t_string *line)
 
 t_code get_var_value(t_shell *shell, t_string *name, t_string **value)
 {
-    size_t i = 0;
-    size_t len = ft_strlen(name->str);
-    char   *dup;
+    char    *raw_val;
+    char    *dup;
 
-    while (shell->env_vars[i])
+    raw_val = get_env_value(shell->env_list, name->str);
+    if (!raw_val)
     {
-        if (ft_strncmp(shell->env_vars[i], name->str, len) == 0
-            && shell->env_vars[i][len] == '=')
-        {
-            dup = ft_strdup(shell->env_vars[i] + len + 1); // MALLOC_CHECK[OK]
-            if (!dup)
-                return (INTERNAL_ERROR);
-            *value = init_string(dup); // MALLOC_CHECK[OK]
-            if (!*value)
-            {
-                free(dup);
-                return (INTERNAL_ERROR);
-            }
-            return (OK);
-        }
-        i++;
+        *value = NULL;
+        return (NONE);
     }
-    *value = NULL;
-    return (NONE);
+    dup = ft_strdup(raw_val);
+    if (!dup)
+        return (INTERNAL_ERROR);
+    *value = init_string(dup);
+    if (!*value)
+    {
+        free(dup);
+        return (INTERNAL_ERROR);
+    }
+    return (OK);
 }
 
 t_code	init_expand(t_shell *shell, t_string *line, t_string *word, int quoted)

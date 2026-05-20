@@ -50,9 +50,15 @@ typedef struct s_string
 	size_t	len;
 }			t_string;
 
+typedef struct s_env_var
+{
+    char    *key;
+    char    *value;
+} t_env_var;
+
 typedef struct s_shell
 {
-	char	**env_vars;
+	t_list 	*env_list;
 	char	*cwd;
 	int		exit_status;
 	t_list	*tokens;
@@ -72,6 +78,8 @@ typedef struct s_redir
 	t_type	type;
 	char	*target;
 }			t_redir;
+
+
 
 // Shell functions & utils
 int			start_shell(t_shell *shell);
@@ -106,6 +114,15 @@ void		cmd_list_clear(t_list **cmd_list);
 t_redir		*redir_create(t_type type, char *target);
 void		redir_free(void *p);
 
+// t_env
+t_env_var   *new_env_var(const char *key, const char *value);
+t_env_var *find_env_var(t_list *env_list, const char *key);
+t_code  update_env_value(t_env_var *env, const char *value);
+t_code add_env_var(t_list **env_list, t_env_var *var);
+void    free_env_var(void *content);
+char    **get_env_array(t_list *env_list);
+
+
 // Tokenization & Scanners
 t_code		tokenizer(t_shell *shell, t_string *line);
 t_code		scan_word(t_shell *shell, t_string *line);
@@ -130,10 +147,11 @@ t_code		parse(t_shell *shell);
 // Helpers
 int			ft_isspace(char c);
 char		**copy_env(char **envp);
-char		*get_env_value(char **env_vars, const char *key);
+char		*get_env_value(t_list *env_vars, const char *key);
 void		free_split(char **words);
 int			safe_atol(const char *str, long *out);
 int			is_number(char *arg);
+int 		ft_strcmp(const char *s1, const char *s2);
 
 // Tests
 void		print_tokens(t_list *tokens);
@@ -159,21 +177,33 @@ t_code		search_and_exec(t_shell *shell, char **argv);
 t_code		exec_from_path(t_shell *shell, char **argv, char **path_list);
 int			is_builtin(char *name);
 t_code		run_builtin(t_shell *shell, t_cmd *cmd);
-size_t		find_env_var(char **env_vars, char *name, size_t name_len);
-t_code		update_env_var(t_shell *shell, char *name, char *value,
-				size_t name_len);
-t_code		add_env_var(t_shell *shell, char *name, char *value,
-				size_t env_count);
+t_env_var *find_env_var(t_list *env_list, const char *key);
+
+t_code 		add_env_var(t_list **env_list, t_env_var *var);
 size_t		count_env(char **env_vars);
 void		sort_env(char **sorted, size_t count);
 void		print_env_entry(char *entry);
 t_code		print_export(t_shell *shell);
 
 // Built-in functions
-void		env(t_shell shell);
-t_code		pwd(int fd_out);
-t_code		echo(char **args, int fd_out);
-t_code		shell_exit(t_shell *shell, char **args);
-t_code		cd(t_shell *shell, char **args);
-t_code		export(t_shell *shell, char **args);
-t_code		unset(t_shell *shell, char **args);
+void		env(t_shell *shell, t_list *args);
+void  		pwd(t_shell *shell);
+void		echo(t_list *args);
+void		shell_exit(t_shell *shell, char **args);
+void		cd(t_shell *shell, t_list *args);
+
+// export
+void		export(t_shell *shell, t_list *args);
+t_code	 	export_variables(t_list **env_list, t_list *args);
+t_code 		export_print(t_list *env_list);
+t_code		unset(t_shell *shell, t_list *args);
+
+
+t_env_var   *create_env_var(char *env_str);
+t_list      *init_env_list(char **envp);
+char    	**get_env_array(t_list *env_list);
+char        **env_list_to_array(t_list *env_list);
+char        *get_env_val(t_list *env_list, const char *key);
+t_code      set_env_var(t_list **env_list, const char *key, const char *value);
+t_code      unset_env_var(t_shell *shell, const char *key);
+void        free_env_var(void *content);

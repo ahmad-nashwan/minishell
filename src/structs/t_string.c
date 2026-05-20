@@ -38,13 +38,24 @@ t_string	*new_string(size_t cap)
 
 char *realloc_string(t_string *word)
 {
-    size_t new_cap = word->cap * 2;
-    void *ptr = realloc(word->str, new_cap);
+    size_t  new_cap;
+    char    *new_str;
+    size_t  i;
 
-    if (!ptr)
-        return NULL;
+    new_cap = word->cap * 2;
+    new_str = malloc(new_cap);
+    if (!new_str)
+        return (NULL);
+    i = 0;
+    while (i < word->len)
+    {
+        new_str[i] = word->str[i];
+        i++;
+    }
+    new_str[i] = '\0'; 
+    free(word->str);
     word->cap = new_cap;
-    return ptr;
+    return (new_str);
 }
 
 char	peek(t_string *line)

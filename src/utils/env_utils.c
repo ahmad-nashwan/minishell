@@ -1,89 +1,73 @@
 #include "../../inc/minishell.h"
 
-static char	*build_env_entry(char *name, char *value)
+t_list  *node_from_env_str(char *env_str)
 {
-	char	*temp;
-	char	*entry;
+    char        *eq_pos;
+    char        *key;
+    t_env_var   *var;
+    t_list      *node;
 
-	if (!value)
-		return (ft_strdup(name));
-	temp = ft_strjoin(name, "=");
-	if (!temp)
-		return (NULL);
-	entry = ft_strjoin(temp, value);
-	free(temp);
-	return (entry);
+    eq_pos = ft_strchr(env_str, '=');
+    if (!eq_pos)
+        var = new_env_var(env_str, NULL);
+    else
+    {
+        key = ft_substr(env_str, 0, eq_pos - env_str);
+        if (!key)
+            return (NULL);
+        var = new_env_var(key, eq_pos + 1);
+        free(key); // MUST FREE OR WE DIE
+    }
+    if (!var)
+        return (NULL);
+    node = ft_lstnew(var);
+    if (!node)
+        free_env_var(var); // ALSO MUST FREE OR WE DIE
+    return (node);
 }
 
-size_t	find_env_var(char **env_vars, char *name, size_t name_len)
+t_list  *init_env_list(char **envp)
 {
-	size_t	i;
+    t_list  *env_list;
+    t_list  *new_node;
+    int     i;
 
-	i = 0;
-	while (env_vars[i])
-	{
-		if (ft_strncmp(env_vars[i], name, name_len) == 0
-			&& (env_vars[i][name_len] == '=' || env_vars[i][name_len] == '\0'))
-			return (i);
-		i++;
-	}
-	return (i);
+    env_list = NULL;
+    if (!envp)
+        return (NULL);
+    i = 0;
+    while (envp[i])
+    {
+        new_node = node_from_env_str(envp[i]);
+        if (!new_node)
+        {
+            ft_lstclear(&env_list, free_env_var);
+            return (NULL);
+        }
+        ft_lstadd_back(&env_list, new_node);
+        i++;
+    }
+    return (env_list);
 }
 
-t_code	update_env_var(t_shell *shell, char *name, char *value, size_t name_len)
+char    *get_env_value(t_list *env_list, const char *key)
 {
-	size_t	i;
-	char	*entry;
+    t_env_var   *env_var;
+    size_t      key_len;
 
-	i = 0;
-	while (shell->env_vars[i])
-	{
-		if (ft_strncmp(shell->env_vars[i], name, name_len) == 0
-			&& shell->env_vars[i][name_len] == '=')
-		{
-			entry = build_env_entry(name, value);
-			if (!entry)
-				return (INTERNAL_ERROR);
-			free(shell->env_vars[i]);
-			shell->env_vars[i] = entry;
-			return (OK);
-		}
-		i++;
-	}
-	return (OK);
+    if (!env_list || !key)
+        return (NULL);
+    key_len = ft_strlen(key);
+    while (env_list)
+    {
+        env_var = (t_env_var *)env_list->content;
+        if (ft_strncmp(env_var->key, key, key_len) == 0 
+            && env_var->key[key_len] == '\0')
+        {
+            return (env_var->value);
+        }
+        env_list = env_list->next;
+    }
+    return (NULL);
 }
 
-t_code	add_env_var(t_shell *shell, char *name, char *value, size_t env_count)
-{
-	char	**new_env;
-	char	*entry;
-	size_t	j;
-
-	new_env = malloc(sizeof(char *) * (env_count + 2));
-	if (!new_env)
-		return (INTERNAL_ERROR);
-	j = 0;
-	while (j < env_count)
-	{
-		new_env[j] = shell->env_vars[j];
-		j++;
-	}
-	entry = build_env_entry(name, value);
-	if (!entry)
-		return (free(new_env), INTERNAL_ERROR);
-	new_env[env_count] = entry;
-	new_env[env_count + 1] = NULL;
-	free(shell->env_vars);
-	shell->env_vars = new_env;
-	return (OK);
-}
-
-size_t	count_env(char **env_vars)
-{
-	size_t	count;
-
-	count = 0;
-	while (env_vars[count])
-		count++;
-	return (count);
-}

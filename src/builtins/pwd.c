@@ -1,13 +1,21 @@
 #include "../../inc/minishell.h"
 
-t_code	pwd(int fd_out)
+void    pwd(t_shell *shell)
 {
-	char	*wd;
+    char    *env_pwd;
+    char    *wd;
 
-	wd = getcwd(NULL, 0);
-	if (!wd)
-		return (INTERNAL_ERROR);
-	ft_putendl_fd(wd, fd_out);
-	free(wd);
-	return (OK);
+    env_pwd = get_env_value(shell->env_list, "PWD"); // Use your actual env fetcher
+    if (env_pwd)
+    {
+        ft_putendl_fd(env_pwd, STDOUT_FILENO);
+    }
+    wd = getcwd(NULL, 0);
+    if (wd)
+    {
+        ft_putendl_fd(wd, STDOUT_FILENO);
+        free(wd);
+    }
+    perror("minishell: pwd");
+    shell->exit_status = 1;
 }

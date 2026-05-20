@@ -50,7 +50,7 @@ t_code	run_builtin(t_shell *shell, t_cmd *cmd)
 	if (ft_strncmp(name, "env", 4) == 0)
 		env(*shell);
 	else if (ft_strncmp(name, "pwd", 4) == 0)
-		pwd(STDOUT_FILENO);
+		pwd(shell, STDOUT_FILENO);
 	else if (ft_strncmp(name, "echo", 5) == 0)
 		echo(argv, STDOUT_FILENO);
 	else if (ft_strncmp(name, "cd", 3) == 0)

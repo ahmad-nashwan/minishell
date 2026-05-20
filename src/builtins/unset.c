@@ -1,31 +1,46 @@
 #include "../../inc/minishell.h"
 
-static void	remove_env_var(char **env_vars, size_t index)
+static void unset_env_var(t_list **env_list, char *key)
 {
-	free(env_vars[index]);
-	while (env_vars[index])
-	{
-		env_vars[index] = env_vars[index + 1];
-		index++;
-	}
+    t_list      *prev;
+    t_list      *node;
+    t_env_var   *var;
+
+    if (!env_list || !*env_list)
+        return ;
+    prev = NULL;
+    node = *env_list;
+    while (node)
+    {
+        var = (t_env_var *)node->content;
+        if (ft_strcmp(var->key, key) == 0)
+        {
+            if (prev)
+                prev->next = node->next;
+            else
+                *env_list = node->next;
+            ft_lstdelone(node, free_env_var);
+            return ;
+        }
+        prev = node;
+        node = node->next;
+    }
 }
 
-t_code	unset(t_shell *shell, char **args)
+void	unset(t_shell *shell, t_list *args)
 {
-	int		i;
-	size_t	name_len;
-	size_t	index;
+	char *key;
 
-	if (!shell || !shell->env_vars || !args)
-		return (INTERNAL_ERROR);
-	i = 1;
-	while (args[i])
+	if (!shell || !args)
 	{
-		name_len = ft_strlen(args[i]);
-		index = find_env_var(shell->env_vars, args[i], name_len);
-		if (shell->env_vars[index])
-			remove_env_var(shell->env_vars, index);
-		i++;
+		report_error(shell, INTERNAL_ERROR, "Invalid pointer");
+		return ;
 	}
-	return (OK);
+	args = args->next; // skipping the unset command string
+	while (args)
+	{
+		key = (char *)args->content;
+		unset_env_var(&shell->env_list, key);
+		args = args->next;
+	}
 }

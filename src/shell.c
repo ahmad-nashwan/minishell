@@ -10,11 +10,16 @@ void	reset_shell(t_shell *shell)
 	shell->cmds = NULL;
 }
 
-void init_shell(t_shell *shell, char **envp)
+void    init_shell(t_shell *shell, char **envp)
 {
-    shell->env_vars = copy_env(envp);
-    if (!shell->env_vars)
-        error_exit("Malloc failure.");
+    shell->env_list = NULL;
+    if (envp && *envp)
+    {
+        shell->env_list = init_env_list(envp);
+        if (!shell->env_list)
+            error_exit("Malloc failure.");
+    }
+    shell->cwd = NULL;
     shell->tokens = NULL;
     shell->cmds = NULL;
     shell->exit_status = 0;
@@ -67,7 +72,7 @@ int	start_shell(t_shell *shell)
 	}
 	printf("exit\n");
 	reset_shell(shell);
-	free_env(shell->env_vars);
+	ft_lstclear(&shell->env_list, free_env_var);
 	rl_clear_history();
 	return (shell->exit_status);
 }

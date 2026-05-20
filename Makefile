@@ -31,7 +31,6 @@ SRC = \
 	src/tokenizer/scan_word.c \
 	src/parsing/parsing.c \
 	src/parsing/syntax_errors.c \
-	src/builtins/builtins.c \
 	src/builtins/echo.c \
 	src/builtins/pwd.c \
 	src/builtins/env.c \
