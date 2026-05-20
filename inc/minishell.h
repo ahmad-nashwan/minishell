@@ -116,12 +116,12 @@ void		redir_free(void *p);
 
 // t_env
 t_env_var   *new_env_var(const char *key, const char *value);
-t_env_var *find_env_var(t_list *env_list, const char *key);
-t_code  update_env_value(t_env_var *env, const char *value);
-t_code add_env_var(t_list **env_list, t_env_var *var);
-void    free_env_var(void *content);
-char    **get_env_array(t_list *env_list);
-
+t_env_var 	*find_env_var(t_list *env_list, const char *key);
+t_code  	update_env_value(t_env_var *env, const char *value);
+t_code 		add_env_var(t_list **env_list, t_env_var *var);
+void    	free_env_var(void *content);
+char    	**get_env_array(t_list *env_list);
+void 		free_array(char **arr, int elements);
 
 // Tokenization & Scanners
 t_code		tokenizer(t_shell *shell, t_string *line);
@@ -164,39 +164,35 @@ t_code		handle_error(t_shell *shell);
 t_code		report_syntax_error(char *bad_token);
 t_code		parse_error(t_shell *shell, t_cmd *cmd, t_list **cmd_list,
 				t_code error);
-
 // Execution
 t_code		excute_cmds(t_shell *shell);
 t_code		excuter(t_shell *shell);
 t_code		child_process(t_shell *shell);
 char		*find_cmd_path(t_shell *shell);
-t_code		exec_absolute_path(t_shell *shell, char **argv);
+t_code		exec_absolute_path(char **argv, char **envp);
 char		**argv_list_to_array(t_list *argv_list);
 char		*build_full_path(char *dir, char *cmd);
-t_code		search_and_exec(t_shell *shell, char **argv);
-t_code		exec_from_path(t_shell *shell, char **argv, char **path_list);
+t_code		search_and_exec(t_shell *shell, char **argv, char **envp);
+t_code		exec_from_path( char **argv, char **path_list, char **envp);
 int			is_builtin(char *name);
 t_code		run_builtin(t_shell *shell, t_cmd *cmd);
-t_env_var *find_env_var(t_list *env_list, const char *key);
+t_env_var 	*find_env_var(t_list *env_list, const char *key);
 
 t_code 		add_env_var(t_list **env_list, t_env_var *var);
-size_t		count_env(char **env_vars);
-void		sort_env(char **sorted, size_t count);
-void		print_env_entry(char *entry);
 t_code		print_export(t_shell *shell);
 
 // Built-in functions
 void		env(t_shell *shell, t_list *args);
 void  		pwd(t_shell *shell);
-void		echo(t_list *args);
-void		shell_exit(t_shell *shell, char **args);
+void  		echo(t_shell *shell, t_list *args);
+void		shell_exit(t_shell *shell, t_list *args);
 void		cd(t_shell *shell, t_list *args);
+void		unset(t_shell *shell, t_list *args);
 
 // export
 void		export(t_shell *shell, t_list *args);
 t_code	 	export_variables(t_list **env_list, t_list *args);
 t_code 		export_print(t_list *env_list);
-t_code		unset(t_shell *shell, t_list *args);
 
 
 t_env_var   *create_env_var(char *env_str);
@@ -205,5 +201,4 @@ char    	**get_env_array(t_list *env_list);
 char        **env_list_to_array(t_list *env_list);
 char        *get_env_val(t_list *env_list, const char *key);
 t_code      set_env_var(t_list **env_list, const char *key, const char *value);
-t_code      unset_env_var(t_shell *shell, const char *key);
 void        free_env_var(void *content);

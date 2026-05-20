@@ -28,17 +28,20 @@ t_code	child_process(t_shell *shell)
 {
 	t_cmd	*cmd;
 	char	**argv;
+	char	**envp;
 
 	cmd = (t_cmd *)shell->cmds->content;
 	argv = argv_list_to_array(cmd->argv_list);
 	if (!argv || !argv[0])
 		return (INTERNAL_ERROR);
+	envp = get_env_array(shell->env_list);
+	if (!envp)
+		return (INTERNAL_ERROR);
 	if (ft_strchr(argv[0], '/'))
-		return (exec_absolute_path(shell, argv));
-	return (search_and_exec(shell, argv));
+		return (exec_absolute_path(argv, envp));
+	return (search_and_exec(shell, argv, envp));
 }
-
-t_code	exec_from_path(t_shell *shell, char **argv, char **path_list)
+t_code	exec_from_path(char **argv, char **path_list, char **envp)
 {
 	char	*full_path;
 	int		i;
@@ -49,7 +52,7 @@ t_code	exec_from_path(t_shell *shell, char **argv, char **path_list)
 		full_path = build_full_path(path_list[i], argv[0]);
 		if (full_path && access(full_path, X_OK) == 0)
 		{
-			execve(full_path, argv, shell->env_vars);
+			execve(full_path, argv, envp);
 			return (INTERNAL_ERROR);
 		}
 		if (access(full_path, F_OK) == 0 && access(full_path, X_OK) != 0)
@@ -59,7 +62,7 @@ t_code	exec_from_path(t_shell *shell, char **argv, char **path_list)
 	return (CMD_NOT_FOUND);
 }
 
-t_code	search_and_exec(t_shell *shell, char **argv)
+t_code	search_and_exec(t_shell *shell, char **argv, char **envp)
 {
 	char	**path_list;
 	char	*cmd_path;
@@ -76,22 +79,17 @@ t_code	search_and_exec(t_shell *shell, char **argv)
 		report_error(shell, CMD_NOT_FOUND, argv[0]);
 		exit(EXIT_FAILURE);
 	}
-	return (exec_from_path(shell, argv, path_list));
+	return (exec_from_path(argv, path_list, envp));
 }
 
-t_code	exec_absolute_path(t_shell *shell, char **argv)
+t_code	exec_absolute_path(char **argv, char **envp)
 {
-	if (ft_strchr(argv[0], '/'))
+	if (access(argv[0], F_OK) == 0)
 	{
-		if (access(argv[0], F_OK) == 0)
-		{
-			if (access(argv[0], X_OK) == 0)
-				return (execve(argv[0], argv, shell->env_vars));
-			else
-				return (PERMISSION_DENIED);
-		}
+		if (access(argv[0], X_OK) == 0)
+			return (execve(argv[0], argv, envp));
 		else
-			return (CMD_NOT_FOUND);
+			return (PERMISSION_DENIED);
 	}
-	return (INTERNAL_ERROR);
+	return (CMD_NOT_FOUND);
 }

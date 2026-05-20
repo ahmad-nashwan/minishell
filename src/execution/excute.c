@@ -43,24 +43,21 @@ int	is_builtin(char *name)
 t_code	run_builtin(t_shell *shell, t_cmd *cmd)
 {
 	char	*name;
-	char	**argv;
 
 	name = (char *)cmd->argv_list->content;
-	argv = argv_list_to_array(cmd->argv_list);
 	if (ft_strncmp(name, "env", 4) == 0)
-		env(*shell);
+		env(shell, cmd->argv_list);
 	else if (ft_strncmp(name, "pwd", 4) == 0)
-		pwd(shell, STDOUT_FILENO);
+		pwd(shell);
 	else if (ft_strncmp(name, "echo", 5) == 0)
-		echo(argv, STDOUT_FILENO);
+		echo(shell, cmd->argv_list);
 	else if (ft_strncmp(name, "cd", 3) == 0)
-		cd(shell, argv);
+		cd(shell, cmd->argv_list);
 	else if (ft_strncmp(name, "export", 7) == 0)
-		export(shell, argv);
+		export(shell, cmd->argv_list);
 	else if (ft_strncmp(name, "unset", 6) == 0)
-		unset(shell, argv);
+		unset(shell, cmd->argv_list);
 	else if (ft_strncmp(name, "exit", 5) == 0)
-		shell_exit(shell, argv);
-	free(argv);
+		shell_exit(shell, cmd->argv_list);
 	return (OK);
 }

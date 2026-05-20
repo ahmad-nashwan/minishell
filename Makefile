@@ -21,6 +21,8 @@ SRC = \
 	src/structs/t_cmd.c \
 	src/structs/t_cmd_list.c \
 	src/structs/t_redir.c \
+	src/structs/env/get_env_array.c \
+	src/structs/env/t_env.c \
 	src/tokenizer/tokenizer.c \
 	src/tokenizer/expander/init_expand.c \
 	src/tokenizer/expander/find_expand.c \
@@ -36,10 +38,11 @@ SRC = \
 	src/builtins/env.c \
 	src/builtins/exit.c \
 	src/builtins/cd.c \
-	src/builtins/export.c \
+	src/builtins/export/export.c \
+	src/builtins/export/export_print.c \
+	src/builtins/export/export_variables.c \
 	src/builtins/unset.c \
 	src/utils/env_utils.c \
-	src/utils/export_utils.c\
 	src/utils/excution_utils.c \
 	src/utils/helpers.c \
 	src/utils/safe_atol.c \

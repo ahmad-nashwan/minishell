@@ -2,18 +2,7 @@
 
 char	*find_cmd_path(t_shell *shell)
 {
-	char	**envvars;
-
-	envvars = shell->env_vars;
-	while (*envvars)
-	{
-		if (ft_strncmp(*envvars, "PATH=", 5) == 0)
-		{
-			return (ft_strdup(*envvars + 5));
-		}
-		envvars++;
-	}
-	return (NULL);
+    return (get_env_value(shell->env_list, "PATH"));
 }
 
 char	*build_full_path(char *dir, char *cmd)

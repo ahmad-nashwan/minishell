@@ -53,14 +53,17 @@ static t_code export_with_value(t_list **env_list, char *arg, char *eq)
 static t_code process_export(t_list **env_list, char *arg)
 {
     char        *eq;
+    t_code      rc;
 
     eq = ft_strchr(arg, '=');
     if (!eq)
-        return (export_without_value(env_list, arg));
-    return (export_with_value(env_list, arg, eq));
+        rc = export_without_value(env_list, arg);
+    else
+        rc = export_with_value(env_list, arg, eq);
+    return (rc);
 }
 
-t_code export_variables(t_shell *shell, t_list *args)
+t_code export_variables(t_list **env_list, t_list *args)
 {
     t_code  final_status;
 
@@ -76,14 +79,13 @@ t_code export_variables(t_shell *shell, t_list *args)
         }
         else
         {
-            if (process_export(shell->env_list, (char *)args->content) != OK)
-                final_status = ERR;
+            if (process_export(env_list, (char *)args->content) != OK)
+            {
+                final_status = INTERNAL_ERROR;
+                break;
+            }
         }
         args = args->next;
     }
-    if (final_status == OK)
-        shell->exit_status = 0;
-    else
-        shell->exit_status = 1;
     return (final_status);
 }

@@ -1,6 +1,6 @@
 # include "../../../inc/minishell.h"
 
-static void free_array(char **arr, int elements)
+void free_array(char **arr, int elements)
 {
     int i;
 
@@ -40,7 +40,6 @@ static char *get_var_str(t_env_var *var)
 static t_code fill_array(t_list *env_list, char **arr, int size)
 {
     t_env_var   *var;
-    char        *str;
     t_list      *node;
     int         i;
 
@@ -64,13 +63,10 @@ static t_code fill_array(t_list *env_list, char **arr, int size)
 char    **get_env_array(t_list *env_list)
 {
     int size;
-    t_list *node;
     char    **arr;
-    int     i;
 
     if (!env_list)
         return (NULL);
-    i = 0;
     size = ft_lstsize(env_list);
     arr = malloc(sizeof(char *) * (size + 1));
     if (!arr)

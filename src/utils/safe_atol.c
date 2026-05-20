@@ -42,6 +42,8 @@ int	safe_atol(const char *str, long *out)
 	if (sign == -1 && result == (unsigned long)LONG_MAX + 1)
         *out = LONG_MIN;
     else
+	{
         *out = (long)result * sign;
+	}
 	return (1);
 }
