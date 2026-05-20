@@ -21,7 +21,7 @@ void	export(t_shell *shell, t_list *args)
 	}
 	else
 	{
-		rc = export_variables(&shell->env_list, args + 1);
+		rc = export_variables(&shell->env_list, args);
 		if (rc == INTERNAL_ERROR)
 		{
 			report_error(shell, INTERNAL_ERROR, "Malloc Failure");

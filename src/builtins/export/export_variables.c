@@ -68,6 +68,7 @@ t_code export_variables(t_list **env_list, t_list *args)
     t_code  final_status;
 
     final_status = OK;
+    args = args->next;
     while (args)
     {
         if (!is_valid_identifier((char *)args->content))
