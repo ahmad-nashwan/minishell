@@ -9,12 +9,14 @@ void    pwd(t_shell *shell)
     if (env_pwd)
     {
         ft_putendl_fd(env_pwd, STDOUT_FILENO);
+        return ;
     }
     wd = getcwd(NULL, 0);
     if (wd)
     {
         ft_putendl_fd(wd, STDOUT_FILENO);
         free(wd);
+        return ;
     }
     perror("minishell: pwd");
     shell->exit_status = 1;

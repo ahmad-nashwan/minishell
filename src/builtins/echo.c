@@ -5,6 +5,7 @@ static void	skip_new_line_flags(t_list **args, int *new_line)
 	char	*str;
 	int		i;
 
+    *new_line = 1;
 	while (*args)
 	{
 		i = 0;
@@ -38,8 +39,10 @@ void  echo(t_shell *shell, t_list *args)
     }
     args = args->next;
     if (!args)
+    {
         ft_putstr_fd("\n", STDOUT_FILENO);
-    new_line = 1;
+        return ;
+    }
     skip_new_line_flags(&args, &new_line);
     while (args)
     {

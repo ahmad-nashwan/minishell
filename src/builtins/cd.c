@@ -56,6 +56,11 @@ void  cd(t_shell *shell, t_list *args)
     target = get_cd_target(shell, args);
     if (!target)
         return ;
+    if (target[0] == '\0')
+    {
+        shell->exit_status = 0;
+        return ;
+    }
     old_pwd = get_env_value(shell->env_list, "PWD");
     if (chdir(target) == -1)
     {

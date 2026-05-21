@@ -31,6 +31,7 @@ void    env(t_shell *shell, t_list *args)
         ft_putstr_fd((char *)args->next->content, STDERR_FILENO);
         ft_putstr_fd("': No such file or directory\n", STDERR_FILENO);
         shell->exit_status = 127; 
+        return ;
     }
     print_env(shell->env_list);
     shell->exit_status = 0;
