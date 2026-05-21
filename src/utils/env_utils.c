@@ -70,4 +70,3 @@ char    *get_env_value(t_list *env_list, const char *key)
     }
     return (NULL);
 }
-

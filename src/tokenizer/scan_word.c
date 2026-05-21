@@ -1,5 +1,20 @@
 # include "../../inc/minishell.h"
 
+static t_code expand_tilde(t_shell *shell, t_string *line, t_string *word)
+{
+    char *home;
+    char next;
+
+    advance(line);
+    next = peek(line);
+    if (next != '/' && next != '\0' && !ft_isspace(next))
+        return (append(word, '~'));
+    home = get_env_value(shell->env_list, "HOME");
+    if (home)
+        return (append_str(word, home));
+    return (append(word, '~'));
+}
+
 static t_code quoted_mode(t_shell *shell, t_string *line, t_string *word)
 {
 	int		expand_flag;
@@ -46,14 +61,11 @@ static t_code	normal_mode(t_shell *shell, t_string *line, t_string *word, int *q
 			result = quoted_mode(shell, line, word);
 		}
 		else if (c == '$')
-		{
 			result = init_expand(shell, line, word, 0);
-		}
+		else if (c == '~' && word->len == 0)
+			result = expand_tilde(shell, line, word);
 		else
-		{
-			if (append(word, advance(line)) == INTERNAL_ERROR)
-				return (INTERNAL_ERROR); 
-		}
+			result = append(word, advance(line));
 	}
 	return (result);
 }
@@ -81,7 +93,6 @@ t_code scan_word(t_shell *shell, t_string *line)
 	}
 	else if (add_token(&shell->tokens, word->str, WORD) != OK)
 	{
-		printf("SUP\n");
 		free_t_string(word);
 		return (INTERNAL_ERROR);
 	}

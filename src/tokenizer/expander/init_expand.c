@@ -18,41 +18,33 @@ t_string *get_var_name(t_string *line)
 	return (name);
 }
 
-t_code get_var_value(t_shell *shell, t_string *name, t_string **value)
+t_code	expand_var(t_shell *shell, t_string *word, char *value, int quoted)
 {
-    char    *raw_val;
-    char    *dup;
-
-    raw_val = get_env_value(shell->env_list, name->str);
-    if (!raw_val)
-    {
-        *value = NULL;
-        return (NONE);
-    }
-    dup = ft_strdup(raw_val);
-    if (!dup)
-        return (INTERNAL_ERROR);
-    *value = init_string(dup);
-    if (!*value)
-    {
-        free(dup);
-        return (INTERNAL_ERROR);
-    }
-    return (OK);
+    if (!quoted && ft_strchr(value, ' '))
+		return (expand_split(word, shell, value));
+	else
+		return (append_str(word, value));
 }
 
 t_code	init_expand(t_shell *shell, t_string *line, t_string *word, int quoted)
 {
-	t_code		rc;
-	char		c;
+	char	c;
 
-	advance(line); // consume $
+	advance(line);
 	c = peek(line);
 	if (c == '?')
-		rc = expand_exit_status(shell, line, word, quoted);
-	else if(ft_isalpha(c) || c == '_')
-		rc = find_variable_expand(shell, line, word, quoted);
-	else
-		rc = append(word, '$');
-	return (rc);
+		return (expand_exit_status(shell, line, word, quoted));
+	if (c == '0')
+	{
+		advance(line);
+		return (append_str(word, "minishell"));
+	}
+	if (ft_isdigit(c))
+	{
+		advance(line);
+		return (OK);
+	}
+	if (ft_isalpha(c) || c == '_')
+		return (find_variable_expand(shell, line, word, quoted));
+	return (append(word, '$'));
 }

@@ -28,7 +28,10 @@ void	shell_exit(t_shell *shell, t_list *args)
 	}
 	ft_putstr_fd("exit\n", STDERR_FILENO);
 	if (!args->next)
+	{
 		shell->should_exit = 1;
+		return ;
+	}
 	str = (char *) args->next->content;
 	if (!is_number(str) || !safe_atol(str, &code))
 		exit_non_numerial(shell, str);

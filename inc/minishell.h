@@ -1,8 +1,8 @@
 #include "../libft/libft.h"
+#include <stdio.h>
 #include <limits.h>
 #include <readline/history.h>
 #include <readline/readline.h>
-#include <stdio.h>
 #include <stdlib.h>
 #include <sys/types.h>
 #include <sys/wait.h>
@@ -132,7 +132,6 @@ t_code		scan_pipe(t_shell *shell, t_string *line);
 // Expansion
 t_code		init_expand(t_shell *shell, t_string *line, t_string *word,
 				int quoted);
-t_code		get_var_value(t_shell *shell, t_string *name, t_string **value);
 t_string	*get_var_name(t_string *line);
 t_code		find_variable_expand(t_shell *shell, t_string *line, t_string *word,
 				int quoted);
@@ -140,6 +139,7 @@ t_code		expand_split(t_string *word, t_shell *shell, char *value);
 t_code		expand_var(t_shell *shell, t_string *word, char *value, int quoted);
 t_code		expand_exit_status(t_shell *shell, t_string *line, t_string *word,
 				int quoted);
+t_code 		append_str(t_string *word, char *s);
 
 // Parsing
 t_code		parse(t_shell *shell);
