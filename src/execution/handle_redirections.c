@@ -48,7 +48,6 @@ t_code  handle_redirections(t_shell *shell, t_cmd *cmd)
         {
             perror("minishell: dup2");
             close(fd);
-            report_error(shell, INTERNAL_ERROR, "Dup2 failure");
             return (ERR);
         }
         close(fd);

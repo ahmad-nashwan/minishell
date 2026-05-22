@@ -85,7 +85,6 @@ typedef struct s_redir
 // Shell functions & utils
 int			start_shell(t_shell *shell);
 void		init_shell(t_shell *shell, char **envp);
-void		free_env(char **env);
 void		reset_shell(t_shell *shell);
 
 // t_string Functions
@@ -153,6 +152,8 @@ void		free_split(char **words);
 int			safe_atol(const char *str, long *out);
 int			is_number(char *arg);
 int 		ft_strcmp(const char *s1, const char *s2);
+void		free_strings_array(char **arr, int size);
+char		**list_to_array(t_list *list);;
 
 // Tests
 void		print_tokens(t_list *tokens);
@@ -169,17 +170,17 @@ t_code		parse_error(t_shell *shell, t_cmd *cmd, t_list **cmd_list,
 t_code		process_commands(t_shell *shell);
 t_code		process_pipeline(t_shell *shell);
 t_code		run_builtin(t_shell *shell, t_cmd *cmd);
-void 		run_child(t_shell *shell, t_cmd *cmd, int input_fd, int *pipe_fd);
+t_code 		run_child(t_shell *shell, t_cmd *cmd, int input_fd, int *pipe_fd);
 t_code  	handle_redirections(t_shell *shell, t_cmd *cmd);
+
+char    	*get_valid_path(char **paths, char *cmd);
 
 char		*find_cmd_path(t_shell *shell);
 t_code		exec_absolute_path(char **argv, char **envp);
-char		**argv_list_to_array(t_list *argv_list);
 char		*build_full_path(char *dir, char *cmd);
 t_code		search_and_exec(t_shell *shell, char **argv, char **envp);
 t_code		exec_from_path( char **argv, char **path_list, char **envp);
 int			is_builtin(char *name);
-t_code		run_builtin(t_shell *shell, t_cmd *cmd);
 t_env_var 	*find_env_var(t_list *env_list, const char *key);
 
 t_code 		add_env_var(t_list **env_list, t_env_var *var);
@@ -201,8 +202,6 @@ t_code 		export_print(t_list *env_list);
 
 t_env_var   *create_env_var(char *env_str);
 t_list      *init_env_list(char **envp);
-char    	**get_env_array(t_list *env_list);
-char        **env_list_to_array(t_list *env_list);
 char        *get_env_val(t_list *env_list, const char *key);
 t_code      set_env_var(t_list **env_list, const char *key, const char *value);
 void        free_env_var(void *content);

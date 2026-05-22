@@ -9,6 +9,8 @@ t_code	process_commands(t_shell *shell)
 		cmd = (t_cmd *)shell->cmds->content;
 		if (cmd->argv_list && is_builtin((char *)cmd->argv_list->content))
 		{
+			if (handle_redirections(shell, cmd) == ERR)
+				return (ERR);
 			run_builtin(shell, cmd);
 			return (OK);
 		}
@@ -54,5 +56,7 @@ t_code	run_builtin(t_shell *shell, t_cmd *cmd)
 		unset(shell, cmd->argv_list);
 	else if (ft_strncmp(name, "exit", 5) == 0)
 		shell_exit(shell, cmd->argv_list);
+	else
+		return (NONE);
 	return (OK);
 }

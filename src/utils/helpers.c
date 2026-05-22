@@ -77,3 +77,19 @@ int ft_strcmp(const char *s1, const char *s2)
     }
     return ((unsigned char)*s1 - (unsigned char)*s2);
 }
+
+void	free_strings_array(char **arr, int size)
+{
+	int	i;
+
+	i = 0;
+	if (!arr)
+		return ;
+	while (i < size && arr[i])
+	{
+		free(arr[i]);
+		i++;
+	}
+	free(arr);
+	*arr = NULL;
+}

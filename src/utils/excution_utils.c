@@ -18,18 +18,18 @@ char	*build_full_path(char *dir, char *cmd)
 	return (full_path);
 }
 
-char	**argv_list_to_array(t_list *argv_list)
+char	**list_to_array(t_list *list)
 {
 	t_list	*current;
 	char	**argv;
 	int		size;
 	int		i;
 
-	size = ft_lstsize(argv_list);
+	size = ft_lstsize(list);
 	argv = malloc(sizeof(char *) * (size + 1));
 	if (!argv)
 		return (NULL);
-	current = argv_list;
+	current = list;
 	i = 0;
 	while (current)
 	{
