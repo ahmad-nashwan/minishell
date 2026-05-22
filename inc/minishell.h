@@ -7,6 +7,8 @@
 #include <sys/types.h>
 #include <sys/wait.h>
 #include <unistd.h>
+#include <signal.h>
+#include <fcntl.h>
 
 typedef enum s_type
 {
@@ -78,7 +80,6 @@ typedef struct s_redir
 	t_type	type;
 	char	*target;
 }			t_redir;
-
 
 
 // Shell functions & utils
@@ -165,9 +166,12 @@ t_code		report_syntax_error(char *bad_token);
 t_code		parse_error(t_shell *shell, t_cmd *cmd, t_list **cmd_list,
 				t_code error);
 // Execution
-t_code		excute_cmds(t_shell *shell);
-t_code		excuter(t_shell *shell);
-t_code		child_process(t_shell *shell);
+t_code		process_commands(t_shell *shell);
+t_code		process_pipeline(t_shell *shell);
+t_code		run_builtin(t_shell *shell, t_cmd *cmd);
+void 		run_child(t_shell *shell, t_cmd *cmd, int input_fd, int *pipe_fd);
+t_code  	handle_redirections(t_shell *shell, t_cmd *cmd);
+
 char		*find_cmd_path(t_shell *shell);
 t_code		exec_absolute_path(char **argv, char **envp);
 char		**argv_list_to_array(t_list *argv_list);

@@ -20,7 +20,7 @@ static t_code process_cmd(t_shell *shell, t_list *node, int *input_fd, pid_t *pi
     if (*pid == 0)
     {
         if (node->next)
-            run_child(shell, cmd, *input_fd, fd); // Dereference input_fd
+            run_child(shell, cmd, *input_fd, fd);
         else
             run_child(shell, cmd, *input_fd, NULL);
         exit(shell->exit_status);
