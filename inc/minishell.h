@@ -11,6 +11,11 @@
 #include <fcntl.h>
 #include <sys/stat.h>
 
+/* ************************************************************************** */
+/*                                                                            */
+/*                                     ENUMS                                  */
+/*                                                                            */
+/* ************************************************************************** */
 typedef enum s_type
 {
 	WORD,
@@ -19,9 +24,9 @@ typedef enum s_type
 	OUT_RED,
 	IN_RED,
 	APPEND,
-	INVALID,
 	END
 }			t_type;
+
 
 typedef enum e_code
 {
@@ -39,11 +44,19 @@ typedef enum e_code
 	ERR
 }			t_code;
 
+
+
+/* ************************************************************************** */
+/*                                                                            */
+/*                               Data Structures                              */
+/*                                                                            */
+/* ************************************************************************** */
 typedef struct s_token
 {
 	char	*lexeme;
 	t_type	type;
 }			t_token;
+
 
 typedef struct s_string
 {
@@ -53,11 +66,13 @@ typedef struct s_string
 	size_t	len;
 }			t_string;
 
+
 typedef struct s_env_var
 {
     char    *key;
     char    *value;
 } t_env_var;
+
 
 typedef struct s_shell
 {
@@ -70,11 +85,13 @@ typedef struct s_shell
 	int		should_exit;
 }			t_shell;
 
+
 typedef struct s_cmd
 {
 	t_list	*argv_list;
 	t_list	*redirections;
 }			t_cmd;
+
 
 typedef struct s_redir
 {
@@ -83,11 +100,21 @@ typedef struct s_redir
 }			t_redir;
 
 
-// Shell functions & utils
+/* ************************************************************************** */
+/*                                                                            */
+/*                                Shell Functions                             */
+/*                                                                            */
+/* ************************************************************************** */
 int			start_shell(t_shell *shell);
 void		init_shell(t_shell *shell, char **envp);
 void		reset_shell(t_shell *shell);
 
+
+/* ************************************************************************** */
+/*                                                                            */
+/*                             Structs functions                              */
+/*                                                                            */
+/* ************************************************************************** */
 // t_string Functions
 t_string	*init_string(char *content);
 t_string	*new_string(size_t cap);
@@ -116,14 +143,23 @@ t_redir		*redir_create(t_type type, char *target);
 void		redir_free(void *p);
 
 // t_env
+t_env_var   *create_env_var(char *env_str);
 t_env_var   *new_env_var(const char *key, const char *value);
-t_env_var 	*find_env_var(t_list *env_list, const char *key);
 t_code  	update_env_value(t_env_var *env, const char *value);
-t_code 		add_env_var(t_list **env_list, t_env_var *var);
+t_env_var 	*find_env_var(t_list *env_list, const char *key);
 void    	free_env_var(void *content);
+// env list
+t_list      *init_env_list(char **envp);
+t_code 		add_env_var(t_list **env_list, t_env_var *var);
 char    	**get_env_array(t_list *env_list);
-void 		free_array(char **arr, int elements);
+char		*get_env_value(t_list *env_vars, const char *key);
 
+
+/* ************************************************************************** */
+/*                                                                            */
+/*                                    Parsing                                 */
+/*                                                                            */
+/* ************************************************************************** */
 // Tokenization & Scanners
 t_code		tokenizer(t_shell *shell, t_string *line);
 t_code		scan_word(t_shell *shell, t_string *line);
@@ -145,61 +181,79 @@ t_code 		append_str(t_string *word, char *s);
 // Parsing
 t_code		parse(t_shell *shell);
 
-// Helpers
-int			ft_isspace(char c);
-char		**copy_env(char **envp);
-char		*get_env_value(t_list *env_vars, const char *key);
-void		free_split(char **words);
-int			safe_atol(const char *str, long *out);
-int			is_number(char *arg);
-int 		ft_strcmp(const char *s1, const char *s2);
-void		free_strings_array(char **arr, int size);
-char		**list_to_array(t_list *list);;
 
-// Tests
-void		print_tokens(t_list *tokens);
-void		print_cmds(t_list *cmds);
-
-// Error handling
-void		report_error(t_shell *shell, t_code e, char *msg);
-void		error_exit(char *error);
-t_code		handle_error(t_shell *shell);
-t_code		report_syntax_error(char *bad_token);
-t_code		parse_error(t_shell *shell, t_cmd *cmd, t_list **cmd_list,
-				t_code error);
-// Execution
+/* ************************************************************************** */
+/*                                                                            */
+/*                                   Execution                                */
+/*                                                                            */
+/* ************************************************************************** */
 t_code		process_commands(t_shell *shell);
 t_code		process_pipeline(t_shell *shell);
 t_code		run_builtin(t_shell *shell, t_cmd *cmd);
 void 		run_child(t_shell *shell, t_cmd *cmd, int input_fd, int *pipe_fd);
 t_code  	handle_redirections(t_cmd *cmd);
 
+// Execution helpers
 char    	*get_valid_path(char **paths, char *cmd);
-
 char		*find_cmd_path(t_shell *shell);
 char		*build_full_path(char *dir, char *cmd);
-t_code		exec_from_path( char **argv, char **path_list, char **envp);
 int			is_builtin(char *name);
 t_env_var 	*find_env_var(t_list *env_list, const char *key);
-
 t_code 		add_env_var(t_list **env_list, t_env_var *var);
-t_code		print_export(t_shell *shell);
+t_code  	is_dir(char *path);
+void 		free_argv_envp_exit(char **argv, char **envp, int exit_code);
 
-// Built-in functions
+
+/* ************************************************************************** */
+/*                                                                            */
+/*                                   Builtins                                 */
+/*                                                                            */
+/* ************************************************************************** */
 void		env(t_shell *shell, t_list *args);
 void  		pwd(t_shell *shell);
 void  		echo(t_shell *shell, t_list *args);
 void		shell_exit(t_shell *shell, t_list *args);
 void		cd(t_shell *shell, t_list *args);
 void		unset(t_shell *shell, t_list *args);
-
-// export
 void		export(t_shell *shell, t_list *args);
+
+// export helpers
 t_code	 	export_variables(t_list **env_list, t_list *args);
 t_code 		export_print(t_list *env_list);
 
 
-t_env_var   *create_env_var(char *env_str);
-t_list      *init_env_list(char **envp);
-t_code      set_env_var(t_list **env_list, const char *key, const char *value);
-void        free_env_var(void *content);
+/* ************************************************************************** */
+/*                                                                            */
+/*                             Error handling                                 */
+/*                                                                            */
+/* ************************************************************************** */
+void		report_error(t_shell *shell, t_code e, char *msg);
+void		error_exit(char *error);
+t_code		report_syntax_error(char *bad_token);
+t_code		parse_error(t_shell *shell, t_cmd *cmd, t_list **cmd_list, t_code error);
+void 		print_cmd_error(char *cmd, char *msg);
+
+
+/* ************************************************************************** */
+/*                                                                            */
+/*                                General Helpers                             */
+/*                                                                            */
+/* ************************************************************************** */
+int			ft_isspace(char c);
+char		**copy_env(char **envp);
+void		free_split(char **words);
+int			safe_atol(const char *str, long *out);
+int			is_number(char *arg);
+int 		ft_strcmp(const char *s1, const char *s2);
+char		**list_to_string_array(t_list *list);
+void		free_strings_array(char **arr);
+void 		free_array(char **arr, int elements); // we may remove this
+
+
+/* ************************************************************************** */
+/*                                                                            */
+/*                                    Testing                                 */
+/*                                                                            */
+/* ************************************************************************** */
+void		print_tokens(t_list *tokens);
+void		print_cmds(t_list *cmds);

@@ -50,10 +50,11 @@ SRC = \
 	src/execution/run_builtin.c \
 	src/execution/heredoc.c \
 	src/utils/env_utils.c \
-	src/utils/excution_utils.c \
 	src/utils/helpers.c \
 	src/utils/safe_atol.c \
 	src/utils/shell_utils.c \
+	src/utils/string_utils.c \
+	src/utils/array_utils.c \
 	src/tests/print_tokens.c \
 	src/tests/print_cmds.c \
 

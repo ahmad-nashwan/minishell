@@ -1,51 +1,28 @@
 # include "../../inc/minishell.h"
 
-static void print_err_exit(char *cmd, char *msg, int code)
-{
-    ft_putstr_fd("minishell: ", STDERR_FILENO);
-    ft_putstr_fd(cmd, STDERR_FILENO);
-    ft_putstr_fd(msg, STDERR_FILENO);
-    exit(code);
-}
-
-static t_code is_dir(char *path)
-{
-    struct stat path_stat;
-
-    stat(path, &path_stat);
-    if (S_ISDIR(path_stat.st_mode))
-    {
-        ft_putstr_fd("minishell: ", STDERR_FILENO);
-        ft_putstr_fd(path, STDERR_FILENO);
-        ft_putstr_fd(": Is a directory\n", STDERR_FILENO);
-        return(OK);
-    }
-    return (ERR);
-}
-
 static void exec_absolute_path(char **argv, char **envp)
 {
     // file doesn't exist
     if (argv[0] && is_dir(argv[0]) == OK)
-        exit(126);
+        free_argv_envp_exit(argv, envp, 126);
     if (access(argv[0], F_OK) == -1)
     {
         ft_putstr_fd("minishell: ", STDERR_FILENO);
         perror(argv[0]);
-        exit(127);
+            free_argv_envp_exit(argv, envp, 127);
     }
     // file exists but something is wrong, ex: permission or its a dir
     if (access(argv[0], X_OK) == -1)
     {
         ft_putstr_fd("minishell: ", STDERR_FILENO);
         perror(argv[0]);
-        exit(126);
+        free_argv_envp_exit(argv, envp, 126);
     }
     // if it fails, print the error, if it works, the following lines are never reached since they are wiped from ram
     execve(argv[0], argv, envp);
     ft_putstr_fd("minishell: ", STDERR_FILENO);
     perror(argv[0]);
-    exit(126);
+    free_argv_envp_exit(argv, envp, 126);
 }
 
 static void search_and_exec(t_shell *shell, char **argv, char **envp)
@@ -56,22 +33,29 @@ static void search_and_exec(t_shell *shell, char **argv, char **envp)
 
     path_env = get_env_value(shell->env_list, "PATH");
     if (!path_env)
-        print_err_exit(argv[0], ": No such file or directory\n", 127);
+    {
+        print_cmd_error(argv[0], ": No such file or directory\n");
+        free_argv_envp_exit(argv, envp, 127);
+    }
     paths = ft_split(path_env, ':');
     if (!paths)
-        exit(1);
+        free_argv_envp_exit(argv, envp, 1);
     path = get_valid_path(paths, argv[0]);
     free_split(paths); 
     if (path && is_dir(path) == OK)
-        exit(126);
+    {
+        free(path);
+        free_argv_envp_exit(argv, envp, 126);
+    }
     if (path)
     {
         execve(path, argv, envp);
         perror("minishell");
         free(path);
-        exit(126);
+        free_argv_envp_exit(argv, envp, 126);
     }
-    print_err_exit(argv[0], ": command not found\n", 127);
+    print_cmd_error(argv[0], ": command not found\n");
+    free_argv_envp_exit(argv, envp, 127);
 }
 
 void execute_command(t_shell *shell, t_cmd *cmd)
@@ -81,7 +65,7 @@ void execute_command(t_shell *shell, t_cmd *cmd)
 
     if (run_builtin(shell, cmd) == OK)
         exit(shell->exit_status);
-    argv = list_to_array(cmd->argv_list);
+    argv = list_to_string_array(cmd->argv_list);
     if (!argv)
         exit(1);
     envp = get_env_array(shell->env_list); // THIS ONE CAN BE NULL
@@ -90,8 +74,8 @@ void execute_command(t_shell *shell, t_cmd *cmd)
     else
         search_and_exec(shell, argv, envp);
     
-    free_strings_array(argv, ft_lstsize(cmd->argv_list));
-    free_strings_array(envp, ft_lstsize(shell->env_list));
+    free_strings_array(argv);
+    free_strings_array(envp);
     // If we reach here, execve failed or command wasn't found.
     // The path functions should print the error and exit(127) or exit(126).
 }

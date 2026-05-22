@@ -39,9 +39,9 @@ void	report_error(t_shell *shell, t_code e, char *msg)
 	}
 }
 
-t_code  handle_error(t_shell *shell)
+void print_cmd_error(char *cmd, char *msg)
 {
-    if (shell->should_exit)
-        return (ERR);
-    return (OK);
+    ft_putstr_fd("minishell: ", STDERR_FILENO);
+    ft_putstr_fd(cmd, STDERR_FILENO);
+    ft_putstr_fd(msg, STDERR_FILENO);
 }
