@@ -19,7 +19,7 @@ static int  get_fd(t_redir *redir)
     return (fd);
 }
 
-static t_code safe_dup2(t_redir *redir, int fd)
+static t_code safe_redirection(t_redir *redir, int fd)
 {
     int rc;
     if (redir->type == IN_RED)
@@ -31,7 +31,7 @@ static t_code safe_dup2(t_redir *redir, int fd)
     return (OK);
 }
 
-t_code  handle_redirections(t_shell *shell, t_cmd *cmd)
+t_code  handle_redirections(t_cmd *cmd)
 {
     t_redir *redir;
     t_list  *node;
@@ -44,7 +44,7 @@ t_code  handle_redirections(t_shell *shell, t_cmd *cmd)
         fd = get_fd(redir);
         if (fd == -1)
             return (ERR);
-        if (safe_dup2(redir, fd) == ERR)
+        if (safe_redirection(redir, fd) == ERR)
         {
             perror("minishell: dup2");
             close(fd);

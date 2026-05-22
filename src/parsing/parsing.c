@@ -65,7 +65,7 @@ static t_code  consume_pipe(t_list **node)
     return (OK);
 }
 
-static t_code process_pipeline(t_shell *shell, t_list **node)
+static t_code process_node(t_shell *shell, t_list **node)
 {
     t_cmd   *cmd;
     t_token *token;
@@ -105,7 +105,7 @@ t_code  parse(t_shell *shell)
         if (token->type == END)
             break;
             
-        rc = process_pipeline(shell, &node);
+        rc = process_node(shell, &node);
         if (rc != OK)
             return (rc);
     }

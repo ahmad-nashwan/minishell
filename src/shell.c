@@ -47,7 +47,7 @@ void process_input(t_shell *shell, char *input)
 		if (rc == OK)
 			rc = parse(shell);
 		if (rc == OK)
-			excute_cmds(shell);
+			process_commands(shell);
     }
     free_t_string(line);
 }

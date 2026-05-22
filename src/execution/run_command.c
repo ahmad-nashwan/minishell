@@ -1,8 +1,33 @@
 # include "../../inc/minishell.h"
 
+static void print_err_exit(char *cmd, char *msg, int code)
+{
+    ft_putstr_fd("minishell: ", STDERR_FILENO);
+    ft_putstr_fd(cmd, STDERR_FILENO);
+    ft_putstr_fd(msg, STDERR_FILENO);
+    exit(code);
+}
+
+static t_code is_dir(char *path)
+{
+    struct stat path_stat;
+
+    stat(path, &path_stat);
+    if (S_ISDIR(path_stat.st_mode))
+    {
+        ft_putstr_fd("minishell: ", STDERR_FILENO);
+        ft_putstr_fd(path, STDERR_FILENO);
+        ft_putstr_fd(": Is a directory\n", STDERR_FILENO);
+        return(OK);
+    }
+    return (ERR);
+}
+
 static void exec_absolute_path(char **argv, char **envp)
 {
     // file doesn't exist
+    if (argv[0] && is_dir(argv[0]) == OK)
+        exit(126);
     if (access(argv[0], F_OK) == -1)
     {
         ft_putstr_fd("minishell: ", STDERR_FILENO);
@@ -23,29 +48,22 @@ static void exec_absolute_path(char **argv, char **envp)
     exit(126);
 }
 
-static void print_err_exit(char *cmd, char *msg, int code)
-{
-    ft_putstr_fd("minishell: ", STDERR_FILENO);
-    ft_putstr_fd(cmd, STDERR_FILENO);
-    ft_putstr_fd(msg, STDERR_FILENO);
-    exit(code);
-}
-
 static void search_and_exec(t_shell *shell, char **argv, char **envp)
 {
     char    *path_env;
     char    **paths;
     char    *path;
 
-    path_env = get_env_val(shell->env_list, "PATH");
+    path_env = get_env_value(shell->env_list, "PATH");
     if (!path_env)
         print_err_exit(argv[0], ": No such file or directory\n", 127);
     paths = ft_split(path_env, ':');
     if (!paths)
         exit(1);
-        
     path = get_valid_path(paths, argv[0]);
     free_split(paths); 
+    if (path && is_dir(path) == OK)
+        exit(126);
     if (path)
     {
         execve(path, argv, envp);
@@ -91,7 +109,7 @@ void run_child(t_shell *shell, t_cmd *cmd, int input_fd, int *pipe_fd)
         dup2(pipe_fd[1], STDOUT_FILENO);
         close(pipe_fd[1]);
     }
-    if (handle_redirections(shell, cmd) != OK)
+    if (handle_redirections(cmd) != OK)
         exit(1);
     signal(SIGINT, SIG_DFL);
     signal(SIGQUIT, SIG_DFL);

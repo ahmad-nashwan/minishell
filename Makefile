@@ -42,6 +42,13 @@ SRC = \
 	src/builtins/export/export_print.c \
 	src/builtins/export/export_variables.c \
 	src/builtins/unset.c \
+	src/execution/execution_utils.c \
+	src/execution/handle_redirections.c \
+	src/execution/process_pipeline.c \
+	src/execution/process_commands.c \
+	src/execution/run_command.c \
+	src/execution/run_builtin.c \
+	src/execution/heredoc.c \
 	src/utils/env_utils.c \
 	src/utils/excution_utils.c \
 	src/utils/helpers.c \
@@ -49,9 +56,6 @@ SRC = \
 	src/utils/shell_utils.c \
 	src/tests/print_tokens.c \
 	src/tests/print_cmds.c \
-	src/execution/excute.c \
-	src/execution/excuter.c \
-	src/execution/handle_redirections.c
 
 OBJ = $(SRC:.c=.o)
 
