@@ -1,24 +1,19 @@
 #include "../../inc/minishell.h"
 
-t_code	excute_cmds(t_shell *shell)
+t_code	process_commands(t_shell *shell)
 {
-	t_list	*cmd_node;
 	t_cmd	*cmd;
 
-	cmd_node = shell->cmds;
-	while (cmd_node)
+	if (ft_lstsize(shell->cmds) == 1)
 	{
-		cmd = (t_cmd *)cmd_node->content;
-		if (cmd->argv_list)
+		cmd = (t_cmd *)shell->cmds->content;
+		if (cmd->argv_list && is_builtin((char *)cmd->argv_list->content))
 		{
-			if (is_builtin((char *)cmd->argv_list->content))
-				run_builtin(shell, cmd);
-			else
-				excuter(shell);
+			run_builtin(shell, cmd);
+			return (OK);
 		}
-		cmd_node = cmd_node->next;
 	}
-	return (OK);
+	return (process_pipeline(shell));
 }
 
 int	is_builtin(char *name)
