@@ -44,7 +44,10 @@ t_code  is_dir(char *path)
 void free_argv_envp_exit(char **argv, char **envp, int exit_code)
 {
     if (argv)
+    {
         free_strings_array(argv);
+        
+    }
     if (envp)
         free_strings_array(envp);
     exit (exit_code);

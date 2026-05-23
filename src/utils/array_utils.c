@@ -83,5 +83,4 @@ void	free_strings_array(char **arr)
 		i++;
 	}
 	free(arr);
-	*arr = NULL;
 }

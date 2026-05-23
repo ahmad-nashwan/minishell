@@ -60,13 +60,29 @@ static t_code fill_array(t_list *env_list, char **arr, int size)
     return (OK);
 }
 
+
+/*
+Changes to this function:
+env_list being null does not mean that envp can be null
+envp should be a valid memory address
+if env_list is null, or empty
+we should still allocate memory for envp
+because passing NULL to execve would be undefined behavior
+To do: Check the validity of this function usage across the program
+*/
 char    **get_env_array(t_list *env_list)
 {
     int size;
     char    **arr;
 
     if (!env_list)
-        return (NULL);
+    {
+        arr = malloc(sizeof(char *) * 1);
+        if (!arr)
+            return (NULL);
+        arr[0] = NULL;
+        return (arr);
+    }
     size = ft_lstsize(env_list);
     arr = malloc(sizeof(char *) * (size + 1));
     if (!arr)

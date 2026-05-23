@@ -44,8 +44,9 @@ SRC = \
 	src/builtins/unset.c \
 	src/execution/execution_utils.c \
 	src/execution/handle_redirections.c \
-	src/execution/process_pipeline.c \
 	src/execution/process_commands.c \
+	src/execution/process_single_builtin.c \
+	src/execution/process_pipeline.c \
 	src/execution/run_command.c \
 	src/execution/run_builtin.c \
 	src/execution/heredoc.c \

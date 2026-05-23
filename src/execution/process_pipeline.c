@@ -34,6 +34,7 @@ static t_code process_cmd(t_shell *shell, t_list *node, int *input_fd, pid_t *pi
     }
     return (OK);
 }
+
 static void wait_for_children(t_shell *shell, pid_t *pids, int len)
 {
     int i;

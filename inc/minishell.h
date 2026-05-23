@@ -188,6 +188,7 @@ t_code		parse(t_shell *shell);
 /*                                                                            */
 /* ************************************************************************** */
 t_code		process_commands(t_shell *shell);
+t_code		process_single_builtin(t_shell *shell, t_cmd *cmd);
 t_code		process_pipeline(t_shell *shell);
 t_code		run_builtin(t_shell *shell, t_cmd *cmd);
 void 		run_child(t_shell *shell, t_cmd *cmd, int input_fd, int *pipe_fd);

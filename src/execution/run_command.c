@@ -25,6 +25,19 @@ static void exec_absolute_path(char **argv, char **envp)
     free_argv_envp_exit(argv, envp, 126);
 }
 
+static void execute_valid_path(char *path, char **argv, char **envp)
+{
+    if (is_dir(path) == OK)
+    {
+        free(path);
+        free_argv_envp_exit(argv, envp, 126);
+    }
+    execve(path, argv, envp);
+    perror("minishell");
+    free(path);
+    free_argv_envp_exit(argv, envp, 126);
+}
+
 static void search_and_exec(t_shell *shell, char **argv, char **envp)
 {
     char    *path_env;
@@ -48,16 +61,10 @@ static void search_and_exec(t_shell *shell, char **argv, char **envp)
         free_argv_envp_exit(argv, envp, 126);
     }
     if (path)
-    {
-        execve(path, argv, envp);
-        perror("minishell");
-        free(path);
-        free_argv_envp_exit(argv, envp, 126);
-    }
+        execute_valid_path(path, argv, envp);
     print_cmd_error(argv[0], ": command not found\n");
     free_argv_envp_exit(argv, envp, 127);
 }
-
 void execute_command(t_shell *shell, t_cmd *cmd)
 {
     char **argv;
@@ -65,19 +72,20 @@ void execute_command(t_shell *shell, t_cmd *cmd)
 
     if (run_builtin(shell, cmd) == OK)
         exit(shell->exit_status);
+        
     argv = list_to_string_array(cmd->argv_list);
     if (!argv)
         exit(1);
-    envp = get_env_array(shell->env_list); // THIS ONE CAN BE NULL
+    if (!argv[0])
+        free_argv_envp_exit(argv, NULL, 0);
+        
+    envp = get_env_array(shell->env_list);
+    if (!envp)
+        free_argv_envp_exit(argv, NULL, 1);
     if (ft_strchr(argv[0], '/'))
         exec_absolute_path(argv, envp);
     else
         search_and_exec(shell, argv, envp);
-    
-    free_strings_array(argv);
-    free_strings_array(envp);
-    // If we reach here, execve failed or command wasn't found.
-    // The path functions should print the error and exit(127) or exit(126).
 }
 
 void run_child(t_shell *shell, t_cmd *cmd, int input_fd, int *pipe_fd)
