@@ -2,7 +2,7 @@
 
 t_code	run_builtin(t_shell *shell, t_cmd *cmd)
 {
-    char *name;
+    char    *name;
 
     if (!cmd->argv_list)
         return (ERR);

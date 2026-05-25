@@ -16,6 +16,7 @@ void    pwd(t_shell *shell)
     {
         ft_putendl_fd(wd, STDOUT_FILENO);
         free(wd);
+        shell->exit_status = 0;
         return ;
     }
     perror("minishell: pwd");

@@ -18,6 +18,7 @@ static char *get_cd_target(t_shell *shell, t_list *args)
     {
         ft_putstr_fd("minishell: cd: HOME not set\n", STDERR_FILENO);
         shell->exit_status = 1;
+        return (NULL);
     }
     return (home);
 }
@@ -47,20 +48,11 @@ static t_code update_pwd(t_list **env_list, char *new_pwd, char *old_pwd)
     return (add_env_var(env_list, var));
 }
 
-void  cd(t_shell *shell, t_list *args)
+static void switch_directory(t_shell *shell, char *target)
 {
-    char    *target;
     char    *old_pwd;
     char    *new_pwd;
 
-    target = get_cd_target(shell, args);
-    if (!target)
-        return ;
-    if (target[0] == '\0')
-    {
-        shell->exit_status = 0;
-        return ;
-    }
     old_pwd = get_env_value(shell->env_list, "PWD");
     if (chdir(target) == -1)
     {
@@ -79,4 +71,19 @@ void  cd(t_shell *shell, t_list *args)
     if (update_pwd(&shell->env_list, new_pwd, old_pwd) != OK)
         report_error(shell, INTERNAL_ERROR, "Malloc Failure");
     free(new_pwd);
+}
+
+void  cd(t_shell *shell, t_list *args)
+{
+    char    *target;
+
+    target = get_cd_target(shell, args);
+    if (!target)
+        return ;
+    if (target[0] == '\0')
+    {
+        shell->exit_status = 0;
+        return ;
+    }
+    switch_directory(shell, target);
 }
