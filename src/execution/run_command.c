@@ -79,7 +79,6 @@ void execute_command(t_shell *shell, t_cmd *cmd)
         exit(1);
     if (!argv[0])
         free_argv_envp_exit(argv, NULL, 0);
-        
     envp = get_env_array(shell->env_list);
     if (!envp)
         free_argv_envp_exit(argv, NULL, 1);

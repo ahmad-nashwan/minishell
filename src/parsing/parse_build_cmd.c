@@ -1,5 +1,23 @@
 # include "../../inc/minishell.h"
 
+static  void    clear_prev_hdoc(t_list *redirection)
+{
+    t_redir *redir;
+
+    if (!redirection)
+        return ;
+    while (redirection)
+    {
+        redir = (t_redir *)redirection->content;
+        if (redir->h_fd != -1)
+        {
+            close(redir->h_fd);
+            redir->h_fd = -1;
+        }
+        redirection = redirection->next;
+    }
+}
+
 static t_code parse_redir(t_shell *shell, t_cmd *cmd, t_token *redir, t_token *target)
 {
     t_redir *redirection;
@@ -9,10 +27,10 @@ static t_code parse_redir(t_shell *shell, t_cmd *cmd, t_token *redir, t_token *t
     redirection = redir_create(redir->type, target->lexeme);
     if (!redirection)
         return (INTERNAL_ERROR);
-        
     if (redirection->type == HEREDOC)
     {
-        redirection->h_fd = parse_hdoc(shell, redirection->target, target->quoted); 
+        clear_prev_hdoc(cmd->redirections);
+        redirection->h_fd = parse_hdoc(shell, redirection->target, target->quoted);
         if (redirection->h_fd == -1)
         {
             free(redirection->target);

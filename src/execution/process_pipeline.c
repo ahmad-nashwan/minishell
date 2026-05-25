@@ -1,5 +1,6 @@
 # include "../../inc/minishell.h"
 
+
 static t_code error(t_shell *shell, t_code e, char *msg)
 {
     report_error(shell, e, msg);
@@ -76,6 +77,7 @@ t_code process_pipeline(t_shell *shell)
         i++;
     }
     wait_for_children(shell, pids, i);
+    close_hdoc_fds(shell->cmds);
     free(pids);
     return (OK);
 }

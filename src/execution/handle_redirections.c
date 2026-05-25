@@ -35,6 +35,8 @@ static  t_code  process_redirection(t_redir *redir)
 {
     int fd;
 
+    if (redir->type == HEREDOC)
+        return (handle_hdoc(redir));  
     fd = get_fd(redir);
     if (fd == -1)
         return (ERR);

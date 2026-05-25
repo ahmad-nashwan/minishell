@@ -198,6 +198,8 @@ t_code		process_pipeline(t_shell *shell);
 t_code		run_builtin(t_shell *shell, t_cmd *cmd);
 void 		run_child(t_shell *shell, t_cmd *cmd, int input_fd, int *pipe_fd);
 t_code  	handle_redirections(t_cmd *cmd);
+t_code  	handle_hdoc(t_redir *redir);
+void    	close_hdoc_fds(t_list *cmds);
 
 // Execution helpers
 char    	*get_valid_path(char **paths, char *cmd);
