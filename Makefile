@@ -24,7 +24,7 @@ SRC = \
 	src/structs/env/get_env_array.c \
 	src/structs/env/t_env.c \
 	src/tokenizer/tokenizer.c \
-	src/tokenizer/expander/init_expand.c \
+	src/tokenizer/expander/expand_start.c \
 	src/tokenizer/expander/find_expand.c \
 	src/tokenizer/expander/expand_split.c \
 	src/tokenizer/expander/expand_exit.c \

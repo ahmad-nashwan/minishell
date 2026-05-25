@@ -169,10 +169,10 @@ t_code		scan_redirection(t_shell *shell, t_string *line);
 t_code		scan_pipe(t_shell *shell, t_string *line);
 
 // Expansion
-t_code		init_expand(t_shell *shell, t_string *line, t_string *word,
+t_code		expand_start(t_shell *shell, t_string *line, t_string *word,
 				int quoted);
 t_string	*get_var_name(t_string *line);
-t_code		find_variable_expand(t_shell *shell, t_string *line, t_string *word,
+t_code		find_var_expand(t_shell *shell, t_string *line, t_string *word,
 				int quoted);
 t_code		expand_split(t_string *word, t_shell *shell, char *value);
 t_code		expand_var(t_shell *shell, t_string *word, char *value, int quoted);

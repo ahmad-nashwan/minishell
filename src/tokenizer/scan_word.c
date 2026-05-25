@@ -29,7 +29,7 @@ static t_code quoted_mode(t_shell *shell, t_string *line, t_string *word, int hd
 	{
 		if (line->str[line->index] == '$' && expand_flag && !hdoc_target)
 		{
-			if (init_expand(shell, line, word, 1) != OK) 
+			if (expand_start(shell, line, word, 1) != OK) 
 				return (INTERNAL_ERROR);
 		}
 		else
@@ -63,7 +63,7 @@ static t_code	normal_mode(t_shell *shell, t_string *line, t_string *word, int *q
 			result = quoted_mode(shell, line, word, hdoc_target);
 		}
 		else if (c == '$' && !hdoc_target)
-			result = init_expand(shell, line, word, 0);
+			result = expand_start(shell, line, word, 0);
 		else if (c == '~' && word->len == 0 && !hdoc_target)
 			result = expand_tilde(shell, line, word);
 		else

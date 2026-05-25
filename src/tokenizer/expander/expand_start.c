@@ -18,15 +18,7 @@ t_string *get_var_name(t_string *line)
 	return (name);
 }
 
-t_code	expand_var(t_shell *shell, t_string *word, char *value, int quoted)
-{
-    if (!quoted && ft_strchr(value, ' '))
-		return (expand_split(word, shell, value));
-	else
-		return (append_str(word, value));
-}
-
-t_code	init_expand(t_shell *shell, t_string *line, t_string *word, int quoted)
+t_code	expand_start(t_shell *shell, t_string *line, t_string *word, int quoted)
 {
 	char	c;
 
@@ -45,6 +37,6 @@ t_code	init_expand(t_shell *shell, t_string *line, t_string *word, int quoted)
 		return (OK);
 	}
 	if (ft_isalpha(c) || c == '_')
-		return (find_variable_expand(shell, line, word, quoted));
+		return (find_var_expand(shell, line, word, quoted));
 	return (append(word, '$'));
 }
