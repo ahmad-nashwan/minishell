@@ -178,10 +178,12 @@ t_code		expand_split(t_string *word, t_shell *shell, char *value);
 t_code		expand_var(t_shell *shell, t_string *word, char *value, int quoted);
 t_code		expand_exit_status(t_shell *shell, t_string *line, t_string *word,
 				int quoted);
+t_code    	expand_hdoc(t_shell *shell, t_string *line, t_string *buff);
 t_code 		append_str(t_string *word, char *s);
 
 // Parsing
 t_code		parse(t_shell *shell);
+t_code		build_cmd(t_shell *shell, t_cmd *cmd, t_list **node);
 int			parse_hdoc(t_shell *shell, char *delimeter, int quoted);
 
 

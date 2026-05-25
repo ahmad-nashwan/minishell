@@ -40,7 +40,7 @@ static t_code hdoc_expand_exit(t_shell *shell, t_string *line, t_string *buff)
     return (OK);
 }
 
-t_code    hdoc_expand(t_shell *shell, t_string *line, t_string *buff)
+t_code    expand_hdoc(t_shell *shell, t_string *line, t_string *buff)
 {
 	char	c;
 

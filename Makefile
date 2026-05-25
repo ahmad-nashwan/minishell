@@ -25,14 +25,17 @@ SRC = \
 	src/structs/env/t_env.c \
 	src/tokenizer/tokenizer.c \
 	src/tokenizer/expander/expand_start.c \
-	src/tokenizer/expander/find_expand.c \
+	src/tokenizer/expander/expand_vars.c \
 	src/tokenizer/expander/expand_split.c \
-	src/tokenizer/expander/expand_exit.c \
+	src/tokenizer/expander/expand_exit_status.c \
+	src/tokenizer/expander/expand_hdoc.c \
 	src/tokenizer/scan_pipe.c \
 	src/tokenizer/scan_redirection.c \
 	src/tokenizer/scan_word.c \
-	src/parsing/parsing.c \
-	src/parsing/syntax_errors.c \
+	src/parsing/parse_start.c \
+	src/parsing/parse_build_cmd.c \
+	src/parsing/parse_hdoc.c \
+	src/parsing/parse_errors.c \
 	src/builtins/echo.c \
 	src/builtins/pwd.c \
 	src/builtins/env.c \
@@ -49,7 +52,6 @@ SRC = \
 	src/execution/process_pipeline.c \
 	src/execution/run_command.c \
 	src/execution/run_builtin.c \
-	src/execution/heredoc.c \
 	src/utils/env_utils.c \
 	src/utils/helpers.c \
 	src/utils/safe_atol.c \

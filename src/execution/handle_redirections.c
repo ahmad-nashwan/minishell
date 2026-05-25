@@ -45,6 +45,7 @@ static  t_code  process_redirection(t_redir *redir)
         return (ERR);
     }
     close(fd);
+    return (OK);
 }
 
 t_code  handle_redirections(t_cmd *cmd)

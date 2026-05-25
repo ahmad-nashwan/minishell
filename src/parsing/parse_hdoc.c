@@ -11,7 +11,7 @@ static t_code hdoc_append_char(t_shell *shell, t_string *line, t_string *buff, i
 {
     if (peek(line) == '$' && !quoted)
     {
-        hdoc_expansion(shell, line, buff);
+        expand_hdoc(shell, line, buff);
         return (OK);
     }
     return (append(buff, advance(line)));
