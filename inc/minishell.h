@@ -182,6 +182,7 @@ t_code 		append_str(t_string *word, char *s);
 
 // Parsing
 t_code		parse(t_shell *shell);
+int			parse_hdoc(t_shell *shell, char *delimeter, int quoted);
 
 
 /* ************************************************************************** */

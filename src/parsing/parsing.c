@@ -1,6 +1,6 @@
 # include "../../inc/minishell.h"
 
-static t_code parse_redir(t_cmd *cmd, t_token *redir, t_token *target)
+static t_code parse_redir(t_shell *shell, t_cmd *cmd, t_token *redir, t_token *target)
 {
     t_redir *redirection;
 
@@ -12,7 +12,7 @@ static t_code parse_redir(t_cmd *cmd, t_token *redir, t_token *target)
         
     if (redirection->type == HEREDOC)
     {
-        redirection->h_fd = handle_heredoc(redirection->target); 
+        redirection->h_fd = parse_hdoc(shell, redirection->target, target->quoted); 
         if (redirection->h_fd == -1)
         {
             free(redirection->target);
@@ -23,7 +23,7 @@ static t_code parse_redir(t_cmd *cmd, t_token *redir, t_token *target)
     return (cmd_add_redir(cmd, redirection));
 }
 
-t_code build_cmd(t_cmd *cmd, t_list **node)
+t_code build_cmd(t_shell *shell, t_cmd *cmd, t_list **node)
 {
     t_token *token;
     t_token *next_token;
@@ -40,7 +40,7 @@ t_code build_cmd(t_cmd *cmd, t_list **node)
             next_token = (t_token *)(*node)->next->content;
             if (next_token->type != WORD)
                 return (report_syntax_error(next_token->lexeme));
-            if (parse_redir(cmd, token, next_token)) 
+            if (parse_redir(shell, cmd, token, next_token) != OK) 
                 return (INTERNAL_ERROR);
             (*node) = (*node)->next->next; // consuming the redirection token, safe because we have a check before
         }
@@ -91,7 +91,7 @@ static t_code process_node(t_shell *shell, t_list **node)
     cmd = cmd_create();
     if (!cmd)
         return (parse_error(shell, NULL, &shell->cmds, INTERNAL_ERROR));
-    rc = build_cmd(cmd, node);
+    rc = build_cmd(shell, cmd, node);
     if (rc != OK)
         return (parse_error(shell, cmd, &shell->cmds, rc));
     rc = consume_pipe(node);
