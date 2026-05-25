@@ -7,12 +7,12 @@ static t_code	scan_append_redir(t_shell *shell, t_string *line)
 	if (peek(line) == '>')
 	{
 		advance(line);
-		if (add_token(&shell->tokens, NULL, APPEND) != OK)
+		if (add_token(&shell->tokens, NULL, APPEND, 0) != OK)
 			return (INTERNAL_ERROR);
 	}
 	else
 	{
-		if (add_token(&shell->tokens, NULL, OUT_RED) != OK)
+		if (add_token(&shell->tokens, NULL, OUT_RED, 0) != OK)
 			return (INTERNAL_ERROR);
 	}
 	return (OK);
@@ -25,12 +25,12 @@ static t_code	scan_input_redir(t_shell *shell, t_string *line)
 	if (peek(line) == '<')
 	{
 		advance(line);
-		if (add_token(&shell->tokens, NULL, HEREDOC) != OK)
+		if (add_token(&shell->tokens, NULL, HEREDOC, 0) != OK)
 			return (INTERNAL_ERROR);
 	}
 	else
 	{
-		if (add_token(&shell->tokens, NULL, IN_RED) != OK)
+		if (add_token(&shell->tokens, NULL, IN_RED, 0) != OK)
 			return (INTERNAL_ERROR);
 	}
 	return (OK);

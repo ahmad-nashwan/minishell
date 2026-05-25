@@ -33,7 +33,7 @@ void process_input(t_shell *shell, char *input)
 	t_code		rc;
 
 	rc = OK;
-    line = init_string(ft_strdup(input));
+    line = init_string(input);
     if (!line)
 	{
         report_error(shell, INTERNAL_ERROR, "Malloc Failure");

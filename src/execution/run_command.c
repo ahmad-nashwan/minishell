@@ -65,6 +65,7 @@ static void search_and_exec(t_shell *shell, char **argv, char **envp)
     print_cmd_error(argv[0], ": command not found\n");
     free_argv_envp_exit(argv, envp, 127);
 }
+
 void execute_command(t_shell *shell, t_cmd *cmd)
 {
     char **argv;

@@ -39,7 +39,7 @@ t_code	tokenizer(t_shell *shell, t_string *line)
 		if (rc == OK)
 			continue;
 	}
-	if (add_token(&shell->tokens, NULL, END) != OK)
+	if (add_token(&shell->tokens, NULL, END, 0) != OK)
 		return token_error(shell, INTERNAL_ERROR);
 	return OK;
 }

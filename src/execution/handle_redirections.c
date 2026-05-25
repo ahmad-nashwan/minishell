@@ -31,26 +31,33 @@ static t_code safe_redirection(t_redir *redir, int fd)
     return (OK);
 }
 
+static  t_code  process_redirection(t_redir *redir)
+{
+    int fd;
+
+    fd = get_fd(redir);
+    if (fd == -1)
+        return (ERR);
+    if (safe_redirection(redir, fd) == ERR)
+    {
+        perror("minishell: dup2");
+        close(fd);
+        return (ERR);
+    }
+    close(fd);
+}
+
 t_code  handle_redirections(t_cmd *cmd)
 {
     t_redir *redir;
     t_list  *node;
-    int     fd;
 
     node = cmd->redirections;
     while (node)
     {
         redir = (t_redir *)node->content;
-        fd = get_fd(redir);
-        if (fd == -1)
+        if (process_redirection(redir) == ERR)
             return (ERR);
-        if (safe_redirection(redir, fd) == ERR)
-        {
-            perror("minishell: dup2");
-            close(fd);
-            return (ERR);
-        }
-        close(fd);
         node = node->next;
     }
     return (OK);

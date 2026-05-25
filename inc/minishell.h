@@ -45,35 +45,11 @@ typedef enum e_code
 }			t_code;
 
 
-
 /* ************************************************************************** */
 /*                                                                            */
 /*                               Data Structures                              */
 /*                                                                            */
 /* ************************************************************************** */
-typedef struct s_token
-{
-	char	*lexeme;
-	t_type	type;
-}			t_token;
-
-
-typedef struct s_string
-{
-	char	*str;
-	size_t	index;
-	size_t	cap;
-	size_t	len;
-}			t_string;
-
-
-typedef struct s_env_var
-{
-    char    *key;
-    char    *value;
-} t_env_var;
-
-
 typedef struct s_shell
 {
 	t_list 	*env_list;
@@ -84,6 +60,21 @@ typedef struct s_shell
 	t_code	error_type;
 	int		should_exit;
 }			t_shell;
+
+
+typedef struct s_env_var
+{
+    char    *key;
+    char    *value;
+} t_env_var;
+
+
+typedef struct s_token
+{
+	char	*lexeme;
+	t_type	type;
+	int		quoted;
+}			t_token;
 
 
 typedef struct s_cmd
@@ -97,7 +88,17 @@ typedef struct s_redir
 {
 	t_type	type;
 	char	*target;
+	int		h_fd;
 }			t_redir;
+
+
+typedef struct s_string
+{
+	char	*str;
+	size_t	index;
+	size_t	cap;
+	size_t	len;
+}			t_string;
 
 
 /* ************************************************************************** */
@@ -117,16 +118,16 @@ void		reset_shell(t_shell *shell);
 /* ************************************************************************** */
 // t_string Functions
 t_string	*init_string(char *content);
-t_string	*new_string(size_t cap);
+t_string	*create_empty_string(size_t cap);
 char		advance(t_string *line);
 char		peek(t_string *line);
-char		*realloc_string(t_string *word);
+t_code  	realloc_string(t_string *word);
 t_code		append(t_string *word, char c);
 void		free_t_string(t_string *str);
 
 // t_token Functions
-t_token		*create_token(char *lexeme, t_type type);
-t_code		add_token(t_list **tokens, char *lexeme, t_type type);
+t_token		*create_token(char *lexeme, t_type type, int quoted);
+t_code		add_token(t_list **tokens, char *lexeme, t_type type, int quoted);
 void		free_token(void *ptr);
 void		clear_tokens(t_list **tokens);
 
@@ -139,8 +140,9 @@ void		cmd_free(void *p);
 void		cmd_list_clear(t_list **cmd_list);
 
 // t_redir functions
-t_redir		*redir_create(t_type type, char *target);
+t_redir *redir_create(t_type type, char *target);
 void		redir_free(void *p);
+int is_hdoc_target(t_list *tokens);
 
 // t_env
 t_env_var   *create_env_var(char *env_str);

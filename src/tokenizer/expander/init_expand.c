@@ -4,7 +4,7 @@ t_string *get_var_name(t_string *line)
 {
 	t_string *name;
 
-	name = new_string(32); // MALLOC_CHECK[OK]
+	name = create_empty_string(32); // MALLOC_CHECK[OK]
 	if (!name)
 		return (NULL);
 	while (ft_isalnum(peek(line)) || peek(line) == '_')

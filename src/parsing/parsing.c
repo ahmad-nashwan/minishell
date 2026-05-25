@@ -9,6 +9,17 @@ static t_code parse_redir(t_cmd *cmd, t_token *redir, t_token *target)
     redirection = redir_create(redir->type, target->lexeme);
     if (!redirection)
         return (INTERNAL_ERROR);
+        
+    if (redirection->type == HEREDOC)
+    {
+        redirection->h_fd = handle_heredoc(redirection->target); 
+        if (redirection->h_fd == -1)
+        {
+            free(redirection->target);
+            free(redirection);
+            return (INTERNAL_ERROR); 
+        }
+    }
     return (cmd_add_redir(cmd, redirection));
 }
 

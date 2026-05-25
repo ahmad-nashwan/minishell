@@ -7,7 +7,7 @@ static t_code append_extra_words(t_shell *shell, char **words)
     i = 1;
     while (words[i])
     {
-        if (add_token(&shell->tokens, words[i], WORD) != OK)
+        if (add_token(&shell->tokens, words[i], WORD, 0) != OK)
             return INTERNAL_ERROR;
         i++;
     }
@@ -43,7 +43,7 @@ static t_code reset_word(t_string *word)
 
 static t_code finalize_first_word(t_shell *shell, t_string *word)
 {
-    if (add_token(&shell->tokens, word->str, WORD) != OK)
+    if (add_token(&shell->tokens, word->str, WORD, 0) != OK)
         return (INTERNAL_ERROR);
     word->str = NULL;
     return (reset_word(word));
