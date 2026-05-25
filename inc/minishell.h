@@ -229,6 +229,18 @@ void		export(t_shell *shell, t_list *args);
 t_code	 	export_variables(t_list **env_list, t_list *args);
 t_code 		export_print(t_list *env_list);
 
+/* ************************************************************************** */
+/*                                                                            */
+/*                                   Signals                                  */
+/*                                                                            */
+/* ************************************************************************** */
+void    sig_set_interactive(void);
+void 	sig_set_execution(void);
+void    sig_set_child(void);
+void 	sig_set_heredoc(void);
+void    sigint_interactive_handler(int sig);
+void    sigint_hdoc_handler(int sig);
+
 
 /* ************************************************************************** */
 /*                                                                            */

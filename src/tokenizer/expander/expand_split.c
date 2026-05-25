@@ -60,7 +60,7 @@ t_code expand_split(t_string *word, t_shell *shell, char *value)
     if (!words[0])
     {
         free(words);
-        return (OK); // Nothing to append, no extra words, safe exit!
+        return (OK);
     }
     rc = append_str(word, words[0]);
     free(words[0]);
