@@ -82,6 +82,11 @@ void execute_command(t_shell *shell, t_cmd *cmd)
     envp = get_env_array(shell->env_list);
     if (!envp)
         free_argv_envp_exit(argv, NULL, 1);
+    if (argv[0][0] == '\0')
+    {
+        print_cmd_error(argv[0], ": command not found\n");
+        free_argv_envp_exit(argv, envp, 127);
+    }
     if (ft_strchr(argv[0], '/'))
         exec_absolute_path(argv, envp);
     else
