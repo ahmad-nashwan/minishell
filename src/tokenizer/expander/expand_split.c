@@ -57,6 +57,11 @@ t_code expand_split(t_string *word, t_shell *shell, char *value)
     words = ft_split(value, ' ');
     if (!words)
         return (INTERNAL_ERROR);
+    if (!words[0])
+    {
+        free(words);
+        return (OK); // Nothing to append, no extra words, safe exit!
+    }
     rc = append_str(word, words[0]);
     free(words[0]);
     if (rc != OK)
@@ -74,4 +79,3 @@ t_code expand_split(t_string *word, t_shell *shell, char *value)
     free(words);
     return (rc);
 }
-
