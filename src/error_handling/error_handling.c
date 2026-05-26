@@ -1,4 +1,4 @@
-# include "../../inc/minishell.h"
+#include "../../inc/minishell.h"
 
 void	error_exit(char *error)
 {
@@ -7,23 +7,17 @@ void	error_exit(char *error)
 	exit(1);
 }
 
-static int error_to_exit_code(t_code e)
+static int	error_to_exit_code(t_code e)
 {
-    if (e == NONE)
-        return (0);
-    if (e == SYNTAX_ERROR)
-        return (2);
-    if (e == CMD_NOT_FOUND)
-        return (127);
-    if (e == PERMISSION_DENIED)
-        return (126);
-    if (e == INTERNAL_ERROR)
-        return (1);
-    if (e == EXEC_ERROR)
-        return (1);
-    if (e == BUILTIN_ERROR)
-        return (1);
-    return (1);
+	if (e == NONE)
+		return (0);
+	if (e == SYNTAX_ERROR)
+		return (2);
+	if (e == INTERNAL_ERROR)
+		return (1);
+	if (e == INTERRUPTED)
+		return (130);
+	return (1);
 }
 
 void	report_error(t_shell *shell, t_code e, char *msg)
@@ -39,9 +33,9 @@ void	report_error(t_shell *shell, t_code e, char *msg)
 	}
 }
 
-void print_cmd_error(char *cmd, char *msg)
+void	print_cmd_error(char *cmd, char *msg)
 {
-    ft_putstr_fd("minishell: ", STDERR_FILENO);
-    ft_putstr_fd(cmd, STDERR_FILENO);
-    ft_putstr_fd(msg, STDERR_FILENO);
+	ft_putstr_fd("minishell: ", STDERR_FILENO);
+	ft_putstr_fd(cmd, STDERR_FILENO);
+	ft_putstr_fd(msg, STDERR_FILENO);
 }

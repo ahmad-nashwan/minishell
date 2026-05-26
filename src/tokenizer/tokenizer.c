@@ -1,4 +1,4 @@
-# include "../../inc/minishell.h"
+#include "../../inc/minishell.h"
 
 static t_code	token_error(t_shell *shell, t_code err)
 {
@@ -35,11 +35,11 @@ t_code	tokenizer(t_shell *shell, t_string *line)
 			line->index++;
 		rc = try_scan_token(shell, line);
 		if (rc == INTERNAL_ERROR || rc == SYNTAX_ERROR)
-			return token_error(shell, rc);
+			return (token_error(shell, rc));
 		if (rc == OK)
-			continue;
+			continue ;
 	}
 	if (add_token(&shell->tokens, NULL, END, 0) != OK)
-		return token_error(shell, INTERNAL_ERROR);
-	return OK;
+		return (token_error(shell, INTERNAL_ERROR));
+	return (OK);
 }

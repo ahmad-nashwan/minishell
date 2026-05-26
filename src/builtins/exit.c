@@ -32,7 +32,7 @@ void	shell_exit(t_shell *shell, t_list *args)
 		shell->should_exit = 1;
 		return ;
 	}
-	str = (char *) args->next->content;
+	str = (char *)args->next->content;
 	if (!is_number(str) || !safe_atol(str, &code))
 		exit_non_numerial(shell, str);
 	if (args->next->next)

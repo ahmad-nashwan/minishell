@@ -30,18 +30,13 @@ typedef enum s_type
 
 typedef enum e_code
 {
-	OK = 0,
-	NONE = 1,
-	SYNTAX_ERROR = 3,
-	UNCLOSED_QUOTES = 4,
-	PIPE_ERROR = 5,
-	REDIR_ERROR = 6,
-	INTERNAL_ERROR = 7,
-	CMD_NOT_FOUND = 8,
-	PERMISSION_DENIED = 9,
-	EXEC_ERROR = 10,
-	BUILTIN_ERROR = 11,
-	ERR
+	OK,
+	NONE,
+	ERR,
+	INTERRUPTED,
+	SYNTAX_ERROR,
+	INTERNAL_ERROR,
+	UNCLOSED_QUOTES,
 }			t_code;
 
 
@@ -160,7 +155,7 @@ void    	free_env_var(void *content);
 // env list
 t_list      *init_env_list(char **envp);
 t_code 		add_env_var(t_list **env_list, t_env_var *var);
-char    	**get_env_array(t_list *env_list);
+char    	**env_to_array(t_list *env_list);
 char		*get_env_value(t_list *env_vars, const char *key);
 
 
@@ -191,8 +186,10 @@ t_code 		append_str(t_string *word, char *s);
 // Parsing
 t_code		parse(t_shell *shell);
 t_code		build_cmd(t_shell *shell, t_cmd *cmd, t_list **node);
-int			parse_hdoc(t_shell *shell, char *delimeter, int quoted);
-
+t_code		parse_hdoc(t_shell *shell, char *delimeter, int *h_fd, int quoted);
+char		*hdoc_read_line(void);
+t_code 		hdoc_append_char(t_shell *shell, t_string *line, t_string *buff, int quoted);
+void 		hdoc_eof_error(char *delimeter);
 
 /* ************************************************************************** */
 /*                                                                            */

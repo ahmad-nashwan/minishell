@@ -1,4 +1,4 @@
-# include "../../inc/minishell.h"
+#include "../../inc/minishell.h"
 
 t_code	scan_pipe(t_shell *shell, t_string *line)
 {

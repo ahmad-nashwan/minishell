@@ -1,31 +1,31 @@
-# include "../../inc/minishell.h"
+#include "../../inc/minishell.h"
 
-char    **list_to_string_array(t_list* list)
+char	**list_to_string_array(t_list *list)
 {
-    int     size;
-    char    **arr;
-    int     i;
+	int		size;
+	char	**arr;
+	int		i;
 
-    if (!list)
-        return (NULL);
-    size = ft_lstsize(list);
-    arr = malloc(sizeof(char *) * (size + 1));
-    if (!arr)
-        return (NULL);
-    i = 0;
-    while (i < size && list)
-    {
-        arr[i] = ft_strdup((char *)list->content);
-        if (!arr[i])
-        {
-            free_array(arr, i); // Assuming this frees up to 'i' properly
-            return (NULL);
-        }
-        i++;
-        list = list->next;
-    }
-    arr[i] = NULL;
-    return (arr);
+	if (!list)
+		return (NULL);
+	size = ft_lstsize(list);
+	arr = malloc(sizeof(char *) * (size + 1));
+	if (!arr)
+		return (NULL);
+	i = 0;
+	while (i < size && list)
+	{
+		arr[i] = ft_strdup((char *)list->content);
+		if (!arr[i])
+		{
+			free_array(arr, i); // Assuming this frees up to 'i' properly
+			return (NULL);
+		}
+		i++;
+		list = list->next;
+	}
+	arr[i] = NULL;
+	return (arr);
 }
 
 char	**copy_env(char **envp)
@@ -69,10 +69,9 @@ void	free_split(char **words)
 	free(words);
 }
 
-
 void	free_strings_array(char **arr)
 {
-	int	i;
+	int i;
 
 	i = 0;
 	if (!arr)

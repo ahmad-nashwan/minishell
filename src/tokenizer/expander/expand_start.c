@@ -1,20 +1,20 @@
-# include "../../../inc/minishell.h"
+#include "../../../inc/minishell.h"
 
-t_string *get_var_name(t_string *line)
+t_string	*get_var_name(t_string *line)
 {
-	t_string *name;
+	t_string	*name;
 
 	name = create_empty_string(32); // MALLOC_CHECK[OK]
 	if (!name)
 		return (NULL);
 	while (ft_isalnum(peek(line)) || peek(line) == '_')
-    {
+	{
 		if (append(name, advance(line)) != OK)
-        {
-            free_t_string(name);
-            return (NULL);
-        }
-    }   
+		{
+			free_t_string(name);
+			return (NULL);
+		}
+	}
 	return (name);
 }
 

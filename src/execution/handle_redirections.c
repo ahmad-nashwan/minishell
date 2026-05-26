@@ -1,67 +1,68 @@
-# include "../../inc/minishell.h"
+#include "../../inc/minishell.h"
 
-static int  get_fd(t_redir *redir)
+static int	get_fd(t_redir *redir)
 {
-    int fd;
+	int	fd;
 
-    fd = -1;
-    if (redir->type == IN_RED) // <
-        fd = open(redir->target, O_RDONLY);
-    else if (redir->type == OUT_RED) // >
-        fd = open(redir->target, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-    else if (redir->type == APPEND) // >>
-        fd = open(redir->target, O_WRONLY | O_CREAT | O_APPEND, 0644);
-    if (fd == -1)
-    {
-        ft_putstr_fd("minishell: ", STDERR_FILENO);
-        perror(redir->target);
-    }
-    return (fd);
+	fd = -1;
+	if (redir->type == IN_RED) // <
+		fd = open(redir->target, O_RDONLY);
+	else if (redir->type == OUT_RED) // >
+		fd = open(redir->target, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	else if (redir->type == APPEND) // >>
+		fd = open(redir->target, O_WRONLY | O_CREAT | O_APPEND, 0644);
+	if (fd == -1)
+	{
+		ft_putstr_fd("minishell: ", STDERR_FILENO);
+		perror(redir->target);
+	}
+	return (fd);
 }
 
-static t_code safe_redirection(t_redir *redir, int fd)
+static t_code	safe_redirection(t_redir *redir, int fd)
 {
-    int rc;
-    if (redir->type == IN_RED)
-        rc = dup2(fd, STDIN_FILENO);
-    else
-        rc = dup2(fd, STDOUT_FILENO);
-    if (rc == -1)
-        return (ERR);
-    return (OK);
+	int	rc;
+
+	if (redir->type == IN_RED)
+		rc = dup2(fd, STDIN_FILENO);
+	else
+		rc = dup2(fd, STDOUT_FILENO);
+	if (rc == -1)
+		return (ERR);
+	return (OK);
 }
 
-static  t_code  process_redirection(t_redir *redir)
+static t_code	process_redirection(t_redir *redir)
 {
-    int fd;
+	int	fd;
 
-    if (redir->type == HEREDOC)
-        return (handle_hdoc(redir));  
-    fd = get_fd(redir);
-    if (fd == -1)
-        return (ERR);
-    if (safe_redirection(redir, fd) == ERR)
-    {
-        perror("minishell: dup2");
-        close(fd);
-        return (ERR);
-    }
-    close(fd);
-    return (OK);
+	if (redir->type == HEREDOC)
+		return (handle_hdoc(redir));
+	fd = get_fd(redir);
+	if (fd == -1)
+		return (ERR);
+	if (safe_redirection(redir, fd) == ERR)
+	{
+		perror("minishell: dup2");
+		close(fd);
+		return (ERR);
+	}
+	close(fd);
+	return (OK);
 }
 
-t_code  handle_redirections(t_cmd *cmd)
+t_code	handle_redirections(t_cmd *cmd)
 {
-    t_redir *redir;
-    t_list  *node;
+	t_redir	*redir;
+	t_list	*node;
 
-    node = cmd->redirections;
-    while (node)
-    {
-        redir = (t_redir *)node->content;
-        if (process_redirection(redir) == ERR)
-            return (ERR);
-        node = node->next;
-    }
-    return (OK);
+	node = cmd->redirections;
+	while (node)
+	{
+		redir = (t_redir *)node->content;
+		if (process_redirection(redir) == ERR)
+			return (ERR);
+		node = node->next;
+	}
+	return (OK);
 }

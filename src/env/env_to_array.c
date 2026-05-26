@@ -1,4 +1,4 @@
-# include "../../../inc/minishell.h"
+# include "../../inc/minishell.h"
 
 void free_array(char **arr, int elements)
 {
@@ -70,7 +70,7 @@ we should still allocate memory for envp
 because passing NULL to execve would be undefined behavior
 To do: Check the validity of this function usage across the program
 */
-char    **get_env_array(t_list *env_list)
+char    **env_to_array(t_list *env_list)
 {
     int size;
     char    **arr;

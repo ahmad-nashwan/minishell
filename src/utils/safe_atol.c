@@ -1,24 +1,24 @@
 #include "../../inc/minishell.h"
 
-static int  check_overflow(unsigned long result, int digit, int sign)
+static int	check_overflow(unsigned long result, int digit, int sign)
 {
-    unsigned long max;
+	unsigned long	max;
 
-    if (sign == 1)
-        max = LONG_MAX;
-    else
-        max = (unsigned long)LONG_MAX + 1;
-    if (result > (max - digit) / 10)
-        return (0);
-    return (1);
+	if (sign == 1)
+		max = LONG_MAX;
+	else
+		max = (unsigned long)LONG_MAX + 1;
+	if (result > (max - digit) / 10)
+		return (0);
+	return (1);
 }
 
 int	safe_atol(const char *str, long *out)
 {
-	long i;
-	long sign;
-	unsigned long result;
-	int digit;
+	long			i;
+	long			sign;
+	unsigned long	result;
+	int				digit;
 
 	i = 0;
 	sign = 1;
@@ -40,10 +40,10 @@ int	safe_atol(const char *str, long *out)
 		i++;
 	}
 	if (sign == -1 && result == (unsigned long)LONG_MAX + 1)
-        *out = LONG_MIN;
-    else
+		*out = LONG_MIN;
+	else
 	{
-        *out = (long)result * sign;
+		*out = (long)result * sign;
 	}
 	return (1);
 }

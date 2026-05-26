@@ -1,48 +1,48 @@
-# include "../../../inc/minishell.h"
+#include "../../../inc/minishell.h"
 
-static t_code hdoc_expand_var(t_shell *shell, t_string *line, t_string *buff)
+static t_code	hdoc_expand_var(t_shell *shell, t_string *line, t_string *buff)
 {
-    t_string    *key;
-    char        *value;
+	t_string	*key;
+	char		*value;
 
-    key = get_var_name(line);
-    if (!key)
-    {
-        report_error(shell, INTERNAL_ERROR, "Malloc failure");
-        return (INTERNAL_ERROR);
-    }
-    value = get_env_value(shell->env_list, key->str);
-    free_t_string(key);
-    if (!value)
-        return(OK); // expand nothing
-    if (append_str(buff, value) != OK)
-    {
-        report_error(shell, INTERNAL_ERROR, "Malloc failure");
-        return (INTERNAL_ERROR);
-    }
-    return (OK);
+	key = get_var_name(line);
+	if (!key)
+	{
+		report_error(shell, INTERNAL_ERROR, "Malloc failure");
+		return (INTERNAL_ERROR);
+	}
+	value = get_env_value(shell->env_list, key->str);
+	free_t_string(key);
+	if (!value)
+		return (OK); // expand nothing
+	if (append_str(buff, value) != OK)
+	{
+		report_error(shell, INTERNAL_ERROR, "Malloc failure");
+		return (INTERNAL_ERROR);
+	}
+	return (OK);
 }
 
-static t_code hdoc_expand_exit(t_shell *shell, t_string *line, t_string *buff)
+static t_code	hdoc_expand_exit(t_shell *shell, t_string *line, t_string *buff)
 {
-    char        *exit_status;
+	char	*exit_status;
 
-    advance(line);
-    exit_status = ft_itoa(shell->exit_status);
-    if (!exit_status)
-        return (INTERNAL_ERROR);
-    if (append_str(buff, exit_status) != OK)
-    {
-        free(exit_status);
-        return (INTERNAL_ERROR);
-    }
-    free(exit_status);
-    return (OK);
+	advance(line);
+	exit_status = ft_itoa(shell->exit_status);
+	if (!exit_status)
+		return (INTERNAL_ERROR);
+	if (append_str(buff, exit_status) != OK)
+	{
+		free(exit_status);
+		return (INTERNAL_ERROR);
+	}
+	free(exit_status);
+	return (OK);
 }
 
-t_code    expand_hdoc(t_shell *shell, t_string *line, t_string *buff)
+t_code	expand_hdoc(t_shell *shell, t_string *line, t_string *buff)
 {
-	char	c;
+	char c;
 
 	advance(line); // skip $
 	c = peek(line);
@@ -60,5 +60,5 @@ t_code    expand_hdoc(t_shell *shell, t_string *line, t_string *buff)
 	}
 	if (ft_isalpha(c) || c == '_')
 		return (hdoc_expand_var(shell, line, buff));
-    return (append(buff, '$'));
+	return (append(buff, '$'));
 }

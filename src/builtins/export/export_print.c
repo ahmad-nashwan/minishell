@@ -51,7 +51,7 @@ t_code export_print(t_list *env_list)
     char **env_arr;
     int i;
 
-    env_arr = get_env_array(env_list);
+    env_arr = env_to_array(env_list);
     if (!env_arr)
         return (INTERNAL_ERROR);
     sort_env_arr(env_arr, ft_lstsize(env_list));

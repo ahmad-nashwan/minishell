@@ -1,21 +1,22 @@
-# include "../../inc/minishell.h"
+#include "../../inc/minishell.h"
 
-static t_code expand_tilde(t_shell *shell, t_string *line, t_string *word)
+static t_code	expand_tilde(t_shell *shell, t_string *line, t_string *word)
 {
-    char *home;
-    char next;
+	char	*home;
+	char	next;
 
-    advance(line);
-    next = peek(line);
-    if (next != '/' && next != '\0' && !ft_isspace(next))
-        return (append(word, '~'));
-    home = get_env_value(shell->env_list, "HOME");
-    if (home)
-        return (append_str(word, home));
-    return (append(word, '~'));
+	advance(line);
+	next = peek(line);
+	if (next != '/' && next != '\0' && !ft_isspace(next))
+		return (append(word, '~'));
+	home = get_env_value(shell->env_list, "HOME");
+	if (home)
+		return (append_str(word, home));
+	return (append(word, '~'));
 }
 
-static t_code quoted_mode(t_shell *shell, t_string *line, t_string *word, int hdoc_target)
+static t_code	quoted_mode(t_shell *shell, t_string *line, t_string *word,
+		int hdoc_target)
 {
 	int		expand_flag;
 	char	quote;
@@ -29,7 +30,7 @@ static t_code quoted_mode(t_shell *shell, t_string *line, t_string *word, int hd
 	{
 		if (line->str[line->index] == '$' && expand_flag && !hdoc_target)
 		{
-			if (expand_start(shell, line, word, 1) != OK) 
+			if (expand_start(shell, line, word, 1) != OK)
 				return (INTERNAL_ERROR);
 		}
 		else
@@ -41,10 +42,11 @@ static t_code quoted_mode(t_shell *shell, t_string *line, t_string *word, int hd
 	if (line->index >= line->len)
 		return (SYNTAX_ERROR);
 	advance(line); // closing quote
-	return OK;
+	return (OK);
 }
 
-static t_code	normal_mode(t_shell *shell, t_string *line, t_string *word, int *quoted)
+static t_code	normal_mode(t_shell *shell, t_string *line, t_string *word,
+		int *quoted)
 {
 	char	c;
 	t_code	result;
@@ -55,8 +57,8 @@ static t_code	normal_mode(t_shell *shell, t_string *line, t_string *word, int *q
 	while (line->index < line->len)
 	{
 		c = line->str[line->index];
-		if(result != OK || c == '|' || c == '<' || c == '>' || ft_isspace(c))
-			break;
+		if (result != OK || c == '|' || c == '<' || c == '>' || ft_isspace(c))
+			break ;
 		if (c == '\'' || c == '"')
 		{
 			*quoted = 1;
@@ -72,27 +74,28 @@ static t_code	normal_mode(t_shell *shell, t_string *line, t_string *word, int *q
 	return (result);
 }
 
-t_code  scan_word(t_shell *shell, t_string *line)
+t_code	scan_word(t_shell *shell, t_string *line)
 {
-    t_string    *word;
-    int         quoted;
-    t_code      rc;
+	t_string	*word;
+	int			quoted;
+	t_code		rc;
 
-    quoted = 0;
-    word = create_empty_string(1024);
-    if (!word)
-        return (INTERNAL_ERROR);
-    rc = normal_mode(shell, line, word, &quoted);
-    if (rc == OK && word->len == 0 && !quoted)
-        rc = NONE;
-    else if (rc == OK && add_token(&shell->tokens, word->str, WORD, quoted) != OK)
-        rc = INTERNAL_ERROR;
-    if (rc != OK)
-    {
-        free_t_string(word);
-        return (rc);
-    }
-    word->str = NULL;
-    free(word);
-    return (OK);
+	quoted = 0;
+	word = create_empty_string(1024);
+	if (!word)
+		return (INTERNAL_ERROR);
+	rc = normal_mode(shell, line, word, &quoted);
+	if (rc == OK && word->len == 0 && !quoted)
+		rc = NONE;
+	else if (rc == OK && add_token(&shell->tokens, word->str, WORD,
+			quoted) != OK)
+		rc = INTERNAL_ERROR;
+	if (rc != OK)
+	{
+		free_t_string(word);
+		return (rc);
+	}
+	word->str = NULL;
+	free(word);
+	return (OK);
 }

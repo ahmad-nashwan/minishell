@@ -21,8 +21,9 @@ SRC = \
 	src/structs/t_cmd.c \
 	src/structs/t_cmd_list.c \
 	src/structs/t_redir.c \
-	src/structs/env/get_env_array.c \
-	src/structs/env/t_env.c \
+	src/structs/t_env_var.c \
+	src/env/env_list_utils.c \
+	src/env/env_to_array.c \
 	src/tokenizer/tokenizer.c \
 	src/tokenizer/expander/expand_start.c \
 	src/tokenizer/expander/expand_vars.c \
@@ -35,6 +36,7 @@ SRC = \
 	src/parsing/parse_start.c \
 	src/parsing/parse_build_cmd.c \
 	src/parsing/parse_hdoc.c \
+	src/parsing/parse_hdoc_utils.c \
 	src/parsing/parse_errors.c \
 	src/builtins/echo.c \
 	src/builtins/pwd.c \
@@ -55,7 +57,6 @@ SRC = \
 	src/execution/run_builtin.c \
 	src/signals/sig_settings.c \
 	src/signals/sig_handlers.c \
-	src/utils/env_utils.c \
 	src/utils/helpers.c \
 	src/utils/safe_atol.c \
 	src/utils/shell_utils.c \
