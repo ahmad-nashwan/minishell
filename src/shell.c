@@ -6,7 +6,7 @@
 /*   By: anashwan <anashwan@student.42amman.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/26 20:56:10 by anashwan          #+#    #+#             */
-/*   Updated: 2026/05/26 20:56:11 by anashwan         ###   ########.fr       */
+/*   Updated: 2026/05/27 01:17:21 by anashwan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,12 +70,16 @@ int	start_shell(t_shell *shell)
 
 	while (shell->should_exit != 1)
 	{
-		g_signal = 0;
 		sig_set_interactive();
 		reset_shell(shell);
 		input = readline("minishell$ ");
 		if (!input)
 			break ;
+		if (g_signal)
+		{
+			shell->exit_status = g_signal;
+			g_signal = 0;
+		}
 		process_input(shell, input);
 		free(input);
 	}

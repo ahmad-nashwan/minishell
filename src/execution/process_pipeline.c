@@ -6,7 +6,7 @@
 /*   By: anashwan <anashwan@student.42amman.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/26 21:40:31 by anashwan          #+#    #+#             */
-/*   Updated: 2026/05/26 22:34:39 by anashwan         ###   ########.fr       */
+/*   Updated: 2026/05/26 22:51:42 by anashwan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,14 +18,11 @@ static t_code	error(t_shell *shell, t_code e, char *msg)
 	return (ERR);
 }
 
-static t_code	process_cmd(t_shell *shell, t_list *node, int *input_fd,
-		pid_t *pid)
+static t_code	process_cmd(t_shell *shell, t_list *cmd_node, int *in_fd, pid_t *pid)
 {
 	int		fd[2];
-	t_cmd	*cmd;
 
-	cmd = (t_cmd *)node->content;
-	if (node->next && pipe(fd) != 0)
+	if (cmd_node->next && pipe(fd) != 0)
 		return (error(shell, INTERNAL_ERROR, "Pipe failure"));
 	*pid = fork();
 	if (*pid == -1)
@@ -33,18 +30,18 @@ static t_code	process_cmd(t_shell *shell, t_list *node, int *input_fd,
 	if (*pid == 0)
 	{
 		sig_set_child();
-		if (node->next)
-			run_child(shell, cmd, *input_fd, fd);
+		if (cmd_node->next)
+			run_child(shell, (t_cmd *)cmd_node->content, *in_fd, fd);
 		else
-			run_child(shell, cmd, *input_fd, NULL);
+			run_child(shell, (t_cmd *)cmd_node->content, *in_fd, NULL);
 		exit(shell->exit_status);
 	}
-	if (*input_fd != -1)
-		close(*input_fd);
-	if (node->next)
+	if (*in_fd != -1 && *in_fd != STDIN_FILENO)
+		close(*in_fd);
+	if (cmd_node->next)
 	{
 		close(fd[1]);
-		*input_fd = fd[0];
+		*in_fd = fd[0];
 	}
 	return (OK);
 }
