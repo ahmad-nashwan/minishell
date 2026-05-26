@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   cd.c                                               :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: anashwan <anashwan@student.42amman.com>    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/05/26 21:41:02 by anashwan          #+#    #+#             */
+/*   Updated: 2026/05/26 21:44:00 by anashwan         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../inc/minishell.h"
 
 static char	*get_cd_target(t_shell *shell, t_list *args)
@@ -22,6 +34,7 @@ static char	*get_cd_target(t_shell *shell, t_list *args)
 	}
 	return (home);
 }
+
 static t_code	update_pwd(t_list **env_list, char *new_pwd, char *old_pwd)
 {
 	t_env_var	*var;

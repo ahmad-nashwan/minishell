@@ -1,12 +1,23 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   pwd.c                                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: anashwan <anashwan@student.42amman.com>    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/05/26 21:41:12 by anashwan          #+#    #+#             */
+/*   Updated: 2026/05/26 21:46:19 by anashwan         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../inc/minishell.h"
 
 void	pwd(t_shell *shell)
 {
-	char *env_pwd;
-	char *wd;
+	char	*env_pwd;
+	char	*wd;
 
 	env_pwd = get_env_value(shell->env_list, "PWD");
-		// Use your actual env fetcher
 	if (env_pwd)
 	{
 		ft_putendl_fd(env_pwd, STDOUT_FILENO);

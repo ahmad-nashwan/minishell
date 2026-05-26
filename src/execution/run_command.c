@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   run_command.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: anashwan <anashwan@student.42amman.com>    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/05/26 21:40:41 by anashwan          #+#    #+#             */
+/*   Updated: 2026/05/26 22:34:49 by anashwan         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../inc/minishell.h"
 
 static void	exec_absolute_path(char **argv, char **envp)
@@ -18,8 +30,7 @@ static void	exec_absolute_path(char **argv, char **envp)
 		perror(argv[0]);
 		free_argv_envp_exit(argv, envp, 126);
 	}
-	// if it fails, print the error, if it works,
-		the following lines are never reached since they are wiped from ram
+	// if it fails, print the error, if it works, the following lines are never reached since they are wiped from ram
 	execve(argv[0], argv, envp);
 	ft_putstr_fd("minishell: ", STDERR_FILENO);
 	perror(argv[0]);

@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   execution_utils.c                                  :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: anashwan <anashwan@student.42amman.com>    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/05/26 21:40:21 by anashwan          #+#    #+#             */
+/*   Updated: 2026/05/26 21:47:28 by anashwan         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../inc/minishell.h"
 
 char	*get_valid_path(char **paths, char *cmd)
@@ -59,8 +71,8 @@ char	*find_cmd_path(t_shell *shell)
 
 char	*build_full_path(char *dir, char *cmd)
 {
-	char *temp;
-	char *full_path;
+	char	*temp;
+	char	*full_path;
 
 	temp = ft_strjoin(dir, "/");
 	if (!temp)
