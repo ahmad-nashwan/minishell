@@ -56,7 +56,7 @@ t_code  parse(t_shell *shell)
     t_code  rc;
 
     node = shell->tokens;
-    while (node)
+    while (!shell->should_exit && node)
     {
         token = (t_token *) node->content;
         if (token->type == END)

@@ -61,7 +61,7 @@ t_code build_cmd(t_shell *shell, t_cmd *cmd, t_list **node)
     t_token *token;
     t_code  rc;
 
-    while (*node)
+    while (!shell->should_exit && *node)
     {
         token = (t_token *)(*node)->content;
         if (token->type == PIPE || token->type == END)

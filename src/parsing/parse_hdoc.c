@@ -46,22 +46,27 @@ static t_code hdoc_process_line(t_shell *shell, char *input, int *fd, int quoted
     return (OK);
 }
 
-static t_code  hdoc_reader(t_shell *shell, char *delimeter, int quoted, int *fd)
+static t_code hdoc_reader(t_shell *shell, char *delimeter, int quoted, int *fd)
 {
-    char        *line;
+    char    *line;
 
     while (1)
     {
         line = readline("> ");
+        if (g_signal == 130)
+        {
+            free(line);
+            return (ERR);
+        }
         if (!line)
         {
             hdoc_eof_error(delimeter);
-            break;
+            return (OK);
         }
         if (ft_strcmp(line, delimeter) == 0)
         {
             free(line);
-            break;
+            return (OK);
         }
         if (hdoc_process_line(shell, line, fd, quoted) != OK)
         {
@@ -75,20 +80,29 @@ static t_code  hdoc_reader(t_shell *shell, char *delimeter, int quoted, int *fd)
 
 int parse_hdoc(t_shell *shell, char *delimeter, int quoted)
 {
-    int         fd[2];
+    int fd[2];
 
     if (pipe(fd) == -1)
     {
         report_error(shell, INTERNAL_ERROR, "Pipe failure");
         return (-1);
     }
+    
+    sig_set_heredoc();
+    
     if (hdoc_reader(shell, delimeter, quoted, fd) != OK)
     {
         close(fd[0]);
         close(fd[1]);
-        report_error(shell, INTERNAL_ERROR, NULL);
+        sig_set_interactive(); // MUST reset even on error!
+        
+        // Don't report a generic error for Ctrl+C, it's an expected user abort
+        if (g_signal != 130) 
+            report_error(shell, INTERNAL_ERROR, "Heredoc failed");
         return (-1);
     }
+    
     close(fd[1]);
+    sig_set_interactive(); // Reset on success
     return (fd[0]);
 }

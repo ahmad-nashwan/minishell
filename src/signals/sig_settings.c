@@ -33,9 +33,8 @@ void    sig_set_child(void)
     struct sigaction sa;
 
     sa.sa_handler = SIG_DFL;
-    sa_sa_flags = 0;
+    sa.sa_flags = 0;
     sigemptyset(&sa.sa_mask);
-
     sigaction(SIGINT, &sa, NULL);
     sigaction(SIGQUIT, &sa, NULL);
 }

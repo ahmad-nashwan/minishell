@@ -1,6 +1,5 @@
 # include "../../inc/minishell.h"
 
-
 static t_code error(t_shell *shell, t_code e, char *msg)
 {
     report_error(shell, e, msg);
@@ -20,6 +19,7 @@ static t_code process_cmd(t_shell *shell, t_list *node, int *input_fd, pid_t *pi
         return (error(shell, INTERNAL_ERROR, "Fork failed"));
     if (*pid == 0)
     {
+        sig_set_child();
         if (node->next)
             run_child(shell, cmd, *input_fd, fd);
         else
@@ -50,7 +50,13 @@ static void wait_for_children(t_shell *shell, pid_t *pids, int len)
             if (WIFEXITED(state))
                 shell->exit_status = WEXITSTATUS(state);
             else if (WIFSIGNALED(state))
+            {
                 shell->exit_status = 128 + WTERMSIG(state);
+                if (WTERMSIG(state) == SIGINT)
+                    ft_putstr_fd("\n", STDOUT_FILENO);
+                else if (WTERMSIG(state) == SIGQUIT)
+                    ft_putstr_fd("Quit (core dumped)\n", STDOUT_FILENO);
+            }
         }
         i++;
     }
@@ -69,6 +75,7 @@ t_code process_pipeline(t_shell *shell)
     i = 0;
     input_fd = -1;
     node = shell->cmds;
+    sig_set_execution();
     while (!shell->should_exit && node)
     {
         if (process_cmd(shell, node, &input_fd, &pids[i]) != OK)

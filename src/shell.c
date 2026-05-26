@@ -58,6 +58,7 @@ int	start_shell(t_shell *shell)
 
 	while (shell->should_exit != 1)
 	{
+		sig_set_interactive();
 		reset_shell(shell);
 		input = readline("minishell$ ");
 		if (!input)

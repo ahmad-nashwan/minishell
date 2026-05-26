@@ -53,6 +53,8 @@ SRC = \
 	src/execution/process_pipeline.c \
 	src/execution/run_command.c \
 	src/execution/run_builtin.c \
+	src/signals/sig_settings.c \
+	src/signals/sig_handlers.c \
 	src/utils/env_utils.c \
 	src/utils/helpers.c \
 	src/utils/safe_atol.c \
