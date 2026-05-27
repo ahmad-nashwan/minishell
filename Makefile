@@ -5,14 +5,14 @@ CFLAGS = -Wall -Wextra -Werror
 
 INC_DIR = inc
 LIBFT_DIR = libft
+LIBFT = $(LIBFT_DIR)/libft.a
 
 INCLUDES = -I$(INC_DIR) -I$(LIBFT_DIR)
 
-LIBFT = $(LIBFT_DIR)/libft.a
+LDFLAGS = -L$(LIBFT_DIR)
+LDLIBS = -lft -lreadline -lhistory -lncurses
 
-HEADER = $(INC_DIR)/minishell.h
-
-READLINE = -lreadline -lhistory -lncurses
+OBJ_DIR = obj
 
 SRC = \
 	src/main.c \
@@ -66,21 +66,20 @@ SRC = \
 	src/tests/print_tokens.c \
 	src/tests/print_cmds.c \
 
-OBJ = $(SRC:.c=.o)
+OBJ = $(SRC:src/%.c=$(OBJ_DIR)/%.o)
 
 all: $(NAME)
 
-$(LIBFT): $(LIBFT_DIR)
+$(NAME): $(OBJ)
 	$(MAKE) -C $(LIBFT_DIR) bonus
+	$(CC) $(CFLAGS) $(OBJ) $(LDFLAGS) $(LDLIBS) -o $(NAME)
 
-$(NAME): $(LIBFT) $(OBJ)
-	$(CC) $(CFLAGS) $(OBJ) $(LIBFT) $(READLINE) -o $(NAME)
-
-%.o: %.c $(HEADER)
+$(OBJ_DIR)/%.o: src/%.c $(HEADER)
+	@mkdir -p $(dir $@)
 	$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
 
 clean:
-	rm -f $(OBJ)
+	rm -rf $(OBJ_DIR)
 	$(MAKE) clean -C $(LIBFT_DIR)
 
 fclean: clean

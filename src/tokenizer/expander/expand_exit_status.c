@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../../inc/minishell.h"
+#include "minishell.h"
 
 t_code	expand_exit_status(t_shell *shell, t_string *line, t_string *word,
 		int quoted)

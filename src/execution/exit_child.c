@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-# include "../../inc/minishell.h"
+# include "minishell.h"
 
 void	exit_child(t_shell *shell, int exit_state)
 {

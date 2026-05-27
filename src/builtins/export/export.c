@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../../inc/minishell.h"
+#include "minishell.h"
 
 void	export(t_shell *shell, t_list *args)
 {

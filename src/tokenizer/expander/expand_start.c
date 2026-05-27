@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../../inc/minishell.h"
+#include "minishell.h"
 
 t_string	*get_var_name(t_string *line)
 {

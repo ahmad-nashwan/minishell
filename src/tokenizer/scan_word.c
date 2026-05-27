@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../inc/minishell.h"
+#include "minishell.h"
 
 static t_code	expand_tilde(t_shell *shell, t_string *line, t_string *word)
 {

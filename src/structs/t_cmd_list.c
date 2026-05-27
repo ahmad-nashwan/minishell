@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../inc/minishell.h"
+#include "minishell.h"
 
 t_code	cmd_list_add(t_list **cmd_list, t_cmd *cmd)
 {

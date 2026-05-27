@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../../inc/minishell.h"
+#include "minishell.h"
 
 t_code	expand_var(t_shell *shell, t_string *word, char *value, int quoted)
 {

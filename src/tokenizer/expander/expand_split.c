@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../../inc/minishell.h"
+#include "minishell.h"
 
 static t_code	append_extra_words(t_shell *shell, char **words)
 {
