@@ -6,7 +6,7 @@
 /*   By: anashwan <anashwan@student.42amman.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/26 21:20:17 by anashwan          #+#    #+#             */
-/*   Updated: 2026/05/26 21:20:18 by anashwan         ###   ########.fr       */
+/*   Updated: 2026/05/27 02:46:04 by anashwan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ t_string	*init_string(char *str)
 	if (!string)
 		return (NULL);
 	string->index = 0;
-	string->str = strdup(str);
+	string->str = ft_strdup(str);
 	if (!string->str)
 	{
 		free(string);

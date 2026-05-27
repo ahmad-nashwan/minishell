@@ -6,7 +6,7 @@
 /*   By: anashwan <anashwan@student.42amman.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/26 21:40:31 by anashwan          #+#    #+#             */
-/*   Updated: 2026/05/26 22:51:42 by anashwan         ###   ########.fr       */
+/*   Updated: 2026/05/27 02:20:21 by anashwan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ static t_code	process_cmd(t_shell *shell, t_list *cmd_node, int *in_fd, pid_t *p
 	int		fd[2];
 
 	if (cmd_node->next && pipe(fd) != 0)
-		return (error(shell, INTERNAL_ERROR, "Pipe failure"));
+		return (error(shell, INTERNAL_ERROR, "Pipe failure")); // we need to change the name of this
 	*pid = fork();
 	if (*pid == -1)
 		return (error(shell, INTERNAL_ERROR, "Fork failed"));
@@ -34,7 +34,7 @@ static t_code	process_cmd(t_shell *shell, t_list *cmd_node, int *in_fd, pid_t *p
 			run_child(shell, (t_cmd *)cmd_node->content, *in_fd, fd);
 		else
 			run_child(shell, (t_cmd *)cmd_node->content, *in_fd, NULL);
-		exit(shell->exit_status);
+		exit_child(shell, shell->exit_status);
 	}
 	if (*in_fd != -1 && *in_fd != STDIN_FILENO)
 		close(*in_fd);

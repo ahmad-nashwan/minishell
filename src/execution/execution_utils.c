@@ -6,7 +6,7 @@
 /*   By: anashwan <anashwan@student.42amman.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/26 21:40:21 by anashwan          #+#    #+#             */
-/*   Updated: 2026/05/26 21:47:28 by anashwan         ###   ########.fr       */
+/*   Updated: 2026/05/27 02:06:02 by anashwan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ t_code	is_dir(char *path)
 	return (ERR);
 }
 
-void	free_argv_envp_exit(char **argv, char **envp, int exit_code)
+void	free_argv_envp_exit(t_shell *shell, char **argv, char **envp, int exit_code)
 {
 	if (argv)
 	{
@@ -61,7 +61,7 @@ void	free_argv_envp_exit(char **argv, char **envp, int exit_code)
 	}
 	if (envp)
 		free_strings_array(envp);
-	exit(exit_code);
+	exit_child(shell, exit_code);
 }
 
 char	*find_cmd_path(t_shell *shell)

@@ -6,7 +6,7 @@
 /*   By: anashwan <anashwan@student.42amman.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/26 20:56:10 by anashwan          #+#    #+#             */
-/*   Updated: 2026/05/27 01:17:21 by anashwan         ###   ########.fr       */
+/*   Updated: 2026/05/27 03:39:40 by anashwan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void	init_shell(t_shell *shell, char **envp)
 		if (!shell->env_list)
 			error_exit("Malloc failure.");
 	}
-	shell->cwd = NULL;
+	shell->curr_input = NULL;
 	shell->tokens = NULL;
 	shell->cmds = NULL;
 	shell->exit_status = 0;
@@ -31,6 +31,11 @@ void	init_shell(t_shell *shell, char **envp)
 
 void	reset_shell(t_shell *shell)
 {
+	if (!shell)
+		return ;
+	if (shell->curr_input)
+		free_t_string(shell->curr_input);
+	shell->curr_input = NULL;
 	if (shell->tokens)
 		clear_tokens(&shell->tokens);
 	shell->tokens = NULL;
@@ -39,29 +44,40 @@ void	reset_shell(t_shell *shell)
 	shell->cmds = NULL;
 }
 
+void	free_shell_state(t_shell *shell)
+{
+	if (!shell)
+		return ;
+	reset_shell(shell); 
+	if (shell->env_list)
+		ft_lstclear(&shell->env_list, free_env_var);
+	shell->env_list = NULL;
+	rl_clear_history(); 
+}
+
 void	process_input(t_shell *shell, char *input)
 {
-	t_string	*line;
 	t_code		rc;
 
 	rc = OK;
-	line = init_string(input);
-	if (!line)
+	shell->curr_input = init_string(input);
+	if (!shell->curr_input)
 	{
 		report_error(shell, INTERNAL_ERROR, "Malloc Failure");
 		return ;
 	}
-	if (*line->str)
+	if (*shell->curr_input->str)
 	{
-		add_history(line->str);
+		add_history(shell->curr_input->str);
 		if (rc == OK)
-			rc = tokenizer(shell, line);
+			rc = tokenizer(shell, shell->curr_input);
 		if (rc == OK)
 			rc = parse(shell);
 		if (rc == OK)
 			process_commands(shell);
 	}
-	free_t_string(line);
+	free_t_string(shell->curr_input);
+	shell->curr_input = NULL;
 }
 
 int	start_shell(t_shell *shell)

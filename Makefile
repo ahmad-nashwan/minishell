@@ -10,6 +10,8 @@ INCLUDES = -I$(INC_DIR) -I$(LIBFT_DIR)
 
 LIBFT = $(LIBFT_DIR)/libft.a
 
+HEADER = $(INC_DIR)/minishell.h
+
 READLINE = -lreadline -lhistory -lncurses
 
 SRC = \
@@ -55,6 +57,7 @@ SRC = \
 	src/execution/process_pipeline.c \
 	src/execution/run_command.c \
 	src/execution/run_builtin.c \
+	src/execution/exit_child.c \
 	src/signals/sig_settings.c \
 	src/signals/sig_handlers.c \
 	src/utils/safe_atol.c \
@@ -73,7 +76,7 @@ $(LIBFT): $(LIBFT_DIR)
 $(NAME): $(LIBFT) $(OBJ)
 	$(CC) $(CFLAGS) $(OBJ) $(LIBFT) $(READLINE) -o $(NAME)
 
-%.o: %.c
+%.o: %.c $(HEADER)
 	$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
 
 clean:

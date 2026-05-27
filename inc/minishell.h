@@ -6,7 +6,7 @@
 /*   By: anashwan <anashwan@student.42amman.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/26 21:41:51 by anashwan          #+#    #+#             */
-/*   Updated: 2026/05/26 23:08:25 by anashwan         ###   ########.fr       */
+/*   Updated: 2026/05/27 03:44:52 by anashwan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,16 +55,6 @@ typedef enum e_code
 /*                               Data Structures                              */
 /*                                                                            */
 /* ************************************************************************** */
-typedef struct s_shell
-{
-	t_list						*env_list;
-	char						*cwd;
-	int							exit_status;
-	t_list						*tokens;
-	t_list						*cmds;
-	t_code						error_type;
-	int							should_exit;
-}								t_shell;
 
 typedef struct s_env_var
 {
@@ -100,6 +90,18 @@ typedef struct s_string
 	size_t						len;
 }								t_string;
 
+typedef struct s_shell
+{
+	t_list						*env_list;
+	t_list						*tokens;
+	t_list						*cmds;
+	t_string					*curr_input;
+	int							exit_status;
+	t_code						error_type;
+	int							should_exit;
+}								t_shell;
+
+
 /* ************************************************************************** */
 /*                                                                            */
 /*                               Global Variables                             */
@@ -115,6 +117,7 @@ extern volatile sig_atomic_t	g_signal;
 int								start_shell(t_shell *shell);
 void							init_shell(t_shell *shell, char **envp);
 void							reset_shell(t_shell *shell);
+void							free_shell_state(t_shell *shell);
 
 /* ************************************************************************** */
 /*                                                                            */
@@ -231,8 +234,9 @@ t_env_var						*find_env_var(t_list *env_list,
 									const char *key);
 t_code							add_env_var(t_list **env_list, t_env_var *var);
 t_code							is_dir(char *path);
-void							free_argv_envp_exit(char **argv, char **envp,
+void							free_argv_envp_exit(t_shell *shell, char **argv, char **envp,
 									int exit_code);
+void							exit_child(t_shell *shell, int exit_state);
 
 /* ************************************************************************** */
 /*                                                                            */
