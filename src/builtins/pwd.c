@@ -21,6 +21,7 @@ void	pwd(t_shell *shell)
 	if (env_pwd)
 	{
 		ft_putendl_fd(env_pwd, STDOUT_FILENO);
+		shell->exit_status = 0;
 		return ;
 	}
 	wd = getcwd(NULL, 0);
