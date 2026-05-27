@@ -65,7 +65,7 @@ static void	wait_for_children(t_shell *shell, pid_t *pids, int len)
 				if (WTERMSIG(state) == SIGINT)
 					ft_putstr_fd("\n", STDOUT_FILENO);
 				else if (WTERMSIG(state) == SIGQUIT)
-					ft_putstr_fd("Quit (core dumped)\n", STDOUT_FILENO);
+					ft_putstr_fd("Quit (core dumped)\n", STDERR_FILENO);
 			}
 		}
 		i++;
