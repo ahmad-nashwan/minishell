@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+# include "minishell.h"
 
 static t_code	close_and_return(int saved_stdout, int saved_stdin,
 		t_code status)

@@ -50,6 +50,7 @@ typedef enum e_code
 	UNCLOSED_QUOTES,
 }								t_code;
 
+
 /* ************************************************************************** */
 /*                                                                            */
 /*                               Data Structures                              */

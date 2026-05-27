@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+# include "minishell.h"
 
 static t_code	pipeline_error(t_shell *shell, t_code e, char *msg)
 {

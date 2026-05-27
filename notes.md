@@ -14,7 +14,7 @@ heredoc: https://linuxize.com/post/bash-heredoc/
 what is a time matrix 
 
 to do:
-understand pipe man page
+understand pipe man page[DONE]
 
 we have a still reachable block of memory for the PIDs array in process_pipeline
 the reason for that is we reach exit without freeing the PIDs array

@@ -28,11 +28,28 @@ static void	exit_many_args(t_shell *shell)
 	report_error(shell, ERR, "exit: too many arguments");
 }
 
-void	shell_exit(t_shell *shell, t_list *args)
+static void	exit_with_argument(t_shell *shell, t_list *args)
 {
 	long	code;
 	char	*str;
 
+	str = (char *)args->next->content;
+	if (!is_number(str) || !safe_atol(str, &code))
+	{
+		exit_non_numerial(shell, str);
+		return ;
+	}
+	if (args->next->next)
+	{
+		exit_many_args(shell);
+		return ;
+	}
+	shell->exit_status = (unsigned char)code;
+	shell->should_exit = 1;
+}
+
+void	shell_exit(t_shell *shell, t_list *args)
+{
 	if (!args)
 	{
 		report_error(shell, INTERNAL_ERROR, "Invalid pointer");
@@ -44,13 +61,5 @@ void	shell_exit(t_shell *shell, t_list *args)
 		shell->should_exit = 1;
 		return ;
 	}
-	str = (char *)args->next->content;
-	if (!is_number(str) || !safe_atol(str, &code))
-		exit_non_numerial(shell, str);
-	if (args->next->next)
-	{
-		exit_many_args(shell);
-	}
-	shell->exit_status = (unsigned char)code;
-	shell->should_exit = 1;
+	exit_with_argument(shell, args);
 }

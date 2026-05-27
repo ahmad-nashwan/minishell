@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../inc/minishell.h"
+# include "minishell.h"
 
 static void	exec_absolute_path(t_shell *shell, char **argv, char **envp)
 {
