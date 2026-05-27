@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../../inc/minishell.h"
 
 static void	exec_absolute_path(t_shell *shell, char **argv, char **envp)
 {
@@ -119,7 +119,5 @@ void	run_child(t_shell *shell, t_cmd *cmd, int input_fd, int *pipe_fd)
 	}
 	if (handle_redirections(cmd) != OK)
 		exit_child(shell, 1);
-	signal(SIGINT, SIG_DFL);
-	signal(SIGQUIT, SIG_DFL);
 	execute_command(shell, cmd);
 }

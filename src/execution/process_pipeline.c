@@ -12,7 +12,7 @@
 
 #include "minishell.h"
 
-static t_code	error(t_shell *shell, t_code e, char *msg)
+static t_code	pipeline_error(t_shell *shell, t_code e, char *msg)
 {
 	report_error(shell, e, msg);
 	return (ERR);
@@ -23,10 +23,10 @@ static t_code	process_cmd(t_shell *shell, t_list *cmd_node, int *in_fd, pid_t *p
 	int		fd[2];
 
 	if (cmd_node->next && pipe(fd) != 0)
-		return (error(shell, INTERNAL_ERROR, "Pipe failure")); // we need to change the name of this
+		return (pipeline_error(shell, INTERNAL_ERROR, "Pipe failure"));
 	*pid = fork();
 	if (*pid == -1)
-		return (error(shell, INTERNAL_ERROR, "Fork failed"));
+		return (pipeline_error(shell, INTERNAL_ERROR, "Fork failed"));
 	if (*pid == 0)
 	{
 		sig_set_child();
@@ -81,7 +81,7 @@ t_code	process_pipeline(t_shell *shell)
 
 	pids = malloc(sizeof(pid_t) * ft_lstsize(shell->cmds));
 	if (!pids)
-		return (error(shell, INTERNAL_ERROR, "Malloc failed"));
+		return (pipeline_error(shell, INTERNAL_ERROR, "Malloc failed"));
 	i = 0;
 	input_fd = -1;
 	node = shell->cmds;
