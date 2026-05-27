@@ -119,5 +119,6 @@ void	run_child(t_shell *shell, t_cmd *cmd, int input_fd, int *pipe_fd)
 	}
 	if (handle_redirections(cmd) != OK)
 		exit_child(shell, 1);
+	close_hdoc_fds(shell->cmds);
 	execute_command(shell, cmd);
 }
