@@ -16,7 +16,7 @@ void	error_exit(char *error)
 {
 	ft_putstr_fd("minishell: ", 2);
 	ft_putstr_fd(error, 2);
-	exit(1);
+	exit(EXIT_FAILURE);
 }
 
 static int	error_to_exit_code(t_code e)

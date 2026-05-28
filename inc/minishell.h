@@ -47,7 +47,6 @@ typedef enum e_code
 	INTERRUPTED,
 	SYNTAX_ERROR,
 	INTERNAL_ERROR,
-	UNCLOSED_QUOTES,
 }								t_code;
 
 
