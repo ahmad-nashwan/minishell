@@ -25,9 +25,9 @@ LDLIBS      = -lft -lreadline -lhistory -lncurses
 RESET   = \033[0m
 BOLD    = \033[1m
 
-BLUE = \033[1;34m
-GREEN   = \033[32m
-YELLOW  = \033[33m
+CYAN = \033[38;5;51m
+LIME   = \033[38;5;118m
+YELLOW  = \033[38;5;226m
 
 # ============================================================
 #                        SOURCES
@@ -110,7 +110,7 @@ all: $(NAME)
 $(NAME): $(OBJ)
 	@$(MAKE) -C $(LIBFT_DIR) bonus -s
 	@$(CC) $(CFLAGS) $(OBJ) $(LDFLAGS) $(LDLIBS) -o $(NAME)
-	@printf "⚡ $(BLUE)minishell ready$(RESET)\n"
+	@printf "👾 $(CYAN)minishell ready$(RESET)\n"
 
 $(OBJ_DIR)/%.o: src/%.c
 	@mkdir -p $(dir $@)
@@ -119,12 +119,12 @@ $(OBJ_DIR)/%.o: src/%.c
 clean:
 	@rm -rf $(OBJ_DIR)
 	@$(MAKE) clean -C $(LIBFT_DIR) -s
-	@printf "🧹 $(YELLOW)cleaned$(RESET)\n"
+	@printf "🗑️ $(YELLOW)cleaned$(RESET)\n"
 
 fclean: clean
 	@rm -f $(NAME)
 	@$(MAKE) fclean -C $(LIBFT_DIR) -s
-	@printf "✨ $(GREEN)full clean$(RESET)\n"
+	@printf "🧹 $(LIME)full clean$(RESET)\n"
 
 re: fclean all
 
