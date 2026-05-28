@@ -1,4 +1,16 @@
-# include "../../inc/minishell.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   tokenizer.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: anashwan <anashwan@student.42amman.com>    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/05/26 21:19:38 by anashwan          #+#    #+#             */
+/*   Updated: 2026/05/26 21:19:39 by anashwan         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "minishell.h"
 
 static t_code	token_error(t_shell *shell, t_code err)
 {
@@ -35,11 +47,11 @@ t_code	tokenizer(t_shell *shell, t_string *line)
 			line->index++;
 		rc = try_scan_token(shell, line);
 		if (rc == INTERNAL_ERROR || rc == SYNTAX_ERROR)
-			return token_error(shell, rc);
+			return (token_error(shell, rc));
 		if (rc == OK)
-			continue;
+			continue ;
 	}
-	if (add_token(&shell->tokens, NULL, END) != OK)
-		return token_error(shell, INTERNAL_ERROR);
-	return OK;
+	if (add_token(&shell->tokens, NULL, END, 0) != OK)
+		return (token_error(shell, INTERNAL_ERROR));
+	return (OK);
 }

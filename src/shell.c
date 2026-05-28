@@ -1,91 +1,41 @@
-<<<<<<< HEAD
-# include "../inc/minishell.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   shell.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: anashwan <anashwan@student.42amman.com>    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/05/26 20:56:10 by anashwan          #+#    #+#             */
+/*   Updated: 2026/05/27 03:39:40 by anashwan         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
-void	reset_shell(t_shell *shell)
+#include "minishell.h"
+
+void	init_shell(t_shell *shell, char **envp)
 {
-	if (shell->tokens)
-		clear_tokens(&shell->tokens);
-	shell->tokens = NULL;
-	if (shell->cmds)
-		cmd_list_clear(&shell->cmds);
-	shell->cmds = NULL;
-}
-
-
-void init_shell(t_shell *shell, char **envp)
-{
-    shell->env_vars = copy_env(envp);
-    if (!shell->env_vars)
-        error_exit("Malloc failure.");
-
-    shell->tokens = NULL;
-    shell->cmds = NULL;
-    shell->exit_status = 0;
-    shell->error_type = NONE;
-    shell->should_exit = 0;
-}
-
-t_code process_input(t_shell *shell, char *input)
-{
-    t_string *line;
-    t_code    rc;
-
-	rc = OK;
-    line = init_string(ft_strdup(input));
-    if (!line)
-        return INTERNAL_ERROR;
-    if (*line->str)
-    {
-        add_history(line->str);
-        if (rc == OK)
-		{
-			rc = tokenizer(shell, line);
-		}
-		if (rc == OK)
-		{	
-			rc = parse(shell);
-		}
-		if (rc == OK)
-		{
-			//print_cmds(shell->cmds);
-			excute_cmds(shell);
-		}
-    }
-    free_t_string(line);
-    return rc;
-}
-
-int	start_shell(t_shell *shell)
-{
-	char		*input;
-
-	while (1)
+	shell->env_list = NULL;
+	if (envp && *envp)
 	{
-		reset_shell(shell);
-		input = readline("minishell$ ");
-		if (!input)
-			break;
-		if (process_input(shell, input) != OK)
-		{
-			if (handle_error(shell) != OK)
-			{
-				free(input);
-				break;
-			}
-		}
-		free(input);
+		shell->env_list = init_env_list(envp);
+		if (!shell->env_list)
+			error_exit("Malloc failure.");
 	}
-	printf("exit\n");
-	reset_shell(shell);
-	free_env(shell->env_vars);
-	rl_clear_history();
-	return (shell->exit_status);
+	shell->curr_input = NULL;
+	shell->tokens = NULL;
+	shell->cmds = NULL;
+	shell->exit_status = 0;
+	shell->error_type = NONE;
+	shell->should_exit = 0;
 }
-=======
-# include "../inc/minishell.h"
 
 void	reset_shell(t_shell *shell)
 {
+	if (!shell)
+		return ;
+	if (shell->curr_input)
+		free_t_string(shell->curr_input);
+	shell->curr_input = NULL;
 	if (shell->tokens)
 		clear_tokens(&shell->tokens);
 	shell->tokens = NULL;
@@ -94,69 +44,65 @@ void	reset_shell(t_shell *shell)
 	shell->cmds = NULL;
 }
 
-
-void init_shell(t_shell *shell, char **envp)
+void	free_shell_state(t_shell *shell)
 {
-    shell->env_vars = copy_env(envp);
-    if (!shell->env_vars)
-        error_exit("Malloc failure.");
-
-    shell->tokens = NULL;
-    shell->cmds = NULL;
-    shell->exit_status = 0;
-    shell->error_type = NONE;
-    shell->should_exit = 0;
+	if (!shell)
+		return ;
+	reset_shell(shell); 
+	if (shell->env_list)
+		ft_lstclear(&shell->env_list, free_env_var);
+	shell->env_list = NULL;
+	rl_clear_history(); 
 }
 
-t_code process_input(t_shell *shell, char *input)
+void	process_input(t_shell *shell, char *input)
 {
-    t_string *line;
-    t_code    rc;
+	t_code		rc;
 
 	rc = OK;
-    line = init_string(ft_strdup(input));
-    if (!line)
-        return INTERNAL_ERROR;
-    if (*line->str)
-    {
-        add_history(line->str);
-        if (rc == OK)
-		{
-			rc = tokenizer(shell, line);
-		}
+	shell->curr_input = init_string(input);
+	if (!shell->curr_input)
+	{
+		report_error(shell, INTERNAL_ERROR, "Malloc Failure");
+		return ;
+	}
+	if (*shell->curr_input->str)
+	{
+		add_history(shell->curr_input->str);
 		if (rc == OK)
-		{	
+			rc = tokenizer(shell, shell->curr_input);
+		if (rc == OK)
 			rc = parse(shell);
-		}
-    }
-    free_t_string(line);
-    return rc;
+		if (rc == OK)
+			process_commands(shell);
+	}
+	free_t_string(shell->curr_input);
+	shell->curr_input = NULL;
 }
 
 int	start_shell(t_shell *shell)
 {
-	char		*input;
+	char *input;
 
 	while (shell->should_exit != 1)
 	{
+		sig_set_interactive();
 		reset_shell(shell);
 		input = readline("minishell$ ");
 		if (!input)
-			break;
-		if (process_input(shell, input) != OK)
+			break ;
+		if (g_signal)
 		{
-			if (handle_error(shell) != OK)
-			{
-				free(input);
-				break;
-			}
+			shell->exit_status = g_signal;
+			g_signal = 0;
 		}
+		process_input(shell, input);
 		free(input);
 	}
-	printf("exit\n");
+	if (!input)
+		ft_putstr_fd("exit\n", STDERR_FILENO);
 	reset_shell(shell);
-	free_env(shell->env_vars);
+	ft_lstclear(&shell->env_list, free_env_var);
 	rl_clear_history();
 	return (shell->exit_status);
 }
->>>>>>> 2beb06267a6ee848002dea1489082cc7719a52a4

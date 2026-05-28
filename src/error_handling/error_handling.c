@@ -1,29 +1,35 @@
-# include "../../inc/minishell.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   error_handling.c                                   :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: anashwan <anashwan@student.42amman.com>    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/05/26 21:40:48 by anashwan          #+#    #+#             */
+/*   Updated: 2026/05/26 21:46:47 by anashwan         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "minishell.h"
 
 void	error_exit(char *error)
 {
 	ft_putstr_fd("minishell: ", 2);
 	ft_putstr_fd(error, 2);
-	exit(1);
+	exit(EXIT_FAILURE);
 }
 
-static int error_to_exit_code(t_code e)
+static int	error_to_exit_code(t_code e)
 {
-    if (e == NONE)
-        return (0);
-    if (e == SYNTAX_ERROR)
-        return (2);
-    if (e == CMD_NOT_FOUND)
-        return (127);
-    if (e == PERMISSION_DENIED)
-        return (126);
-    if (e == INTERNAL_ERROR)
-        return (1);
-    if (e == EXEC_ERROR)
-        return (1);
-    if (e == BUILTIN_ERROR)
-        return (1);
-    return (1);
+	if (e == NONE)
+		return (0);
+	if (e == SYNTAX_ERROR)
+		return (2);
+	if (e == INTERNAL_ERROR)
+		return (1);
+	if (e == INTERRUPTED)
+		return (130);
+	return (1);
 }
 
 void	report_error(t_shell *shell, t_code e, char *msg)
@@ -39,9 +45,9 @@ void	report_error(t_shell *shell, t_code e, char *msg)
 	}
 }
 
-t_code  handle_error(t_shell *shell)
+void	print_cmd_error(char *cmd, char *msg)
 {
-    if (shell->should_exit)
-        return (ERR);
-    return (OK);
+	ft_putstr_fd("minishell: ", STDERR_FILENO);
+	ft_putstr_fd(cmd, STDERR_FILENO);
+	ft_putstr_fd(msg, STDERR_FILENO);
 }

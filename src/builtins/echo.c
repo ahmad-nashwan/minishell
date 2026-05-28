@@ -1,51 +1,77 @@
-# include "../../inc/minishell.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   echo.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: anashwan <anashwan@student.42amman.com>    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/05/26 21:41:04 by anashwan          #+#    #+#             */
+/*   Updated: 2026/05/26 21:41:05 by anashwan         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
-static int  new_line_flags(char **args)
+#include "minishell.h"
+
+static void	skip_new_line_flags(t_list **args, int *new_line)
 {
-    int i;
-    int j;
+	char	*str;
+	int		i;
 
-    i = 1;
-    j = 0;
-    while (args[i])
-    {
-        j = 0;
-        if (args[i][j] == '-')
-        {
-            j++;
-            if (args[i][j] != 'n')
-                break;
-            while (args[i][j] == 'n')
-                j++;
-            if (args[i][j] != '\0')
-                break;
-        }
-        else
-            break;
-        i++;
-    }
-    return (i);
+	*new_line = 1;
+	while (*args)
+	{
+		i = 0;
+		str = (char *)(*args)->content;
+		if (str[i] == '-')
+		{
+			i++;
+			if (str[i] != 'n')
+				break ;
+			while (str[i] == 'n')
+				i++;
+			if (str[i] != '\0')
+				break ;
+			*new_line = 0;
+		}
+		else
+			break ;
+		(*args) = (*args)->next;
+	}
 }
 
-t_code  echo(char **args, int fd_out)
+static void	print_args(t_list *args, int new_line)
 {
-    int i;
-    int new_line;
+	char	*str;
 
-    if (!args)
-        return (INTERNAL_ERROR);
-    new_line = 1;
-    i = new_line_flags(args);
-    if (i > 1)
-        new_line = 0;
-    while (args[i])
-    {
-        ft_putstr_fd(args[i], fd_out);
-        if (args[i + 1])
-            ft_putstr_fd(" ", fd_out);
-        i++;
-    }
-     if (new_line)
-        ft_putstr_fd("\n", fd_out);
-    return (OK);
+	while (args)
+	{
+		str = (char *)args->content;
+		ft_putstr_fd(str, STDOUT_FILENO);
+		if (args->next)
+			ft_putstr_fd(" ", STDOUT_FILENO);
+		args = args->next;
+	}
+	if (new_line)
+		ft_putstr_fd("\n", STDOUT_FILENO);
+}
+
+void	echo(t_shell *shell, t_list *args)
+{
+	int	new_line;
+
+	if (!args)
+	{
+		report_error(shell, INTERNAL_ERROR, "Invalid pointer");
+		return ;
+	}
+	args = args->next;
+	if (!args)
+	{
+		ft_putstr_fd("\n", STDOUT_FILENO);
+		shell->exit_status = 0;
+		return ;
+	}
+	skip_new_line_flags(&args, &new_line);
+	print_args(args, new_line);
+	shell->exit_status = 0;
 }

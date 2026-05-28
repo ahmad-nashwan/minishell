@@ -1,37 +1,37 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pwd.c                                              :+:      :+:    :+:   */
+/*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: anashwan <anashwan@student.42amman.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/05/26 21:41:12 by anashwan          #+#    #+#             */
-/*   Updated: 2026/05/26 21:46:19 by anashwan         ###   ########.fr       */
+/*   Created: 2026/05/26 21:41:24 by anashwan          #+#    #+#             */
+/*   Updated: 2026/05/26 21:41:25 by anashwan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	pwd(t_shell *shell)
+void	export(t_shell *shell, t_list *args)
 {
-	char	*env_pwd;
-	char	*wd;
+	t_code	rc;
 
-	env_pwd = get_env_value(shell->env_list, "PWD");
-	if (env_pwd)
+	if (!shell || !args)
 	{
-		ft_putendl_fd(env_pwd, STDOUT_FILENO);
-		shell->exit_status = 0;
+		report_error(shell, INTERNAL_ERROR, "Invalid pointer");
 		return ;
 	}
-	wd = getcwd(NULL, 0);
-	if (wd)
+	if (!args->next)
+		rc = export_print(shell->env_list);
+	else
+		rc = export_variables(&shell->env_list, args);
+	if (rc == INTERNAL_ERROR)
 	{
-		ft_putendl_fd(wd, STDOUT_FILENO);
-		free(wd);
-		shell->exit_status = 0;
+		report_error(shell, INTERNAL_ERROR, "Malloc Failure");
 		return ;
 	}
-	perror("minishell: pwd");
-	shell->exit_status = 1;
+	else if (rc == ERR)
+		shell->exit_status = 1;
+	else
+		shell->exit_status = 0;
 }
