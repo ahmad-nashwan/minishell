@@ -92,7 +92,9 @@ SRC = \
 	\
 	src/utils/safe_atol.c \
 	src/utils/string_utils.c \
-	src/utils/array_utils.c
+	src/utils/array_utils.c \
+	\
+	src/theme/banner.c
 
 # ============================================================
 #                        OBJECTS
