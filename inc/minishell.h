@@ -10,18 +10,47 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../libft/libft.h"
-#include <fcntl.h>
-#include <limits.h>
-#include <stdio.h>
-#include <readline/history.h>
-#include <readline/readline.h>
-#include <signal.h>
-#include <stdlib.h>
-#include <sys/stat.h>
-#include <sys/types.h>
-#include <sys/wait.h>
-#include <unistd.h>
+# include "../libft/libft.h"
+# include <fcntl.h>
+# include <limits.h>
+# include <stdio.h>
+# include <readline/history.h>
+# include <readline/readline.h>
+# include <signal.h>
+# include <stdlib.h>
+# include <sys/stat.h>
+# include <sys/types.h>
+# include <sys/wait.h>
+# include <unistd.h>
+
+/* ************************************************************************** */
+/*                                                                            */
+/*                                   Colors                                   */
+/*                                                                            */
+/* ************************************************************************** */
+/* Basic */
+#define PROMPT_COLOR	"\033[38;5;111m"
+#define RESET_COLOR  	"\001\033[38;5;195m\002"
+#define CLEAR       	"\033[2J\033[H"
+#define RESET       	"\033[0m"
+#define BOLD        	"\033[1m"
+#define DIM         	"\033[2m"
+
+/* Structure & info */
+#define BORDER      	"\033[38;5;246m"
+#define PRISM       	"\033[38;5;111m"
+#define TITLE       	"\033[38;5;255m"
+#define AUTHORS     	"\033[38;5;253m"
+#define INPUT       	"\033[38;5;15m"
+
+/* The Fractured Light (Cool-Toned Spectrum) */
+#define C_1         	"\033[38;5;195m"  /* 1. Ice White */
+#define C_2         	"\033[38;5;159m"  /* 2. Pale Cyan */
+#define C_3         	"\033[38;5;87m"   /* 3. Bright Cyan */
+#define C_4         	"\033[38;5;111m"  /* 4. Mid Blue */
+#define C_5         	"\033[38;5;147m"  /* 5. Pale Violet */
+#define C_6         	"\033[38;5;141m"  /* 6. Dream Purple */
+#define C_7         	"\033[38;5;99m"   /* 7. Deep Indigo */
 
 /* ************************************************************************** */
 /*                                                                            */

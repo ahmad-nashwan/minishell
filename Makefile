@@ -25,7 +25,7 @@ LDLIBS      = -lft -lreadline -lhistory -lncurses
 RESET   = \033[0m
 BOLD    = \033[1m
 
-CYAN =  \033[38;5;87m
+CYAN =  \033[38;5;111m
 LIME   = \033[38;5;118m
 YELLOW  = \033[38;5;226m
 

@@ -11,7 +11,7 @@
 /* ************************************************************************** */
 
 #include "minishell.h"
-
+#define THIN_SP "\xE2\x80\x89"
 void	init_shell(t_shell *shell, char **envp)
 {
 	shell->env_list = NULL;
@@ -88,7 +88,7 @@ int	start_shell(t_shell *shell)
 	{
 		sig_set_interactive();
 		reset_shell(shell);
-		input = readline("minishell$ ");
+		input = readline(PROMPT_COLOR "🌑" THIN_SP "nash$ " RESET_COLOR);
 		if (!input)
 			break ;
 		if (g_signal)
