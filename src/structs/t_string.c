@@ -61,7 +61,10 @@ t_code	realloc_string(t_string *word)
 	char	*new_str;
 	size_t	i;
 
-	new_cap = word->cap == 0 ? 16 : word->cap * 2;
+	if (word->cap == 0)
+		new_cap = 16;
+	else
+		new_cap = word->cap * 2;
 	new_str = malloc(new_cap);
 	if (!new_str)
 		return (INTERNAL_ERROR);
