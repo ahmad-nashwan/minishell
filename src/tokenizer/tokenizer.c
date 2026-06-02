@@ -36,8 +36,7 @@ static t_code	try_scan_token(t_shell *shell, t_string *line)
 		return (rc);
 	return (NONE);
 }
-// to do:
-// use peek and advanec instead of indexing directly in the tokenizer loop	
+
 t_code	tokenizer(t_shell *shell, t_string *line)
 {
 	t_code	rc;
