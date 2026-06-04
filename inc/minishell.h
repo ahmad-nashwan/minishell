@@ -56,6 +56,11 @@ typedef enum e_code
 /*                                                                            */
 /* ************************************************************************** */
 
+typedef struct s_pid
+{
+	
+}	t_pid;
+
 typedef struct s_env_var
 {
 	char						*key;
