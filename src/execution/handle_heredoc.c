@@ -52,8 +52,10 @@ t_code	handle_hdoc(t_redir *redir)
 	{
 		perror("minishell: dup2");
 		close(redir->h_fd);
+		redir->h_fd = -1;
 		return (ERR);
 	}
 	close(redir->h_fd);
+	redir->h_fd = -1;
 	return (OK);
 }

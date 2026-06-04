@@ -6,11 +6,11 @@
 /*   By: anashwan <anashwan@student.42amman.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/26 21:41:51 by anashwan          #+#    #+#             */
-/*   Updated: 2026/05/28 06:31:27 by anashwan         ###   ########.fr       */
+/*   Updated: 2026/06/04 23:59:16 by anashwan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-# include "../libft/libft.h"
+# include "libft.h"
 # include <fcntl.h>
 # include <limits.h>
 # include <stdio.h>
@@ -51,6 +51,7 @@
 #define C_5         	"\033[38;5;147m"  /* 5. Pale Violet */
 #define C_6         	"\033[38;5;141m"  /* 6. Dream Purple */
 #define C_7         	"\033[38;5;99m"   /* 7. Deep Indigo */
+
 
 /* ************************************************************************** */
 /*                                                                            */

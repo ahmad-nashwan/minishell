@@ -110,7 +110,7 @@ OBJ = $(SRC:src/%.c=$(OBJ_DIR)/%.o)
 all: $(NAME)
 
 $(NAME): $(OBJ)
-	@$(MAKE) -C $(LIBFT_DIR) bonus -s
+	@$(MAKE) -C $(LIBFT_DIR) bonus > /dev/null
 	@$(CC) $(CFLAGS) $(OBJ) $(LDFLAGS) $(LDLIBS) -o $(NAME)
 	@printf "👾 $(CYAN)minishell ready$(RESET)\n"
 
@@ -120,12 +120,12 @@ $(OBJ_DIR)/%.o: src/%.c
 
 clean:
 	@rm -rf $(OBJ_DIR)
-	@$(MAKE) clean -C $(LIBFT_DIR) -s
+	@$(MAKE) clean -C $(LIBFT_DIR) > /dev/null
 	@printf "🗑️ $(YELLOW)cleaned$(RESET)\n"
 
 fclean: clean
 	@rm -f $(NAME)
-	@$(MAKE) fclean -C $(LIBFT_DIR) -s
+	@$(MAKE) fclean -C $(LIBFT_DIR) > /dev/null
 	@printf "🧹 $(LIME)full clean$(RESET)\n"
 
 re: fclean all
