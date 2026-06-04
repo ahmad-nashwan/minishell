@@ -6,11 +6,11 @@
 /*   By: anashwan <anashwan@student.42amman.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/26 21:41:51 by anashwan          #+#    #+#             */
-/*   Updated: 2026/05/27 03:44:52 by anashwan         ###   ########.fr       */
+/*   Updated: 2026/06/04 15:42:15 by anashwan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../libft/libft.h"
+#include "libft.h"
 #include <fcntl.h>
 #include <limits.h>
 #include <stdio.h>

@@ -36,6 +36,7 @@ static t_code	try_scan_token(t_shell *shell, t_string *line)
 		return (rc);
 	return (NONE);
 }
+
 t_code	tokenizer(t_shell *shell, t_string *line)
 {
 	t_code	rc;
@@ -43,8 +44,8 @@ t_code	tokenizer(t_shell *shell, t_string *line)
 	shell->tokens = NULL;
 	while (line->index < line->len && line->str[line->index])
 	{
-		while (ft_isspace(line->str[line->index]))
-			line->index++;
+		while (ft_isspace(peek(line)))
+			advance(line);
 		rc = try_scan_token(shell, line);
 		if (rc == INTERNAL_ERROR || rc == SYNTAX_ERROR)
 			return (token_error(shell, rc));

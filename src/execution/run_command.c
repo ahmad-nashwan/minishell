@@ -85,6 +85,8 @@ void	execute_command(t_shell *shell, t_cmd *cmd)
 
 	if (run_builtin(shell, cmd) == OK)
 		exit_child(shell, shell->exit_status);
+	if (!cmd->argv_list) // empty command
+		exit_child(shell, 0);
 	argv = list_to_string_array(cmd->argv_list);
 	if (!argv)
 		exit_child(shell, 1);
