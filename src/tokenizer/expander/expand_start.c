@@ -6,7 +6,7 @@
 /*   By: anashwan <anashwan@student.42amman.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/26 21:19:54 by anashwan          #+#    #+#             */
-/*   Updated: 2026/05/26 21:19:55 by anashwan         ###   ########.fr       */
+/*   Updated: 2026/06/05 00:56:45 by anashwan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,8 @@ t_code	expand_start(t_shell *shell, t_string *line, t_string *word, int quoted)
 	c = peek(line);
 	if (c == '?')
 		return (expand_exit_status(shell, line, word, quoted));
+	if (!quoted && (c == '"' || c == '\''))
+        return (OK);
 	if (c == '0')
 	{
 		advance(line);
