@@ -20,7 +20,10 @@ void	init_shell(t_shell *shell, char **envp)
 		shell->env_list = init_env_list(envp);
 		if (!shell->env_list)
 			error_exit("Malloc failure.");
+		check_shell_level(shell->env_list);
+
 	}
+	
 	shell->curr_input = NULL;
 	shell->tokens = NULL;
 	shell->cmds = NULL;

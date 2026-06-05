@@ -56,11 +56,6 @@ typedef enum e_code
 /*                                                                            */
 /* ************************************************************************** */
 
-typedef struct s_pid
-{
-	
-}	t_pid;
-
 typedef struct s_env_var
 {
 	char						*key;
@@ -168,6 +163,8 @@ t_code							update_env_value(t_env_var *env,
 t_env_var						*find_env_var(t_list *env_list,
 									const char *key);
 void							free_env_var(void *content);
+void							check_shell_level(t_list *env_list);
+
 // env list
 t_list							*init_env_list(char **envp);
 t_code							add_env_var(t_list **env_list, t_env_var *var);
