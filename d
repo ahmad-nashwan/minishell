@@ -1,0 +1,12 @@
+Makefile
+README.md
+cat
+d
+file_test
+inc
+libft
+minishell
+notes.md
+obj
+src
+tests.md

@@ -30,30 +30,30 @@ static void	clear_prev_hdoc(t_list *redirection)
 	}
 }
 
-static t_code	parse_redir(t_shell *shell, t_cmd *cmd, t_token *redir,
-		t_token *target)
+static t_code    parse_redir(t_shell *shell, t_cmd *cmd, t_token *redir,
+        t_token *target)
 {
-	t_redir	*redirection;
-	t_code	rc;
+    t_redir    *redirection;
+    t_code    rc;
 
-	if (!cmd || !redir || !target)
-		return (INTERNAL_ERROR);
-	redirection = redir_create(redir->type, target->lexeme);
-	if (!redirection)
-		return (INTERNAL_ERROR);
-	if (redirection->type == HEREDOC)
-	{
-		clear_prev_hdoc(cmd->redirections);
-		rc = parse_hdoc(shell, redirection->target, &redirection->h_fd,
-				target->quoted);
-		if (rc != OK)
-		{
-			free(redirection->target);
-			free(redirection);
-			return (rc);
-		}
-	}
-	return (cmd_add_redir(cmd, redirection));
+    if (!cmd || !redir || !target)
+        return (INTERNAL_ERROR);
+    redirection = redir_create(redir->type, target->lexeme);
+    if (!redirection)
+        return (INTERNAL_ERROR);
+    if (redirection->type == HEREDOC)
+    {
+        clear_prev_hdoc(cmd->redirections);
+        rc = parse_hdoc(shell, redirection->target, &redirection->h_fd,
+                target->quoted);
+        if (rc != OK)
+        {
+            free(redirection->target);
+            free(redirection);
+            return (rc);
+        }
+    }
+    return (cmd_add_redir(cmd, redirection));
 }
 
 static t_code	handle_redir_node(t_shell *shell, t_cmd *cmd, t_list **node,

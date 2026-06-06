@@ -92,6 +92,7 @@ typedef struct s_string
 
 typedef struct s_shell
 {
+	pid_t						*child_pids;
 	t_list						*env_list;
 	t_list						*tokens;
 	t_list						*cmds;
@@ -305,3 +306,9 @@ void	free_array(char **arr, int elements); // we may remove this
 /* ************************************************************************** */
 void							print_tokens(t_list *tokens);
 void							print_cmds(t_list *cmds);
+
+
+
+
+void	clear_child_pids(t_shell *shell);
+void	init_child_pids(t_shell *shell);

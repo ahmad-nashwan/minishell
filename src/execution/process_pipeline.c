@@ -75,13 +75,12 @@ static void	wait_for_children(t_shell *shell, pid_t *pids, int len)
 t_code	process_pipeline(t_shell *shell)
 {
 	t_list	*node;
-	pid_t	*pids;
 	int		i;
 	int		input_fd;
+	pid_t	*pids;
 
-	pids = malloc(sizeof(pid_t) * ft_lstsize(shell->cmds));
-	if (!pids)
-		return (pipeline_error(shell, INTERNAL_ERROR, "Malloc failed"));
+	init_child_pids(shell);
+	pids = shell->child_pids;
 	i = 0;
 	input_fd = -1;
 	node = shell->cmds;
@@ -95,6 +94,5 @@ t_code	process_pipeline(t_shell *shell)
 	}
 	wait_for_children(shell, pids, i);
 	close_hdoc_fds(shell->cmds);
-	free(pids);
 	return (OK);
 }

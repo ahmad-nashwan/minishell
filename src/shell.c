@@ -23,7 +23,7 @@ void	init_shell(t_shell *shell, char **envp)
 		check_shell_level(shell->env_list);
 
 	}
-	
+	shell->child_pids = NULL;
 	shell->curr_input = NULL;
 	shell->tokens = NULL;
 	shell->cmds = NULL;
@@ -44,6 +44,8 @@ void	reset_shell(t_shell *shell)
 	shell->tokens = NULL;
 	if (shell->cmds)
 		cmd_list_clear(&shell->cmds);
+	if (shell->child_pids)
+		clear_child_pids(shell);
 	shell->cmds = NULL;
 }
 
