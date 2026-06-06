@@ -92,7 +92,7 @@ t_code	process_pipeline(t_shell *shell)
 		node = node->next;
 		i++;
 	}
-	wait_for_children(shell, pids, i);
 	close_hdoc_fds(shell->cmds);
+	wait_for_children(shell, pids, i);
 	return (OK);
 }

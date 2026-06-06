@@ -37,6 +37,8 @@ void	redir_free(void *p)
 	redir = (t_redir *)p;
 	if (!redir)
 		return ;
+	if (redir->h_fd != -1)
+		close(redir->h_fd);
 	if (redir->target)
 		free(redir->target);
 	free(redir);
