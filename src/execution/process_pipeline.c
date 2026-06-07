@@ -12,21 +12,15 @@
 
 # include "minishell.h"
 
-static t_code	pipeline_error(t_shell *shell, t_code e, char *msg)
-{
-	report_error(shell, e, msg);
-	return (ERR);
-}
-
 static t_code	process_cmd(t_shell *shell, t_list *cmd_node, int *in_fd, pid_t *pid)
 {
 	int		fd[2];
 
 	if (cmd_node->next && pipe(fd) != 0)
-		return (pipeline_error(shell, INTERNAL_ERROR, "Pipe failure"));
+		return (INTERNAL_ERROR);
 	*pid = fork();
 	if (*pid == -1)
-		return (pipeline_error(shell, INTERNAL_ERROR, "Fork failed"));
+		return (INTERNAL_ERROR);
 	if (*pid == 0)
 	{
 		sig_set_child();
@@ -46,16 +40,17 @@ static t_code	process_cmd(t_shell *shell, t_list *cmd_node, int *in_fd, pid_t *p
 	return (OK);
 }
 
-static void	wait_for_children(t_shell *shell, pid_t *pids, int len)
+static void	wait_for_children(t_shell *shell, int len)
 {
-	int	i;
-	int	state;
+	int		i;
+	int		state;
+	pid_t	pid;
 
 	i = 0;
 	while (i < len)
 	{
-		waitpid(pids[i], &state, 0);
-		if (i == len - 1)
+		pid = waitpid(-1, &state, 0);
+		if (pid == shell->pids[len - 1])
 		{
 			if (WIFEXITED(state))
 				shell->exit_status = WEXITSTATUS(state);
@@ -72,29 +67,49 @@ static void	wait_for_children(t_shell *shell, pid_t *pids, int len)
 	}
 }
 
-t_code	process_pipeline(t_shell *shell)
+static	void pipeline_cleanup(t_shell *shell, int len)
 {
-	t_list	*node;
-	int		i;
-	int		input_fd;
-
-	shell->pids = malloc(sizeof(pid_t) * ft_lstsize(shell->cmds));
-	if (!shell->pids)
-		return (pipeline_error(shell, INTERNAL_ERROR, "Malloc failed"));
-	i = 0;
-	input_fd = -1;
-	node = shell->cmds;
-	sig_set_execution();
-	while (!shell->should_exit && node)
-	{
-		if (process_cmd(shell, node, &input_fd, &shell->pids[i]) != OK)
-			break ;
-		node = node->next;
-		i++;
-	}
-	wait_for_children(shell, shell->pids, i);
+	wait_for_children(shell, len);
 	close_hdoc_fds(shell->cmds);
-	free(shell->pids);
+	if (shell->pids)
+		free(shell->pids);
 	shell->pids = NULL;
-	return (OK);
+}
+
+static t_code   init_pipeline(t_shell *shell, int *i, int *in_fd, t_list **node)
+{
+    shell->pids = malloc(sizeof(pid_t) * ft_lstsize(shell->cmds));
+    if (!shell->pids)
+    {
+        report_error(shell, INTERNAL_ERROR, "Malloc Error");
+        return (INTERNAL_ERROR);
+    }
+    *i = 0;
+    *in_fd = -1;
+    *node = shell->cmds;
+    sig_set_execution();
+    return (OK);
+}
+
+void    process_pipeline(t_shell *shell)
+{
+    t_list  *node;
+    int     i;
+    int     input_fd;
+
+    if (init_pipeline(shell, &i, &input_fd, &node) != OK)
+        return ;
+    while (!shell->should_exit && node)
+    {
+        if (process_cmd(shell, node, &input_fd, &shell->pids[i]) != OK)
+        {
+            if (input_fd != -1)
+                close(input_fd);
+            report_error(shell, INTERNAL_ERROR, "Internal error.");
+            break ;
+        }
+        node = node->next;
+        i++;
+    }
+    pipeline_cleanup(shell, i);
 }
