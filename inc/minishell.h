@@ -6,7 +6,7 @@
 /*   By: anashwan <anashwan@student.42amman.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/26 21:41:51 by anashwan          #+#    #+#             */
-/*   Updated: 2026/06/07 14:51:33 by anashwan         ###   ########.fr       */
+/*   Updated: 2026/06/07 19:28:01 by anashwan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,8 +96,9 @@ typedef struct s_shell
 	t_list						*tokens;
 	t_list						*cmds;
 	t_string					*curr_input;
-	int							exit_status;
+	pid_t						*pids;
 	t_code						error_type;
+	int							exit_status;
 	int							should_exit;
 }								t_shell;
 

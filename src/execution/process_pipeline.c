@@ -6,7 +6,7 @@
 /*   By: anashwan <anashwan@student.42amman.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/26 21:40:31 by anashwan          #+#    #+#             */
-/*   Updated: 2026/05/27 02:20:21 by anashwan         ###   ########.fr       */
+/*   Updated: 2026/06/07 19:31:07 by anashwan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,12 +75,11 @@ static void	wait_for_children(t_shell *shell, pid_t *pids, int len)
 t_code	process_pipeline(t_shell *shell)
 {
 	t_list	*node;
-	pid_t	*pids;
 	int		i;
 	int		input_fd;
 
-	pids = malloc(sizeof(pid_t) * ft_lstsize(shell->cmds));
-	if (!pids)
+	shell->pids = malloc(sizeof(pid_t) * ft_lstsize(shell->cmds));
+	if (!shell->pids)
 		return (pipeline_error(shell, INTERNAL_ERROR, "Malloc failed"));
 	i = 0;
 	input_fd = -1;
@@ -88,13 +87,14 @@ t_code	process_pipeline(t_shell *shell)
 	sig_set_execution();
 	while (!shell->should_exit && node)
 	{
-		if (process_cmd(shell, node, &input_fd, &pids[i]) != OK)
+		if (process_cmd(shell, node, &input_fd, &shell->pids[i]) != OK)
 			break ;
 		node = node->next;
 		i++;
 	}
-	wait_for_children(shell, pids, i);
+	wait_for_children(shell, shell->pids, i);
 	close_hdoc_fds(shell->cmds);
-	free(pids);
+	free(shell->pids);
+	shell->pids = NULL;
 	return (OK);
 }
