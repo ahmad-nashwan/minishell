@@ -6,7 +6,7 @@
 /*   By: anashwan <anashwan@student.42amman.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/26 21:19:33 by anashwan          #+#    #+#             */
-/*   Updated: 2026/05/26 21:19:34 by anashwan         ###   ########.fr       */
+/*   Updated: 2026/06/07 14:57:53 by anashwan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ static t_code	quoted_mode(t_shell *shell, t_string *line, t_string *word,
 	}
 	if (line->index >= line->len)
 		return (SYNTAX_ERROR);
-	advance(line); // closing quote
+	advance(line);
 	return (OK);
 }
 

@@ -6,7 +6,7 @@
 /*   By: anashwan <anashwan@student.42amman.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/26 21:41:51 by anashwan          #+#    #+#             */
-/*   Updated: 2026/06/04 15:42:15 by anashwan         ###   ########.fr       */
+/*   Updated: 2026/06/07 14:51:33 by anashwan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -230,9 +230,6 @@ char							*get_valid_path(char **paths, char *cmd);
 char							*find_cmd_path(t_shell *shell);
 char							*build_full_path(char *dir, char *cmd);
 int								is_builtin(char *name);
-t_env_var						*find_env_var(t_list *env_list,
-									const char *key);
-t_code							add_env_var(t_list **env_list, t_env_var *var);
 t_code							is_dir(char *path);
 void							free_argv_envp_exit(t_shell *shell, char **argv, char **envp,
 									int exit_code);
