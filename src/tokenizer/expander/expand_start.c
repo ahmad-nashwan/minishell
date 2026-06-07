@@ -16,7 +16,7 @@ t_string	*get_var_name(t_string *line)
 {
 	t_string	*name;
 
-	name = create_empty_string(32); // MALLOC_CHECK[OK]
+	name = create_empty_string(32);
 	if (!name)
 		return (NULL);
 	while (ft_isalnum(peek(line)) || peek(line) == '_')
@@ -28,6 +28,21 @@ t_string	*get_var_name(t_string *line)
 		}
 	}
 	return (name);
+}
+
+t_code	expand_tilde(t_shell *shell, t_string *line, t_string *word)
+{
+	char	*home;
+	char	next;
+
+	advance(line);
+	next = peek(line);
+	if (next != '/' && next != '\0' && !ft_isspace(next))
+		return (append(word, '~'));
+	home = get_env_value(shell->env_list, "HOME");
+	if (home)
+		return (append_str(word, home));
+	return (append(word, '~'));
 }
 
 t_code	expand_start(t_shell *shell, t_string *line, t_string *word, int quoted)

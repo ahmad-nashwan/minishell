@@ -33,9 +33,10 @@ typedef enum s_type
 	WORD,
 	PIPE,
 	HEREDOC,
+	APPEND,
 	OUT_RED,
 	IN_RED,
-	APPEND,
+	AMBIG_REDIR,
 	END
 }								t_type;
 
@@ -186,6 +187,7 @@ t_code							scan_pipe(t_shell *shell, t_string *line);
 // Expansion
 t_code							expand_start(t_shell *shell, t_string *line,
 									t_string *word, int quoted);
+t_code							expand_tilde(t_shell *shell, t_string *line, t_string *word);
 t_string						*get_var_name(t_string *line);
 t_code							find_var_expand(t_shell *shell, t_string *line,
 									t_string *word, int quoted);
@@ -203,6 +205,9 @@ t_code							append_str(t_string *word, char *s);
 t_code							parse(t_shell *shell);
 t_code							build_cmd(t_shell *shell, t_cmd *cmd,
 									t_list **node);
+t_code  						parse_redir(t_shell *shell, t_cmd *cmd, t_token *redir, t_token *target);
+t_code							handle_redir_node(t_shell *shell, t_cmd *cmd, t_list **node,
+									t_token *token);
 t_code							parse_hdoc(t_shell *shell, char *delimeter,
 									int *h_fd, int quoted);
 char							*hdoc_read_line(void);
