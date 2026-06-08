@@ -62,6 +62,7 @@ SRC = \
 	\
 	src/parsing/parse_start.c \
 	src/parsing/parse_build_cmd.c \
+	src/parsing/parse_redir.c \
 	src/parsing/parse_hdoc.c \
 	src/parsing/parse_hdoc_utils.c \
 	src/parsing/parse_errors.c \

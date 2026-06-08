@@ -6,26 +6,11 @@
 /*   By: anashwan <anashwan@student.42amman.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/26 21:19:33 by anashwan          #+#    #+#             */
-/*   Updated: 2026/05/26 21:19:34 by anashwan         ###   ########.fr       */
+/*   Updated: 2026/06/07 14:57:53 by anashwan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-static t_code	expand_tilde(t_shell *shell, t_string *line, t_string *word)
-{
-	char	*home;
-	char	next;
-
-	advance(line);
-	next = peek(line);
-	if (next != '/' && next != '\0' && !ft_isspace(next))
-		return (append(word, '~'));
-	home = get_env_value(shell->env_list, "HOME");
-	if (home)
-		return (append_str(word, home));
-	return (append(word, '~'));
-}
 
 static t_code	quoted_mode(t_shell *shell, t_string *line, t_string *word,
 		int hdoc_target)
@@ -53,7 +38,7 @@ static t_code	quoted_mode(t_shell *shell, t_string *line, t_string *word,
 	}
 	if (line->index >= line->len)
 		return (SYNTAX_ERROR);
-	advance(line); // closing quote
+	advance(line);
 	return (OK);
 }
 
@@ -86,28 +71,35 @@ static t_code	normal_mode(t_shell *shell, t_string *line, t_string *word,
 	return (result);
 }
 
-t_code	scan_word(t_shell *shell, t_string *line)
+static t_code   add_word_token(t_shell *shell, t_string *word, int q, int moved)
 {
-	t_string	*word;
-	int			quoted;
-	t_code		rc;
+    if (word->len == 0 && !q)
+    {
+        if (moved)
+            return (add_token(&shell->tokens, word->str, WORD, 0));
+        return (NONE);
+    }
+    return (add_token(&shell->tokens, word->str, WORD, q));
+}
 
-	quoted = 0;
-	word = create_empty_string(1024);
-	if (!word)
-		return (INTERNAL_ERROR);
-	rc = normal_mode(shell, line, word, &quoted);
-	if (rc == OK && word->len == 0 && !quoted)
-		rc = NONE;
-	else if (rc == OK && add_token(&shell->tokens, word->str, WORD,
-			quoted) != OK)
-		rc = INTERNAL_ERROR;
-	if (rc != OK)
-	{
-		free_t_string(word);
-		return (rc);
-	}
-	word->str = NULL;
-	free(word);
-	return (OK);
+t_code  scan_word(t_shell *shell, t_string *line)
+{
+    int         quoted;
+    size_t      start;
+    t_string    *word;
+    t_code      rc;
+
+    start = line->index;
+    quoted = 0;
+    word = create_empty_string(1024);
+    if (!word)
+        return (INTERNAL_ERROR);
+    rc = normal_mode(shell, line, word, &quoted);
+    if (rc == OK)
+        rc = add_word_token(shell, word, quoted, line->index > start);
+    if (rc != OK)
+        free_t_string(word);
+    else
+        free(word);
+    return (rc);
 }

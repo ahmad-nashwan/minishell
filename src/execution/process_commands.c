@@ -31,7 +31,7 @@ int	is_builtin(char *name)
 	return (0);
 }
 
-t_code	process_commands(t_shell *shell)
+void	process_commands(t_shell *shell)
 {
 	t_cmd	*cmd;
 
@@ -39,7 +39,10 @@ t_code	process_commands(t_shell *shell)
 	{
 		cmd = (t_cmd *)shell->cmds->content;
 		if (cmd->argv_list && is_builtin((char *)cmd->argv_list->content))
-			return (process_single_builtin(shell, cmd));
+		{
+			process_single_builtin(shell, cmd);
+			return ;
+		}
 	}
-	return (process_pipeline(shell));
+	process_pipeline(shell);
 }
