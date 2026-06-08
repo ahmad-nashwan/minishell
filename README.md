@@ -46,61 +46,52 @@ Minishell is a minimal Unix shell written in C, built as part of the 42 curricul
 | `Ctrl+\` | Ignored in interactive mode, quits running process otherwise |
 | `Ctrl+D` | EOF — exits the shell gracefully |
 
-
 ## Implementation
 
 ### Data Structures
 
-| Struct | Role |
-|--------|------|
-| `t_string` | Dynamic string with an internal index and capacity, used as a character-by-character scanner throughout tokenization, expansion, and heredoc reading |
-| `t_token` | Output unit of the tokenizer — carries the raw lexeme, its type, and a quoted flag |
-| `t_env_var` | A single environment variable as a key-value pair, stored in a linked list |
-| `t_redir` | A single redirection with its type, target, and an fd for heredocs filled at parse time |
-| `t_cmd` | Output unit of the parser — a list of arguments and a list of redirections |
-| `t_shell` | Top-level state container passed through every stage — environment, tokens, commands, pids, exit status, and control flags |
-
+* **`t_string`** — Dynamic string with an internal index and capacity, used as a character-by-character scanner throughout tokenization, expansion, and heredoc reading
+* **`t_token`** — Output unit of the tokenizer — carries the raw lexeme, its type, and a quoted flag
+* **`t_env_var`** — A single environment variable as a key-value pair, stored in a linked list
+* **`t_redir`** — A single redirection with its type, target, and an fd for heredocs filled at parse time
+* **`t_cmd`** — Output unit of the parser — a list of arguments and a list of redirections
+* **`t_shell`** — Top-level state container passed through every stage — environment, tokens, commands, pids, exit status, and control flags
 
 ### Overview
+
+```text
+    ┌────────────┐   ┌─────────────┐   ┌────────────┐   ┌────────────┐   ┌────────────┐
+    │  Readline  │──>│  Tokenizer  │──>│  Expander  │──>│   Parser   │──>│  Executor  │
+    └──────▲─────┘   └─────────────┘   └────────────┘   └────────────┘   └─────┬──────┘
+           │                                                                   │
+           │                                                     ┌─────────────┴─────────────┐
+           │                                                     ▼                           ▼
+           │                                               ┌────────────┐              ┌────────────┐
+           │                                               │  Builtins  │              │  Pipeline  │
+           │                                               └──────┬─────┘              └──────┬─────┘
+           │                                                      │                           │
+           └──────────────────────────────────────────────────────┴───────────────────────────┘
 ```
-┌────────────┐   ┌─────────────┐   ┌────────────┐   ┌────────────┐   ┌────────────┐
-│  Readline  │──>│  Tokenizer  │──>│  Expander  │──>│   Parser   │──>│  Executor  │
-└──────▲─────┘   └─────────────┘   └────────────┘   └────────────┘   └─────┬──────┘
-       │                                                                   │
-       │                                                     ┌─────────────┴─────────────┐
-       │                                                     ▼                           ▼
-       │                                               ┌────────────┐              ┌────────────┐
-       │                                               │  Builtins  │              │  Pipeline  │
-       │                                               └──────┬─────┘              └──────┬─────┘
-       │                                                      │                           │
-       └──────────────────────────────────────────────────────┴───────────────────────────┘
-```
+
 ### 1. Tokenizer
 
 The tokenizer acts as a state machine, consuming the input line character by character and producing a flat list of `t_token` nodes. Each token carries a type, a lexeme, and a quoted flag.
 
 **Token types:**
-
-| Type | Description |
-|------|-------------|
-| `WORD` | A command name, argument, or redirection target |
-| `PIPE` | The `\|` operator |
-| `IN_RED` | Input redirection `<` |
-| `OUT_RED` | Output redirection `>` |
-| `APPEND` | Append redirection `>>` |
-| `HEREDOC` | Heredoc operator `<<` |
-| `AMBIG_REDIR` | A redirection with an ambiguous target |
-| `END` | Terminal token marking the end of the list |
+* **`WORD`** — A command name, argument, or redirection target
+* **`PIPE`** — The `|` operator
+* **`IN_RED`** — Input redirection `<`
+* **`OUT_RED`** — Output redirection `>`
+* **`APPEND`** — Append redirection `>>`
+* **`HEREDOC`** — Heredoc operator `<<`
+* **`AMBIG_REDIR`** — A redirection with an ambiguous target
+* **`END`** — Terminal token marking the end of the list
 
 **Scanners:**
-
 Each character class is handled by a dedicated scanner, each with a single responsibility:
-
-| Scanner | Responsibility |
-|---------|---------------|
-| `scan_pipe` | Recognizes the `\|` operator |
-| `scan_redirection` | Recognizes `<`, `>`, `>>`, and `<<` |
-| `scan_word` | Reads a full word token, handles quoted mode and all expansion |
+* **`scan_pipe`** — Recognizes the `|` operator
+* **`scan_redirection`** — Recognizes `<`, `>`, `>>`, and `<<`
+* **`scan_word`** — Reads a full word token, handles quoted mode and all expansion
 
 The `t_string` struct is the shared interface across all scanners, wrapping a raw string with an internal index and exposing an `advance`/`peek` API so scanners consume characters without touching pointer arithmetic directly.
 
@@ -113,18 +104,14 @@ The `t_string` struct is the shared interface across all scanners, wrapping a ra
 The expander is triggered during tokenization whenever a `$` or `~` is encountered in a valid position. It looks up the variable name in the shell's environment list and appends its value to the current word being built. If the variable is not found, nothing is appended — consistent with standard shell behavior.
 
 **Supported expansions:**
-
-| Syntax | Description |
-|--------|-------------|
-| `$VARIABLE` | Expands to the variable's value from the environment |
-| `$?` | Expands to the last command's exit status |
-| `$0` | Expands to `minishell` |
-| `~` | Expands to `$HOME` |
+* **`$VARIABLE`** — Expands to the variable's value from the environment
+* **`$?`** — Expands to the last command's exit status
+* **`$0`** — Expands to `minishell`
+* **`~`** — Expands to `$HOME`
 
 Two important rules govern expansion behavior:
-
-- **Field splitting** — if the expanded value contains spaces and the expansion is unquoted, the value is split into multiple tokens rather than treated as a single word
-- **Quote context** — single quotes suppress expansion entirely, double quotes allow only `$` expansion, `~` expansion is suppressed inside any quotes
+* **Field splitting** — if the expanded value contains spaces and the expansion is unquoted, the value is split into multiple tokens rather than treated as a single word
+* **Quote context** — single quotes suppress expansion entirely, double quotes allow only `$` expansion, `~` expansion is suppressed inside any quotes
 
 ---
 
@@ -132,12 +119,9 @@ Two important rules govern expansion behavior:
 
 The parser walks the token list produced by the tokenizer and has two responsibilities: validating syntax and constructing the command list.
 
-**Syntax validation** — the parser catches and reports the following errors before any command is built:
-
-| Error | Example |
-|-------|---------|
-| Pipe without a preceding or following command | `\| ls` or `ls \|` |
-| Redirection without a target | `ls >` or `< >` |
+**Syntax validation:** The parser catches and reports errors before any command is built:
+* **Invalid Pipes** — Pipe without a preceding or following command (e.g., `| ls` or `ls |`)
+* **Missing Targets** — Redirection without a target (e.g., `ls >` or `< >`)
 
 **Command construction** — for each command segment between pipes, the parser creates a `t_cmd` node populated with two lists: the argument list built from `WORD` tokens, and the redirection list built from redirection tokens and their targets.
 
@@ -148,21 +132,18 @@ The parser walks the token list produced by the tokenizer and has two responsibi
 ### 4. Executor
 
 The executor receives the finalized command list and dispatches execution through one of two paths:
-
-- A single builtin command runs directly in the parent process — this is what allows `cd`, `export`, and `unset` to affect the shell's own state.
-- All other cases go through the pipeline, regardless of whether it's a single command or a chain.
+* **Direct Builtins** — A single builtin command runs directly in the parent process — this is what allows `cd`, `export`, and `unset` to affect the shell's own state.
+* **Pipeline Execution** — All other cases go through the pipeline, regardless of whether it's a single command or a chain.
 
 **Pipeline** — for each command, a child process is forked, pipes are created and chained, and the read end of the previous pipe is passed as stdin to the next child. Each child calls `run_child`.
 
 **`run_child`** — wires up file descriptors via `dup2`, applies the command's redirections, closes any remaining heredoc fds, then hands off to `execute_command`.
 
 **`execute_command`** — runs builtins in the child when inside a pipeline, then resolves external commands in one of two ways:
-
-- If the command contains a `/`, it is treated as a path and executed directly after permission and existence checks.
-- Otherwise, it is searched across each directory in `PATH` and executed if found.
+* If the command contains a `/`, it is treated as a path and executed directly after permission and existence checks.
+* Otherwise, it is searched across each directory in `PATH` and executed if found.
 
 Exit codes follow standard convention: `126` for permission or directory errors, `127` for command not found, and `128 + signal` for signal termination.
-
 ---
 
 ## Instructions
