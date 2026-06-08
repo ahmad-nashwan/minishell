@@ -97,8 +97,6 @@ The `t_string` struct is the shared interface across all scanners, wrapping a ra
 
 `scan_word` is the most involved scanner, handling normal mode, quoted mode, and driving the entire expansion process — `$VARIABLE`, `$?`, `$0`, and `~` are all resolved here before the token is finalized.
 
----
-
 ### 2. Expander
 
 The expander is triggered during tokenization whenever a `$` or `~` is encountered in a valid position. It looks up the variable name in the shell's environment list and appends its value to the current word being built. If the variable is not found, nothing is appended — consistent with standard shell behavior.
@@ -113,8 +111,6 @@ Two important rules govern expansion behavior:
 * **Field splitting** — if the expanded value contains spaces and the expansion is unquoted, the value is split into multiple tokens rather than treated as a single word
 * **Quote context** — single quotes suppress expansion entirely, double quotes allow only `$` expansion, `~` expansion is suppressed inside any quotes
 
----
-
 ### 3. Parser
 
 The parser walks the token list produced by the tokenizer and has two responsibilities: validating syntax and constructing the command list.
@@ -126,8 +122,6 @@ The parser walks the token list produced by the tokenizer and has two responsibi
 **Command construction** — for each command segment between pipes, the parser creates a `t_cmd` node populated with two lists: the argument list built from `WORD` tokens, and the redirection list built from redirection tokens and their targets.
 
 **Heredoc handling** — when the parser encounters a `HEREDOC` redirection, it immediately creates a pipe and reads input line by line until the delimiter is matched, writing each line into the pipe's write end. The read end is stored directly in the redirection struct and consumed at execution time when redirections are applied. If multiple heredocs appear in the same command, only the last one is kept — previous file descriptors are closed. Expansion inside the heredoc content follows the delimiter's quote context: an unquoted delimiter allows `$` expansion, a quoted one treats the content as entirely literal.
-
----
 
 ### 4. Executor
 
@@ -144,7 +138,6 @@ The executor receives the finalized command list and dispatches execution throug
 * Otherwise, it is searched across each directory in `PATH` and executed if found.
 
 Exit codes follow standard convention: `126` for permission or directory errors, `127` for command not found, and `128 + signal` for signal termination.
----
 
 ## Instructions
 
@@ -184,11 +177,7 @@ make fclean
 ./minishell
 ```
 
----
-
 ## Resources
-
-### References
 
 | Type | Resource |
 |------|----------|
