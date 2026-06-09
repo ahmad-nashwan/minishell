@@ -58,7 +58,7 @@ static void	print_top_border( char *username)
 		dashes = 0;
 	ft_putstr_fd(COLOR, STDOUT_FILENO);
 	ft_putstr_fd("┌───[", STDOUT_FILENO);
-	ft_putstr_fd(BOLD, STDOUT_FILENO);
+	ft_putstr_fd(BOLD VIOLET, STDOUT_FILENO);
 	ft_putstr_fd(username, STDOUT_FILENO);
 	ft_putstr_fd(RESET, STDOUT_FILENO);
 	ft_putstr_fd(COLOR, STDOUT_FILENO);
@@ -80,7 +80,7 @@ static void	print_bottom_border( char *distro)
 	ft_putstr_fd("└", STDOUT_FILENO);
 	print_dashes(dashes);
 	ft_putstr_fd("[", STDOUT_FILENO);
-	ft_putstr_fd(BOLD, STDOUT_FILENO);
+	ft_putstr_fd(BOLD VIOLET, STDOUT_FILENO);
 	ft_putstr_fd(distro, STDOUT_FILENO);
 	ft_putstr_fd(RESET, STDOUT_FILENO);
 	ft_putstr_fd(COLOR, STDOUT_FILENO);
@@ -170,17 +170,17 @@ void	print_banner(t_shell *shell)
 	get_distro(distro, sizeof(distro));
 	write(STDOUT_FILENO, "\033[2J\033[H", 7);
 	print_top_border(username);
-	usleep(60000);
+	usleep(30000);
 	print_empty_line();
-	print_centered_line("nash", BOLD COLOR);
-	usleep(80000);
-	print_centered_line("42 amman", DIM);
-	usleep(80000);
-	print_centered_line("· 2026 ·", DIM);
-	usleep(80000);
+	print_centered_line("nash", BOLD VIOLET);
+	usleep(40000);
+	print_centered_line("42 amman", STEEL_BLUE);
+	usleep(40000);
+	print_centered_line("· 2026 ·", STEEL_BLUE);
+	usleep(40000);
 	print_empty_line();
-	usleep(60000);
+	usleep(40000);
 	print_bottom_border(distro);
-	usleep(120000);
+	usleep(90000);
 	ft_putstr_fd("\n", STDOUT_FILENO);
 }
