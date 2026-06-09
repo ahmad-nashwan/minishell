@@ -10,6 +10,9 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#ifndef MINISHELL_H
+# define MINISHELL_H
+
 #include "libft.h"
 #include <fcntl.h>
 #include <limits.h>
@@ -298,3 +301,5 @@ int								ft_strcmp(const char *s1, const char *s2);
 char							**list_to_string_array(t_list *list);
 void							free_strings_array(char **arr);
 void							free_array(char **arr, int elements); // we may remove this
+
+#endif
