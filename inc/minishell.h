@@ -338,5 +338,5 @@ void							free_array(char **arr, int elements); // we may remove this
 /*                                                                            */
 /* ************************************************************************** */
 void    print_banner(t_shell *shell);
-
+void	print_prompt_line(t_shell *shell);
 #endif

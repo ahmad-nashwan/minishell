@@ -96,7 +96,8 @@ SRC = \
 	src/utils/string_utils.c \
 	src/utils/array_utils.c \
 	\
-	src/theme/banner.c
+	src/theme/banner.c \
+	src/theme/prompt_line_theme.c
 
 # ============================================================
 #                        OBJECTS

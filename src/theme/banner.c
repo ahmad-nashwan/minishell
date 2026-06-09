@@ -1,22 +1,5 @@
 #include "minishell.h"
 #include <sys/utsname.h>
-#include <unistd.h>
-
-/*
-** All width ants are in VISUAL characters (terminal columns), not bytes.
-** Box-drawing chars (─ │ ┌ etc.) are 3 bytes each but 1 visual column.
-**
-** TOTAL_WIDTH = 70 visual columns including the two border chars (┌ and ┐)
-** INNER_WIDTH = 68 visual columns (the space between the borders)
-**
-** Top border layout:    ┌ ─ ─ ─ [ username ] ─ ─ ... ─ ┐
-**   fixed parts = 7     (┌ + ─── + [ + ] + ┐)
-**   dashes = TOTAL_WIDTH - 7 - ulen
-**
-** Bottom border layout: └ ─ ─ ... ─ [ sysname ] ─ ─ ─ ┘
-**   fixed parts = 7     (└ + [ + ] + ─── + ┘)
-**   dashes = TOTAL_WIDTH - 7 - slen
-*/
 
 #define TOTAL_WIDTH		70
 #define INNER_WIDTH		68
@@ -153,4 +136,5 @@ void	print_banner(t_shell *shell)
 	usleep(50000);
 	print_bottom_border(sysname);
 	usleep(100000);
+    ft_putstr_fd("\n", STDOUT_FILENO);
 }

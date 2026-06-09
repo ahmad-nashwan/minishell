@@ -92,7 +92,8 @@ int	start_shell(t_shell *shell)
 	{
 		sig_set_interactive();
 		reset_shell(shell);
-		input = readline(PROMPT_COLOR "🌑" THIN_SP "nash$ " RESET_COLOR);
+		print_prompt_line(shell);
+		input = readline(C_3 "❯ " RESET);
 		if (!input)
 			break ;
 		if (g_signal)
@@ -102,6 +103,7 @@ int	start_shell(t_shell *shell)
 		}
 		process_input(shell, input);
 		free(input);
+		ft_putstr_fd("\n", STDOUT_FILENO);
 	}
 	if (!input)
 		ft_putstr_fd("exit\n", STDERR_FILENO);
