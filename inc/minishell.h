@@ -297,12 +297,4 @@ int								is_number(char *arg);
 int								ft_strcmp(const char *s1, const char *s2);
 char							**list_to_string_array(t_list *list);
 void							free_strings_array(char **arr);
-void	free_array(char **arr, int elements); // we may remove this
-
-/* ************************************************************************** */
-/*                                                                            */
-/*                                    Testing                                 */
-/*                                                                            */
-/* ************************************************************************** */
-void							print_tokens(t_list *tokens);
-void							print_cmds(t_list *cmds);
+void							free_array(char **arr, int elements); // we may remove this
