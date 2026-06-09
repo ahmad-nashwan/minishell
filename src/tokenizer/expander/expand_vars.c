@@ -6,7 +6,7 @@
 /*   By: anashwan <anashwan@student.42amman.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/26 21:19:56 by anashwan          #+#    #+#             */
-/*   Updated: 2026/05/26 21:19:57 by anashwan         ###   ########.fr       */
+/*   Updated: 2026/06/07 14:58:43 by anashwan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ t_code	find_var_expand(t_shell *shell, t_string *line, t_string *word,
 	value = get_env_value(shell->env_list, name->str);
 	free_t_string(name);
 	if (!value)
-		return (OK); // variable not found → append nothing
+		return (OK);
 	rc = expand_var(shell, word, value, quoted);
 	return (rc);
 }

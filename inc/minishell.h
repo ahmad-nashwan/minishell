@@ -6,7 +6,7 @@
 /*   By: anashwan <anashwan@student.42amman.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/26 21:41:51 by anashwan          #+#    #+#             */
-/*   Updated: 2026/06/04 23:59:16 by anashwan         ###   ########.fr       */
+/*   Updated: 2026/06/07 19:28:01 by anashwan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,9 +63,10 @@ typedef enum s_type
 	WORD,
 	PIPE,
 	HEREDOC,
+	APPEND,
 	OUT_RED,
 	IN_RED,
-	APPEND,
+	AMBIG_REDIR,
 	END
 }								t_type;
 
@@ -126,8 +127,9 @@ typedef struct s_shell
 	t_list						*tokens;
 	t_list						*cmds;
 	t_string					*curr_input;
-	int							exit_status;
+	pid_t						*pids;
 	t_code						error_type;
+	int							exit_status;
 	int							should_exit;
 }								t_shell;
 
@@ -215,6 +217,7 @@ t_code							scan_pipe(t_shell *shell, t_string *line);
 // Expansion
 t_code							expand_start(t_shell *shell, t_string *line,
 									t_string *word, int quoted);
+t_code							expand_tilde(t_shell *shell, t_string *line, t_string *word);
 t_string						*get_var_name(t_string *line);
 t_code							find_var_expand(t_shell *shell, t_string *line,
 									t_string *word, int quoted);
@@ -232,6 +235,9 @@ t_code							append_str(t_string *word, char *s);
 t_code							parse(t_shell *shell);
 t_code							build_cmd(t_shell *shell, t_cmd *cmd,
 									t_list **node);
+t_code  						parse_redir(t_shell *shell, t_cmd *cmd, t_token *redir, t_token *target);
+t_code							handle_redir_node(t_shell *shell, t_cmd *cmd, t_list **node,
+									t_token *token);
 t_code							parse_hdoc(t_shell *shell, char *delimeter,
 									int *h_fd, int quoted);
 char							*hdoc_read_line(void);
@@ -244,10 +250,10 @@ void							hdoc_eof_error(char *delimeter);
 /*                                   Execution                                */
 /*                                                                            */
 /* ************************************************************************** */
-t_code							process_commands(t_shell *shell);
-t_code							process_single_builtin(t_shell *shell,
+void							process_commands(t_shell *shell);
+void							process_single_builtin(t_shell *shell,
 									t_cmd *cmd);
-t_code							process_pipeline(t_shell *shell);
+void							process_pipeline(t_shell *shell);
 t_code							run_builtin(t_shell *shell, t_cmd *cmd);
 void							run_child(t_shell *shell, t_cmd *cmd,
 									int input_fd, int *pipe_fd);
@@ -260,9 +266,6 @@ char							*get_valid_path(char **paths, char *cmd);
 char							*find_cmd_path(t_shell *shell);
 char							*build_full_path(char *dir, char *cmd);
 int								is_builtin(char *name);
-t_env_var						*find_env_var(t_list *env_list,
-									const char *key);
-t_code							add_env_var(t_list **env_list, t_env_var *var);
 t_code							is_dir(char *path);
 void							free_argv_envp_exit(t_shell *shell, char **argv, char **envp,
 									int exit_code);
@@ -324,19 +327,4 @@ int								is_number(char *arg);
 int								ft_strcmp(const char *s1, const char *s2);
 char							**list_to_string_array(t_list *list);
 void							free_strings_array(char **arr);
-void	free_array(char **arr, int elements); // we may remove this
-
-/* ************************************************************************** */
-/*                                                                            */
-/*                                    Testing                                 */
-/*                                                                            */
-/* ************************************************************************** */
-void							print_tokens(t_list *tokens);
-void							print_cmds(t_list *cmds);
-
-/* ************************************************************************** */
-/*                                                                            */
-/*                                     Theme                                  */
-/*                                                                            */
-/* ************************************************************************** */
-void	print_banner(void);
+void							free_array(char **arr, int elements); // we may remove this

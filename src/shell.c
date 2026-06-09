@@ -6,7 +6,7 @@
 /*   By: anashwan <anashwan@student.42amman.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/26 20:56:10 by anashwan          #+#    #+#             */
-/*   Updated: 2026/05/27 03:39:40 by anashwan         ###   ########.fr       */
+/*   Updated: 2026/06/07 19:28:58 by anashwan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ void	init_shell(t_shell *shell, char **envp)
 	shell->curr_input = NULL;
 	shell->tokens = NULL;
 	shell->cmds = NULL;
+	shell->pids = NULL;
 	shell->exit_status = 0;
 	shell->error_type = NONE;
 	shell->should_exit = 0;
@@ -42,6 +43,9 @@ void	reset_shell(t_shell *shell)
 	if (shell->cmds)
 		cmd_list_clear(&shell->cmds);
 	shell->cmds = NULL;
+	if (shell->pids)
+		free(shell->pids);
+	shell->pids = NULL;
 }
 
 void	free_shell_state(t_shell *shell)

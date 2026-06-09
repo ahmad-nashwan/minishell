@@ -12,35 +12,38 @@
 
 # include "minishell.h"
 
-static t_code	close_and_return(int saved_stdout, int saved_stdin,
-		t_code status)
+static void close_saved_fds(int saved_stdout, int saved_stdin)
 {
-	close(saved_stdout);
-	close(saved_stdin);
-	return (status);
+    if (saved_stdout != -1)
+        close(saved_stdout);
+    if (saved_stdin != -1)
+        close(saved_stdin);
 }
 
-t_code	process_single_builtin(t_shell *shell, t_cmd *cmd)
+void    process_single_builtin(t_shell *shell, t_cmd *cmd)
 {
-	int	saved_stdout;
-	int	saved_stdin;
+    int saved_stdout;
+    int saved_stdin;
 
-	saved_stdout = dup(STDOUT_FILENO);
-	saved_stdin = dup(STDIN_FILENO);
-	if (saved_stdout == -1 || saved_stdin == -1)
-	{
-		report_error(shell, INTERNAL_ERROR, "dup failed");
-		return (ERR);
-	}
-	if (handle_redirections(cmd) == ERR)
-		return (close_and_return(saved_stdout, saved_stdin, ERR));
-	run_builtin(shell, cmd);
-	if (dup2(saved_stdout, STDOUT_FILENO) == -1 || dup2(saved_stdin,
-			STDIN_FILENO) == -1)
-	{
-		perror("minishell: dup2");
-		report_error(shell, INTERNAL_ERROR, NULL);
-		return (close_and_return(saved_stdout, saved_stdin, ERR));
-	}
-	return (close_and_return(saved_stdout, saved_stdin, OK));
+    saved_stdout = dup(STDOUT_FILENO);
+    saved_stdin = dup(STDIN_FILENO);
+    if (saved_stdout == -1 || saved_stdin == -1)
+    {
+        report_error(shell, INTERNAL_ERROR, "dup failed");
+        close_saved_fds(saved_stdout, saved_stdin);
+        return ;
+    }
+    if (handle_redirections(cmd) == ERR)
+    {
+        close_saved_fds(saved_stdout, saved_stdin);
+        return ;
+    }
+    run_builtin(shell, cmd);
+    if (dup2(saved_stdout, STDOUT_FILENO) == -1
+        || dup2(saved_stdin, STDIN_FILENO) == -1)
+    {
+        perror("minishell: dup2");
+        report_error(shell, INTERNAL_ERROR, NULL);
+    }
+    close_saved_fds(saved_stdout, saved_stdin);
 }
