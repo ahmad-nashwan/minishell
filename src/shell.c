@@ -93,7 +93,7 @@ int	start_shell(t_shell *shell)
 		sig_set_interactive();
 		reset_shell(shell);
 		print_prompt_line(shell);
-		input = readline(C_3 "❯ " RESET);
+		input = readline(CYAN "❯ " RESET);
 		if (!input)
 			break ;
 		if (g_signal)

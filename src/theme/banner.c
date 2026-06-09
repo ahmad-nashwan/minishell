@@ -33,6 +33,7 @@ static void	print_top_border( char *username)
 	ft_putstr_fd(COLOR, STDOUT_FILENO);
 	ft_putstr_fd("┌───[", STDOUT_FILENO);
 	ft_putstr_fd(BOLD, STDOUT_FILENO);
+    ft_putstr_fd(VIOLET, STDOUT_FILENO);
 	ft_putstr_fd(username, STDOUT_FILENO);
 	ft_putstr_fd(RESET, STDOUT_FILENO);
 	ft_putstr_fd(COLOR, STDOUT_FILENO);
@@ -57,6 +58,7 @@ static void	print_bottom_border( char *sysname)
 	print_dashes(dashes);
 	ft_putstr_fd("[", STDOUT_FILENO);
 	ft_putstr_fd(BOLD, STDOUT_FILENO);
+    ft_putstr_fd(VIOLET, STDOUT_FILENO);
 	ft_putstr_fd(sysname, STDOUT_FILENO);
 	ft_putstr_fd(RESET, STDOUT_FILENO);
 	ft_putstr_fd(COLOR, STDOUT_FILENO);

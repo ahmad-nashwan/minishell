@@ -32,13 +32,13 @@ void	print_prompt_line(t_shell *shell)
 	if (!getcwd(cwd, sizeof(cwd)))
 		ft_strlcpy(cwd, "?", sizeof(cwd));
 	shorten_path(cwd, path);
-	ft_putstr_fd(C_6, STDOUT_FILENO);
+	ft_putstr_fd(VIOLET, STDOUT_FILENO);
 	ft_putstr_fd(username, STDOUT_FILENO);
 	ft_putstr_fd(RESET, STDOUT_FILENO);
 	ft_putstr_fd(DIM, STDOUT_FILENO);
 	ft_putstr_fd(" · ", STDOUT_FILENO);
 	ft_putstr_fd(RESET, STDOUT_FILENO);
-	ft_putstr_fd(C_4, STDOUT_FILENO);
+	ft_putstr_fd(STEEL_BLUE, STDOUT_FILENO);
 	ft_putstr_fd(path, STDOUT_FILENO);
 	ft_putstr_fd(RESET, STDOUT_FILENO);
 	ft_putchar_fd('\n', STDOUT_FILENO);
