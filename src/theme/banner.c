@@ -1,12 +1,47 @@
 #include "minishell.h"
 #include <sys/utsname.h>
+#include <unistd.h>
+#include <stdio.h>
+
+/*
+** TOTAL_WIDTH is the only value you need to change to resize the banner.
+** Everything else adapts automatically.
+**
+** INNER_WIDTH = TOTAL_WIDTH - 2  (the two border chars ┌ and ┐)
+**
+** Top border:    ┌ ─── [ username ] ─── ... ─── ┐
+** Bottom border: └ ─── ... ─── [ distro ] ─── ┘
+** Fixed parts in both = 7 visual chars (corners + brackets + 3 dashes)
+** Fill dashes = TOTAL_WIDTH - 7 - visual_len(label)
+**
+** visual_len counts Unicode codepoints not bytes, so multibyte chars
+** like · (U+00B7, 2 bytes) and box-drawing chars (3 bytes) are counted
+** as 1 visual column each.
+*/
 
 #define TOTAL_WIDTH		60
 #define INNER_WIDTH		(TOTAL_WIDTH - 2)
 #define COLOR			"\033[38;5;111m"
 
-#define ME "anashwan"
-#define PARTNER "masad"
+static int	visual_len( char *s)
+{
+	int	len;
+
+	len = 0;
+	while (*s)
+	{
+		if ((*s & 0x80) == 0)
+			s++;
+		else if ((*s & 0xE0) == 0xC0)
+			s += 2;
+		else if ((*s & 0xF0) == 0xE0)
+			s += 3;
+		else
+			s += 4;
+		len++;
+	}
+	return (len);
+}
 
 static void	print_dashes(int n)
 {
@@ -18,7 +53,7 @@ static void	print_top_border( char *username)
 {
 	int	dashes;
 
-	dashes = TOTAL_WIDTH - 7 - (int)ft_strlen(username);
+	dashes = TOTAL_WIDTH - 7 - visual_len(username);
 	if (dashes < 0)
 		dashes = 0;
 	ft_putstr_fd(COLOR, STDOUT_FILENO);
@@ -38,7 +73,7 @@ static void	print_bottom_border( char *distro)
 {
 	int	dashes;
 
-	dashes = TOTAL_WIDTH - 7 - (int)ft_strlen(distro);
+	dashes = TOTAL_WIDTH - 7 - visual_len(distro);
 	if (dashes < 0)
 		dashes = 0;
 	ft_putstr_fd(COLOR, STDOUT_FILENO);
@@ -76,7 +111,7 @@ static void	print_centered_line( char *text,  char *text_color)
 	int	padding;
 	int	i;
 
-	tlen = ft_strlen(text);
+	tlen = visual_len(text);
 	padding = (INNER_WIDTH - tlen) / 2;
 	ft_putstr_fd(COLOR, STDOUT_FILENO);
 	ft_putstr_fd("│", STDOUT_FILENO);
@@ -127,29 +162,25 @@ static void	get_distro(char *out, size_t size)
 void	print_banner(t_shell *shell)
 {
 	char	distro[64];
-	char	byline[64];
 	char	*username;
 
 	username = get_env_value(shell->env_list, "USER");
 	if (!username)
 		username = "user";
 	get_distro(distro, sizeof(distro));
-	ft_strlcpy(byline, "by ", sizeof(byline));
-	ft_strlcat(byline, ME, sizeof(byline));
-	ft_strlcat(byline, " & ", sizeof(byline));
-	ft_strlcat(byline, PARTNER, sizeof(byline));
 	write(STDOUT_FILENO, "\033[2J\033[H", 7);
 	print_top_border(username);
-	usleep(20000);
+	usleep(60000);
 	print_empty_line();
 	print_centered_line("nash", BOLD COLOR);
-	usleep(40000);
-	print_centered_line(byline, DIM);
-	usleep(30000);
-	print_centered_line("42 Amman", DIM);
-	usleep(30000);
-	print_empty_line();
-	usleep(30000);
-	print_bottom_border(distro);
 	usleep(80000);
+	print_centered_line("42 amman", DIM);
+	usleep(80000);
+	print_centered_line("· 2026 ·", DIM);
+	usleep(80000);
+	print_empty_line();
+	usleep(60000);
+	print_bottom_border(distro);
+	usleep(120000);
+	ft_putstr_fd("\n", STDOUT_FILENO);
 }
