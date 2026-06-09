@@ -15,7 +15,7 @@ LIBFT_DIR   = libft
 OBJ_DIR     = obj
 
 INCLUDES    = -I$(INC_DIR) -I$(LIBFT_DIR)
-HEADERS = $(INC_DIR)/minishell.h
+HEADER		= $(INC_DIR)/minishell.h
 LDFLAGS     = -L$(LIBFT_DIR)
 LDLIBS      = -lft -lreadline -lhistory -lncurses
 

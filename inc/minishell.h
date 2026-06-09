@@ -332,6 +332,7 @@ char							**list_to_string_array(t_list *list);
 void							free_strings_array(char **arr);
 void							free_array(char **arr, int elements); // we may remove this
 
+<<<<<<< HEAD
 /* ************************************************************************** */
 /*                                                                            */
 /*                                     Theme                                  */
@@ -340,3 +341,6 @@ void							free_array(char **arr, int elements); // we may remove this
 void    print_banner(t_shell *shell);
 
 #endif
+=======
+#endif
+>>>>>>> origin/main
