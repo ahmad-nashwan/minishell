@@ -54,7 +54,7 @@ t_code	expand_start(t_shell *shell, t_string *line, t_string *word, int quoted)
 	if (c == '?')
 		return (expand_exit_status(shell, line, word, quoted));
 	if (!quoted && (c == '"' || c == '\''))
-        return (OK);
+		return (OK);
 	if (c == '0')
 	{
 		advance(line);

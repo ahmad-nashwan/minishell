@@ -32,10 +32,10 @@ t_code	add_token(t_list **tokens, char *lexeme, t_type type, int quoted)
 
 	if (!tokens)
 		return (INTERNAL_ERROR);
-	token = create_token(lexeme, type, quoted); // MEMORY_CHECK[OK]
+	token = create_token(lexeme, type, quoted);
 	if (token == NULL)
 		return (INTERNAL_ERROR);
-	new_node = ft_lstnew(token); // MEMORY_CHECK[OK]
+	new_node = ft_lstnew(token);
 	if (!new_node)
 	{
 		free(token);
@@ -55,6 +55,7 @@ void	free_token(void *ptr)
 	free(token->lexeme);
 	free(token);
 }
+
 void	clear_tokens(t_list **tokens)
 {
 	ft_lstclear(tokens, free_token);

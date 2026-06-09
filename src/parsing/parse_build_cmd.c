@@ -12,7 +12,7 @@
 
 #include "minishell.h"
 
-static	t_code add_argument_helper(t_cmd *cmd, t_token *token)
+static t_code	add_argument_helper(t_cmd *cmd, t_token *token)
 {
 	if (!cmd || !token || !token->lexeme)
 		return (INTERNAL_ERROR);
@@ -25,8 +25,8 @@ static	t_code add_argument_helper(t_cmd *cmd, t_token *token)
 
 t_code	build_cmd(t_shell *shell, t_cmd *cmd, t_list **node)
 {
-	t_token *token;
-	t_code rc;
+	t_token	*token;
+	t_code	rc;
 
 	while (!shell->should_exit && *node)
 	{

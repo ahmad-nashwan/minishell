@@ -46,11 +46,11 @@ void	redir_free(void *p)
 
 int	is_hdoc_target(t_list *tokens)
 {
-	t_token *t;
-	t_list *last;
+	t_list		*last;
+	t_token		*t;
 
 	if (!tokens)
-		return (0); // empty list
+		return (0);
 	last = ft_lstlast(tokens);
 	t = (t_token *)last->content;
 	if (t->type == HEREDOC)

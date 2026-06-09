@@ -48,9 +48,7 @@ static void	print_export_line(char *str)
 	}
 	else
 	{
-		// Print KEY=
 		write(STDOUT_FILENO, str, eq - str + 1);
-		// Print "VALUE"
 		ft_putstr_fd("\"", STDOUT_FILENO);
 		ft_putstr_fd(eq + 1, STDOUT_FILENO);
 		ft_putstr_fd("\"", STDOUT_FILENO);

@@ -52,14 +52,13 @@ void	sig_set_child(void)
 
 void	sig_set_heredoc(void)
 {
-	struct sigaction sa_int;
-	struct sigaction sa_quit;
+	struct sigaction	sa_int;
+	struct sigaction	sa_quit;
 
 	sa_int.sa_handler = sigint_hdoc_handler;
-	sa_int.sa_flags = 0; // because we do not need readline
+	sa_int.sa_flags = 0;
 	sigemptyset(&sa_int.sa_mask);
 	sigaction(SIGINT, &sa_int, NULL);
-
 	sa_quit.sa_handler = SIG_IGN;
 	sa_quit.sa_flags = 0;
 	sigemptyset(&sa_quit.sa_mask);

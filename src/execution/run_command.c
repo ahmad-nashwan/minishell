@@ -10,11 +10,10 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-# include "minishell.h"
+#include "minishell.h"
 
 static void	exec_absolute_path(t_shell *shell, char **argv, char **envp)
 {
-	// file doesn't exist
 	if (argv[0] && is_dir(argv[0]) == OK)
 		free_argv_envp_exit(shell, argv, envp, 126);
 	if (access(argv[0], F_OK) == -1)
@@ -23,21 +22,20 @@ static void	exec_absolute_path(t_shell *shell, char **argv, char **envp)
 		perror(argv[0]);
 		free_argv_envp_exit(shell, argv, envp, 127);
 	}
-	// file exists but something is wrong, ex: permission or its a dir
 	if (access(argv[0], X_OK) == -1)
 	{
 		ft_putstr_fd("minishell: ", STDERR_FILENO);
 		perror(argv[0]);
 		free_argv_envp_exit(shell, argv, envp, 126);
 	}
-	// if it fails, print the error, if it works, the following lines are never reached since they are wiped from ram
 	execve(argv[0], argv, envp);
 	ft_putstr_fd("minishell: ", STDERR_FILENO);
 	perror(argv[0]);
 	free_argv_envp_exit(shell, argv, envp, 126);
 }
 
-static void	execute_valid_path(t_shell *shell, char *path, char **argv, char **envp)
+static void	execute_valid_path(t_shell *shell, char *path, char **argv,
+		char **envp)
 {
 	if (is_dir(path) == OK)
 	{

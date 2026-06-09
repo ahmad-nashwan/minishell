@@ -30,7 +30,7 @@ char	**list_to_string_array(t_list *list)
 		arr[i] = ft_strdup((char *)list->content);
 		if (!arr[i])
 		{
-			free_array(arr, i); // Assuming this frees up to 'i' properly
+			free_array(arr, i);
 			return (NULL);
 		}
 		i++;
@@ -83,7 +83,7 @@ void	free_split(char **words)
 
 void	free_strings_array(char **arr)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	if (!arr)
@@ -94,4 +94,10 @@ void	free_strings_array(char **arr)
 		i++;
 	}
 	free(arr);
+}
+
+t_code	split_error(char **words, t_code rc)
+{
+	free_split(words);
+	return (rc);
 }

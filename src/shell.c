@@ -52,16 +52,16 @@ void	free_shell_state(t_shell *shell)
 {
 	if (!shell)
 		return ;
-	reset_shell(shell); 
+	reset_shell(shell);
 	if (shell->env_list)
 		ft_lstclear(&shell->env_list, free_env_var);
 	shell->env_list = NULL;
-	rl_clear_history(); 
+	rl_clear_history();
 }
 
 void	process_input(t_shell *shell, char *input)
 {
-	t_code		rc;
+	t_code	rc;
 
 	rc = OK;
 	shell->curr_input = init_string(input);
@@ -86,7 +86,7 @@ void	process_input(t_shell *shell, char *input)
 
 int	start_shell(t_shell *shell)
 {
-	char *input;
+	char	*input;
 
 	while (shell->should_exit != 1)
 	{

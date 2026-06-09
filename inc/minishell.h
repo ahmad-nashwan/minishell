@@ -13,18 +13,18 @@
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
-#include "libft.h"
-#include <fcntl.h>
-#include <limits.h>
-#include <stdio.h>
-#include <readline/history.h>
-#include <readline/readline.h>
-#include <signal.h>
-#include <stdlib.h>
-#include <sys/stat.h>
-#include <sys/types.h>
-#include <sys/wait.h>
-#include <unistd.h>
+# include "libft.h"
+# include <fcntl.h>
+# include <limits.h>
+# include <readline/history.h>
+# include <readline/readline.h>
+# include <signal.h>
+# include <stdio.h>
+# include <stdlib.h>
+# include <sys/stat.h>
+# include <sys/types.h>
+# include <sys/wait.h>
+# include <unistd.h>
 
 /* ************************************************************************** */
 /*                                                                            */
@@ -52,7 +52,6 @@ typedef enum e_code
 	SYNTAX_ERROR,
 	INTERNAL_ERROR,
 }								t_code;
-
 
 /* ************************************************************************** */
 /*                                                                            */
@@ -105,7 +104,6 @@ typedef struct s_shell
 	int							exit_status;
 	int							should_exit;
 }								t_shell;
-
 
 /* ************************************************************************** */
 /*                                                                            */
@@ -190,7 +188,8 @@ t_code							scan_pipe(t_shell *shell, t_string *line);
 // Expansion
 t_code							expand_start(t_shell *shell, t_string *line,
 									t_string *word, int quoted);
-t_code							expand_tilde(t_shell *shell, t_string *line, t_string *word);
+t_code							expand_tilde(t_shell *shell, t_string *line,
+									t_string *word);
 t_string						*get_var_name(t_string *line);
 t_code							find_var_expand(t_shell *shell, t_string *line,
 									t_string *word, int quoted);
@@ -208,9 +207,10 @@ t_code							append_str(t_string *word, char *s);
 t_code							parse(t_shell *shell);
 t_code							build_cmd(t_shell *shell, t_cmd *cmd,
 									t_list **node);
-t_code  						parse_redir(t_shell *shell, t_cmd *cmd, t_token *redir, t_token *target);
-t_code							handle_redir_node(t_shell *shell, t_cmd *cmd, t_list **node,
-									t_token *token);
+t_code							parse_redir(t_shell *shell, t_cmd *cmd,
+									t_token *redir, t_token *target);
+t_code							handle_redir_node(t_shell *shell, t_cmd *cmd,
+									t_list **node, t_token *token);
 t_code							parse_hdoc(t_shell *shell, char *delimeter,
 									int *h_fd, int quoted);
 char							*hdoc_read_line(void);
@@ -240,8 +240,8 @@ char							*find_cmd_path(t_shell *shell);
 char							*build_full_path(char *dir, char *cmd);
 int								is_builtin(char *name);
 t_code							is_dir(char *path);
-void							free_argv_envp_exit(t_shell *shell, char **argv, char **envp,
-									int exit_code);
+void							free_argv_envp_exit(t_shell *shell, char **argv,
+									char **envp, int exit_code);
 void							exit_child(t_shell *shell, int exit_state);
 
 /* ************************************************************************** */
@@ -286,6 +286,7 @@ t_code							report_syntax_error(char *bad_token);
 t_code							parse_error(t_shell *shell, t_cmd *cmd,
 									t_list **cmd_list, t_code error);
 void							print_cmd_error(char *cmd, char *msg);
+t_code							split_error(char **words, t_code rc);
 
 /* ************************************************************************** */
 /*                                                                            */
@@ -300,6 +301,7 @@ int								is_number(char *arg);
 int								ft_strcmp(const char *s1, const char *s2);
 char							**list_to_string_array(t_list *list);
 void							free_strings_array(char **arr);
-void							free_array(char **arr, int elements); // we may remove this
+void							free_array(char **arr, int elements);
+// we may remove this
 
 #endif

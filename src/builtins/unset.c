@@ -48,7 +48,7 @@ void	unset(t_shell *shell, t_list *args)
 		report_error(shell, INTERNAL_ERROR, "Invalid pointer");
 		return ;
 	}
-	args = args->next; // skipping the unset command string
+	args = args->next;
 	while (args)
 	{
 		key = (char *)args->content;

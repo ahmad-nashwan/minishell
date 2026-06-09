@@ -14,8 +14,8 @@
 
 void	hdoc_eof_error(char *delimeter)
 {
-	ft_putstr_fd("\nminishell: warning: here-document delimited by end-of-file (wanted `",
-		2);
+	ft_putstr_fd("\nminishell: warning: here-document at line 0", 2);
+	ft_putstr_fd(" delimited by end-of-file (wanted `", 2);
 	ft_putstr_fd(delimeter, 2);
 	ft_putstr_fd("')\n", 2);
 }

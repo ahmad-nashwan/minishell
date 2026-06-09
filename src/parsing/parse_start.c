@@ -21,15 +21,15 @@ static t_code	consume_pipe(t_list **node)
 	n = (*node);
 	token = (t_token *)n->content;
 	if (token->type == END)
-		return (OK);         // Do nothing
-	if (token->type == PIPE) // real work
+		return (OK);
+	if (token->type == PIPE)
 	{
 		if (!n->next)
-			return (report_syntax_error("|")); // Syntax error, pipe at the end
+			return (report_syntax_error("|"));
 		next_token = (t_token *)n->next->content;
 		if (next_token->type == END || next_token->type == PIPE)
-			return (report_syntax_error("|")); // Syntax error
-		(*node) = (*node)->next;               // consume pipe
+			return (report_syntax_error("|"));
+		(*node) = (*node)->next;
 	}
 	return (OK);
 }

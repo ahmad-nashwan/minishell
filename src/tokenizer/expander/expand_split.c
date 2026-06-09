@@ -44,7 +44,7 @@ static t_code	reset_word(t_string *word)
 {
 	char	*new;
 
-	new = malloc(word->cap); // MEMORY_CHECK[OK]
+	new = malloc(word->cap);
 	if (!new)
 		return (INTERNAL_ERROR);
 	word->str = new;
@@ -77,16 +77,9 @@ t_code	expand_split(t_string *word, t_shell *shell, char *value)
 	rc = append_str(word, words[0]);
 	free(words[0]);
 	if (rc != OK)
-	{
-		free_split(words);
-		return (INTERNAL_ERROR);
-	}
-	rc = finalize_first_word(shell, word);
-	if (rc != OK)
-	{
-		free_split(words);
-		return (INTERNAL_ERROR);
-	}
+		return (split_error(words, INTERNAL_ERROR));
+	if (finalize_first_word(shell, word) != OK)
+		return (split_error(words, INTERNAL_ERROR));
 	rc = append_extra_words(shell, words);
 	free(words);
 	return (rc);
