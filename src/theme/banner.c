@@ -1,19 +1,12 @@
 #include "minishell.h"
 #include <sys/utsname.h>
 
-#define TOTAL_WIDTH		70
-#define INNER_WIDTH		68
+#define TOTAL_WIDTH		60
+#define INNER_WIDTH		(TOTAL_WIDTH - 2)
 #define COLOR			"\033[38;5;111m"
-#define RESET			"\033[0m"
-#define BOLD			"\033[1m"
 
-static  char	*g_logo[] = {
-	"   ____  ____ _ _____ / /_  ",
-	"  / __ \\/ __ `// ___// __ \\ ",
-	" / / / / /_/ /(__  )/ / / / ",
-	"/_/ /_/\\__,_//____//_/ /_/  ",
-	NULL
-};
+#define ME "anashwan"
+#define PARTNER "masad"
 
 static void	print_dashes(int n)
 {
@@ -23,17 +16,14 @@ static void	print_dashes(int n)
 
 static void	print_top_border( char *username)
 {
-	int	ulen;
 	int	dashes;
 
-	ulen = ft_strlen(username);
-	dashes = TOTAL_WIDTH - 7 - ulen;
+	dashes = TOTAL_WIDTH - 7 - (int)ft_strlen(username);
 	if (dashes < 0)
 		dashes = 0;
 	ft_putstr_fd(COLOR, STDOUT_FILENO);
 	ft_putstr_fd("┌───[", STDOUT_FILENO);
 	ft_putstr_fd(BOLD, STDOUT_FILENO);
-    ft_putstr_fd(VIOLET, STDOUT_FILENO);
 	ft_putstr_fd(username, STDOUT_FILENO);
 	ft_putstr_fd(RESET, STDOUT_FILENO);
 	ft_putstr_fd(COLOR, STDOUT_FILENO);
@@ -44,13 +34,11 @@ static void	print_top_border( char *username)
 	ft_putchar_fd('\n', STDOUT_FILENO);
 }
 
-static void	print_bottom_border( char *sysname)
+static void	print_bottom_border( char *distro)
 {
-	int	slen;
 	int	dashes;
 
-	slen = ft_strlen(sysname);
-	dashes = TOTAL_WIDTH - 7 - slen;
+	dashes = TOTAL_WIDTH - 7 - (int)ft_strlen(distro);
 	if (dashes < 0)
 		dashes = 0;
 	ft_putstr_fd(COLOR, STDOUT_FILENO);
@@ -58,8 +46,7 @@ static void	print_bottom_border( char *sysname)
 	print_dashes(dashes);
 	ft_putstr_fd("[", STDOUT_FILENO);
 	ft_putstr_fd(BOLD, STDOUT_FILENO);
-    ft_putstr_fd(VIOLET, STDOUT_FILENO);
-	ft_putstr_fd(sysname, STDOUT_FILENO);
+	ft_putstr_fd(distro, STDOUT_FILENO);
 	ft_putstr_fd(RESET, STDOUT_FILENO);
 	ft_putstr_fd(COLOR, STDOUT_FILENO);
 	ft_putstr_fd("]───┘", STDOUT_FILENO);
@@ -83,25 +70,24 @@ static void	print_empty_line(void)
 	ft_putchar_fd('\n', STDOUT_FILENO);
 }
 
-static void	print_logo_line( char *line)
+static void	print_centered_line( char *text,  char *text_color)
 {
-	int	llen;
+	int	tlen;
 	int	padding;
 	int	i;
 
-	llen = ft_strlen(line);
-	padding = (INNER_WIDTH - llen) / 2;
+	tlen = ft_strlen(text);
+	padding = (INNER_WIDTH - tlen) / 2;
 	ft_putstr_fd(COLOR, STDOUT_FILENO);
 	ft_putstr_fd("│", STDOUT_FILENO);
 	ft_putstr_fd(RESET, STDOUT_FILENO);
 	i = 0;
 	while (i++ < padding)
 		ft_putchar_fd(' ', STDOUT_FILENO);
-	ft_putstr_fd(BOLD, STDOUT_FILENO);
-	ft_putstr_fd(COLOR, STDOUT_FILENO);
-	ft_putstr_fd(line, STDOUT_FILENO);
+	ft_putstr_fd(text_color, STDOUT_FILENO);
+	ft_putstr_fd(text, STDOUT_FILENO);
 	ft_putstr_fd(RESET, STDOUT_FILENO);
-	i = padding + llen;
+	i = padding + tlen;
 	while (i++ < INNER_WIDTH)
 		ft_putchar_fd(' ', STDOUT_FILENO);
 	ft_putstr_fd(COLOR, STDOUT_FILENO);
@@ -110,33 +96,60 @@ static void	print_logo_line( char *line)
 	ft_putchar_fd('\n', STDOUT_FILENO);
 }
 
+static void	get_distro(char *out, size_t size)
+{
+	FILE	*f;
+	char	line[256];
+	char	*p;
+
+	ft_strlcpy(out, "Linux", size);
+	f = fopen("/etc/os-release", "r");
+	if (!f)
+		return ;
+	while (fgets(line, sizeof(line), f))
+	{
+		if (ft_strncmp(line, "NAME=", 5) == 0)
+		{
+			p = line + 5;
+			if (*p == '"')
+				p++;
+			ft_strlcpy(out, p, size);
+			p = out;
+			while (*p && *p != '"' && *p != '\n')
+				p++;
+			*p = '\0';
+			break ;
+		}
+	}
+	fclose(f);
+}
+
 void	print_banner(t_shell *shell)
 {
-	struct utsname	uts;
-	char			*username;
-	char			*sysname;
-	int				i;
+	char	distro[64];
+	char	byline[64];
+	char	*username;
 
 	username = get_env_value(shell->env_list, "USER");
 	if (!username)
 		username = "user";
-	if (uname(&uts) == 0)
-		sysname = uts.sysname;
-	else
-		sysname = "unknown";
+	get_distro(distro, sizeof(distro));
+	ft_strlcpy(byline, "by ", sizeof(byline));
+	ft_strlcat(byline, ME, sizeof(byline));
+	ft_strlcat(byline, " & ", sizeof(byline));
+	ft_strlcat(byline, PARTNER, sizeof(byline));
 	write(STDOUT_FILENO, "\033[2J\033[H", 7);
 	print_top_border(username);
-	usleep(6000);
+	usleep(20000);
 	print_empty_line();
-	i = 0;
-	while (g_logo[i])
-	{
-		print_logo_line(g_logo[i++]);
-		usleep(30000);
-	}
+	print_centered_line("nash", BOLD COLOR);
+	usleep(40000);
+	print_centered_line(byline, DIM);
+	usleep(30000);
+	print_centered_line("42 Amman", DIM);
+	usleep(30000);
 	print_empty_line();
-	usleep(50000);
-	print_bottom_border(sysname);
-	usleep(100000);
-    ft_putstr_fd("\n", STDOUT_FILENO);
+	usleep(30000);
+	print_bottom_border(distro);
+	usleep(80000);
 }
