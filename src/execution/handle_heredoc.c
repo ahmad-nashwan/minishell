@@ -50,7 +50,7 @@ t_code	handle_hdoc(t_redir *redir)
 		return (OK);
 	if (dup2(redir->h_fd, STDIN_FILENO) == -1)
 	{
-		perror("minishell: dup2");
+		perror("nash: dup2");
 		close(redir->h_fd);
 		redir->h_fd = -1;
 		return (ERR);

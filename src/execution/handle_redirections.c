@@ -25,7 +25,7 @@ static int	get_fd(t_redir *redir)
 		fd = open(redir->target, O_WRONLY | O_CREAT | O_APPEND, 0644);
 	if (fd == -1)
 	{
-		ft_putstr_fd("minishell: ", STDERR_FILENO);
+		ft_putstr_fd("nash: ", STDERR_FILENO);
 		perror(redir->target);
 	}
 	return (fd);
@@ -50,7 +50,7 @@ static t_code	process_redirection(t_redir *redir)
 
 	if (redir->type == AMBIG_REDIR)
 	{
-		ft_putstr_fd("minishell: ambiguous redirect\n", STDERR_FILENO);
+		ft_putstr_fd("nash: ambiguous redirect\n", STDERR_FILENO);
 		return (ERR);
 	}
 	if (redir->type == HEREDOC)
@@ -60,7 +60,7 @@ static t_code	process_redirection(t_redir *redir)
 		return (ERR);
 	if (safe_redirection(redir, fd) == ERR)
 	{
-		perror("minishell: dup2");
+		perror("nash: dup2");
 		close(fd);
 		return (ERR);
 	}

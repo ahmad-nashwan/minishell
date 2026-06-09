@@ -15,6 +15,7 @@ LIBFT_DIR   = libft
 OBJ_DIR     = obj
 
 INCLUDES    = -I$(INC_DIR) -I$(LIBFT_DIR)
+HEADERS = $(INC_DIR)/minishell.h
 LDFLAGS     = -L$(LIBFT_DIR)
 LDLIBS      = -lft -lreadline -lhistory -lncurses
 
@@ -115,7 +116,7 @@ $(NAME): $(OBJ)
 	@$(CC) $(CFLAGS) $(OBJ) $(LDFLAGS) $(LDLIBS) -o $(NAME)
 	@printf "👾 $(CYAN)minishell ready$(RESET)\n"
 
-$(OBJ_DIR)/%.o: src/%.c
+$(OBJ_DIR)/%.o: src/%.c $(HEADERS)
 	@mkdir -p $(dir $@)
 	@$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
 

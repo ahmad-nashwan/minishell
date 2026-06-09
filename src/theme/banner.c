@@ -1,40 +1,156 @@
 #include "minishell.h"
+#include <sys/utsname.h>
+#include <unistd.h>
 
-#define P(line) do { \
-    printf(RESET); \
-    printf(BORDER "    │ " RESET "%s" BORDER " │\n" RESET, line); \
-    fflush(stdout); \
-    usleep(25000); \
-} while(0)
+/*
+** All width ants are in VISUAL characters (terminal columns), not bytes.
+** Box-drawing chars (─ │ ┌ etc.) are 3 bytes each but 1 visual column.
+**
+** TOTAL_WIDTH = 70 visual columns including the two border chars (┌ and ┐)
+** INNER_WIDTH = 68 visual columns (the space between the borders)
+**
+** Top border layout:    ┌ ─ ─ ─ [ username ] ─ ─ ... ─ ┐
+**   fixed parts = 7     (┌ + ─── + [ + ] + ┐)
+**   dashes = TOTAL_WIDTH - 7 - ulen
+**
+** Bottom border layout: └ ─ ─ ... ─ [ sysname ] ─ ─ ─ ┘
+**   fixed parts = 7     (└ + [ + ] + ─── + ┘)
+**   dashes = TOTAL_WIDTH - 7 - slen
+*/
 
-void    print_banner(void)
+#define TOTAL_WIDTH		70
+#define INNER_WIDTH		68
+#define COLOR			"\033[38;5;111m"
+#define RESET			"\033[0m"
+#define BOLD			"\033[1m"
+
+static  char	*g_logo[] = {
+	"   ____  ____ _ _____ / /_  ",
+	"  / __ \\/ __ `// ___// __ \\ ",
+	" / / / / /_/ /(__  )/ / / / ",
+	"/_/ /_/\\__,_//____//_/ /_/  ",
+	NULL
+};
+
+static void	print_dashes(int n)
 {
-    printf(CLEAR);
-    fflush(stdout);
-    usleep(100000);
-    printf("\n");
-    printf(BORDER "    ┌────────────────── The Dark Side Of The Shell ──────────────────┐\n" RESET);
-    P("                                                              ");
-    P(PRISM "                             /\\" RESET "                               ");
-    P(PRISM "                            /  \\" RESET "                              ");
-    P(PRISM "                           /    \\" RESET "                             ");
-    P(PRISM "                          /   " C_1 "·" PRISM "  \\" RESET "  " C_1 "·  tokenization" RESET "           ");
-    P(PRISM "                         /   " C_2 "· ·" PRISM "  \\" RESET "  " C_2 "· ·  parsing" RESET "             ");
-    P(PRISM "                        /   " C_3 "· · ·" PRISM "  \\" RESET "  " C_3 "· · ·  expansion" RESET "        ");
-    P(INPUT "       input · · · · · " PRISM "/   " C_4 "· · · ·" PRISM "  \\" RESET "  " C_4 "· · · ·  builtins" RESET "      ");
-    P(PRISM "                      /       " C_5 "· · ·" PRISM "  \\" RESET "  " C_5 "· · ·  signals" RESET "        ");
-    P(PRISM "                     /           " C_6 "· ·" PRISM "  \\" RESET "  " C_6 "· ·  pipes" RESET "           ");
-    P(PRISM "                    /               " C_7 "·" PRISM "  \\" RESET "  " C_7 "·  execution" RESET "        ");
-    P(PRISM "                   /                    \\" RESET "                     ");
-    P(PRISM "                  /______________________\\" RESET "                    ");
-    P("                                                              ");
-    P(TITLE "                   ____  ____ _ _____ / /_                    " RESET);
-    P(TITLE "                  / __ \\/ __ `// ___// __ \\                   " RESET);
-    P(TITLE "                 / / / / /_/ /(__  )/ / / /                   " RESET);
-    P(TITLE "                /_/ /_/\\__,_//____//_/ /_/                    " RESET);
-    P("                                                              ");
-    // P("                    " DIM AUTHORS "anashwan  ×  masad" RESET "                        ");
-    P("                                                              ");
-    printf(BORDER "    └────────────────────────── 42 Amman ────────────────────────────┘\n" RESET);
-    printf("\n");
+	while (n-- > 0)
+		ft_putstr_fd("─", STDOUT_FILENO);
+}
+
+static void	print_top_border( char *username)
+{
+	int	ulen;
+	int	dashes;
+
+	ulen = ft_strlen(username);
+	dashes = TOTAL_WIDTH - 7 - ulen;
+	if (dashes < 0)
+		dashes = 0;
+	ft_putstr_fd(COLOR, STDOUT_FILENO);
+	ft_putstr_fd("┌───[", STDOUT_FILENO);
+	ft_putstr_fd(BOLD, STDOUT_FILENO);
+	ft_putstr_fd(username, STDOUT_FILENO);
+	ft_putstr_fd(RESET, STDOUT_FILENO);
+	ft_putstr_fd(COLOR, STDOUT_FILENO);
+	ft_putstr_fd("]", STDOUT_FILENO);
+	print_dashes(dashes);
+	ft_putstr_fd("┐", STDOUT_FILENO);
+	ft_putstr_fd(RESET, STDOUT_FILENO);
+	ft_putchar_fd('\n', STDOUT_FILENO);
+}
+
+static void	print_bottom_border( char *sysname)
+{
+	int	slen;
+	int	dashes;
+
+	slen = ft_strlen(sysname);
+	dashes = TOTAL_WIDTH - 7 - slen;
+	if (dashes < 0)
+		dashes = 0;
+	ft_putstr_fd(COLOR, STDOUT_FILENO);
+	ft_putstr_fd("└", STDOUT_FILENO);
+	print_dashes(dashes);
+	ft_putstr_fd("[", STDOUT_FILENO);
+	ft_putstr_fd(BOLD, STDOUT_FILENO);
+	ft_putstr_fd(sysname, STDOUT_FILENO);
+	ft_putstr_fd(RESET, STDOUT_FILENO);
+	ft_putstr_fd(COLOR, STDOUT_FILENO);
+	ft_putstr_fd("]───┘", STDOUT_FILENO);
+	ft_putstr_fd(RESET, STDOUT_FILENO);
+	ft_putchar_fd('\n', STDOUT_FILENO);
+}
+
+static void	print_empty_line(void)
+{
+	int	i;
+
+	ft_putstr_fd(COLOR, STDOUT_FILENO);
+	ft_putstr_fd("│", STDOUT_FILENO);
+	ft_putstr_fd(RESET, STDOUT_FILENO);
+	i = 0;
+	while (i++ < INNER_WIDTH)
+		ft_putchar_fd(' ', STDOUT_FILENO);
+	ft_putstr_fd(COLOR, STDOUT_FILENO);
+	ft_putstr_fd("│", STDOUT_FILENO);
+	ft_putstr_fd(RESET, STDOUT_FILENO);
+	ft_putchar_fd('\n', STDOUT_FILENO);
+}
+
+static void	print_logo_line( char *line)
+{
+	int	llen;
+	int	padding;
+	int	i;
+
+	llen = ft_strlen(line);
+	padding = (INNER_WIDTH - llen) / 2;
+	ft_putstr_fd(COLOR, STDOUT_FILENO);
+	ft_putstr_fd("│", STDOUT_FILENO);
+	ft_putstr_fd(RESET, STDOUT_FILENO);
+	i = 0;
+	while (i++ < padding)
+		ft_putchar_fd(' ', STDOUT_FILENO);
+	ft_putstr_fd(BOLD, STDOUT_FILENO);
+	ft_putstr_fd(COLOR, STDOUT_FILENO);
+	ft_putstr_fd(line, STDOUT_FILENO);
+	ft_putstr_fd(RESET, STDOUT_FILENO);
+	i = padding + llen;
+	while (i++ < INNER_WIDTH)
+		ft_putchar_fd(' ', STDOUT_FILENO);
+	ft_putstr_fd(COLOR, STDOUT_FILENO);
+	ft_putstr_fd("│", STDOUT_FILENO);
+	ft_putstr_fd(RESET, STDOUT_FILENO);
+	ft_putchar_fd('\n', STDOUT_FILENO);
+}
+
+void	print_banner(t_shell *shell)
+{
+	struct utsname	uts;
+	char			*username;
+	char			*sysname;
+	int				i;
+
+	username = get_env_value(shell->env_list, "USER");
+	if (!username)
+		username = "user";
+	if (uname(&uts) == 0)
+		sysname = uts.sysname;
+	else
+		sysname = "unknown";
+	write(STDOUT_FILENO, "\033[2J\033[H", 7);
+	print_top_border(username);
+	usleep(6000);
+	print_empty_line();
+	i = 0;
+	while (g_logo[i])
+	{
+		print_logo_line(g_logo[i++]);
+		usleep(30000);
+	}
+	print_empty_line();
+	usleep(50000);
+	print_bottom_border(sysname);
+	usleep(100000);
 }

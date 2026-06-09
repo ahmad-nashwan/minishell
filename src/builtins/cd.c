@@ -19,7 +19,7 @@ static char	*get_cd_target(t_shell *shell, t_list *args)
 	args = args->next;
 	if (args && args->next)
 	{
-		ft_putstr_fd("minishell: cd: too many arguments\n", STDERR_FILENO);
+		ft_putstr_fd("nash: cd: too many arguments\n", STDERR_FILENO);
 		shell->exit_status = 1;
 		return (NULL);
 	}
@@ -28,7 +28,7 @@ static char	*get_cd_target(t_shell *shell, t_list *args)
 	home = get_env_value(shell->env_list, "HOME");
 	if (!home)
 	{
-		ft_putstr_fd("minishell: cd: HOME not set\n", STDERR_FILENO);
+		ft_putstr_fd("nash: cd: HOME not set\n", STDERR_FILENO);
 		shell->exit_status = 1;
 		return (NULL);
 	}
@@ -69,14 +69,14 @@ static void	switch_directory(t_shell *shell, char *target)
 	old_pwd = get_env_value(shell->env_list, "PWD");
 	if (chdir(target) == -1)
 	{
-		perror("minishell: cd");
+		perror("nash: cd");
 		shell->exit_status = 1;
 		return ;
 	}
 	new_pwd = getcwd(NULL, 0);
 	if (!new_pwd)
 	{
-		perror("minishell: cd");
+		perror("nash: cd");
 		shell->exit_status = 1;
 		return ;
 	}

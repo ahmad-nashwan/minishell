@@ -154,7 +154,7 @@ Exit codes follow standard convention: `126` for permission or directory errors,
 
 ### Dependencies
 
-The following libraries are required to compile minishell:
+The following libraries are required to compile nash:
 
 - `readline` — for input and history
 - `ncurses` — required by readline on some systems

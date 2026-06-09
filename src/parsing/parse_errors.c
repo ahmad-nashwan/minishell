@@ -14,7 +14,7 @@
 
 t_code	report_syntax_error(char *bad_token)
 {
-	ft_putstr_fd("minishell: syntax error near unexpected token `", 2);
+	ft_putstr_fd("nash: syntax error near unexpected token `", 2);
 	if (bad_token)
 		ft_putstr_fd(bad_token, 2);
 	else

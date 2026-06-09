@@ -10,6 +10,9 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#ifndef MINISHELL_H
+# define MINISHELL_H
+
 # include "libft.h"
 # include <fcntl.h>
 # include <limits.h>
@@ -334,4 +337,6 @@ void							free_array(char **arr, int elements); // we may remove this
 /*                                     Theme                                  */
 /*                                                                            */
 /* ************************************************************************** */
-void    print_banner(void);
+void    print_banner(t_shell *shell);
+
+#endif

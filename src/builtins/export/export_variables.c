@@ -85,7 +85,7 @@ t_code	export_variables(t_list **env_list, t_list *args)
 	{
 		if (!is_valid_identifier((char *)args->content))
 		{
-			ft_putstr_fd("minishell: export: `", STDERR_FILENO);
+			ft_putstr_fd("nash: export: `", STDERR_FILENO);
 			ft_putstr_fd((char *)args->content, STDERR_FILENO);
 			ft_putstr_fd("': not a valid identifier\n", STDERR_FILENO);
 			final_status = ERR;

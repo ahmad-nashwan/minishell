@@ -21,7 +21,7 @@ int	main(int argc, char **argv, char **envp)
 	if (argc > 1)
 		error_exit("usage: ./minishell\n");
 	init_shell(&shell, envp);
-	print_banner();
+	print_banner(&shell);
 	exit_status = start_shell(&shell);
 	(void)argv;
 	return (exit_status);

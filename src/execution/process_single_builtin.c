@@ -42,7 +42,7 @@ void    process_single_builtin(t_shell *shell, t_cmd *cmd)
     if (dup2(saved_stdout, STDOUT_FILENO) == -1
         || dup2(saved_stdin, STDIN_FILENO) == -1)
     {
-        perror("minishell: dup2");
+        perror("nash: dup2");
         report_error(shell, INTERNAL_ERROR, NULL);
     }
     close_saved_fds(saved_stdout, saved_stdin);

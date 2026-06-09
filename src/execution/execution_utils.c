@@ -44,7 +44,7 @@ t_code	is_dir(char *path)
 	{
 		if (S_ISDIR(path_stat.st_mode))
 		{
-			ft_putstr_fd("minishell: ", STDERR_FILENO);
+			ft_putstr_fd("nash: ", STDERR_FILENO);
 			ft_putstr_fd(path, STDERR_FILENO);
 			ft_putstr_fd(": Is a directory\n", STDERR_FILENO);
 			return (OK);
