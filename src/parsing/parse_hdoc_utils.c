@@ -6,7 +6,7 @@
 /*   By: anashwan <anashwan@student.42amman.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/26 21:21:16 by anashwan          #+#    #+#             */
-/*   Updated: 2026/05/26 21:21:17 by anashwan         ###   ########.fr       */
+/*   Updated: 2026/06/10 14:31:07 by anashwan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,11 @@
 
 void	hdoc_eof_error(char *delimeter)
 {
-	ft_putstr_fd("\nminishell: warning: here-document at line 0", 2);
-	ft_putstr_fd(" delimited by end-of-file (wanted `", 2);
-	ft_putstr_fd(delimeter, 2);
-	ft_putstr_fd("')\n", 2);
+	ft_putstr_fd("\nminishell: warning: here-document at line 0",
+		STDERR_FILENO);
+	ft_putstr_fd(" delimited by end-of-file (wanted `", STDERR_FILENO);
+	ft_putstr_fd(delimeter, STDERR_FILENO);
+	ft_putstr_fd("')\n", STDERR_FILENO);
 }
 
 t_code	hdoc_append_char(t_shell *shell, t_string *line, t_string *buff,

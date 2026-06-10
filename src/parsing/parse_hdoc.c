@@ -6,7 +6,7 @@
 /*   By: anashwan <anashwan@student.42amman.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/26 21:21:19 by anashwan          #+#    #+#             */
-/*   Updated: 2026/05/26 21:21:20 by anashwan         ###   ########.fr       */
+/*   Updated: 2026/06/10 14:33:03 by anashwan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ static t_code	hdoc_reader(t_shell *shell, char *delimeter, int quoted,
 	rc = NONE;
 	while (rc == NONE)
 	{
-		write(STDOUT_FILENO, "> ", 2);
+		write(STDOUT_FILENO, "> ", STDERR_FILENO);
 		line = hdoc_read_line();
 		if (g_signal)
 			return (INTERRUPTED);
