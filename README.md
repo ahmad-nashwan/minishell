@@ -51,15 +51,6 @@ At its core, it is a multi-stage pipeline where each component has a clear respo
 
 ## Implementation
 
-### Data Structures
-
-* **`t_string`** — Dynamic string with an internal index and capacity, used as a character-by-character scanner throughout tokenization, expansion, and heredoc reading
-* **`t_token`** — Output unit of the tokenizer — carries the raw lexeme, its type, and a quoted flag
-* **`t_env_var`** — A single environment variable as a key-value pair, stored in a linked list
-* **`t_redir`** — A single redirection with its type, target, and an fd for heredocs filled at parse time
-* **`t_cmd`** — Output unit of the parser — a list of arguments and a list of redirections
-* **`t_shell`** — Top-level state container passed through every stage — environment, tokens, commands, pids, exit status, and control flags
-
 ### Overview
 
 ![overview-diagram](./assets/overview.svg)
@@ -69,6 +60,15 @@ At its core, it is a multi-stage pipeline where each component has a clear respo
 The following diagram traces a real command through every stage of the shell:
 
 ![command-trace](./assets/example.svg)
+
+### Data Structures
+
+* **`t_string`** — Dynamic string with an internal index and capacity, used as a character-by-character scanner throughout tokenization, expansion, and heredoc reading
+* **`t_token`** — Output unit of the tokenizer — carries the raw lexeme, its type, and a quoted flag
+* **`t_env_var`** — A single environment variable as a key-value pair, stored in a linked list
+* **`t_redir`** — A single redirection with its type, target, and an fd for heredocs filled at parse time
+* **`t_cmd`** — Output unit of the parser — a list of arguments and a list of redirections
+* **`t_shell`** — Top-level state container passed through every stage — environment, tokens, commands, pids, exit status, and control flags
 
 ### 1. Tokenization: Splitting the input into recognizable tokens
 
