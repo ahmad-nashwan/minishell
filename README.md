@@ -62,21 +62,13 @@ At its core, it is a multi-stage pipeline where each component has a clear respo
 
 ### Overview
 
-```text
-┌────────────┐   ┌─────────────┐   ┌────────────┐   ┌────────────┐   ┌────────────┐
-│  Readline  │──>│  Tokenizer  │──>│  Expander  │──>│   Parser   │──>│  Executor  │
-└──────▲─────┘   └─────────────┘   └────────────┘   └────────────┘   └─────┬──────┘
-       │                                                                   │
-       │                                                     ┌─────────────┴─────────────┐
-       │                                                     ▼                           ▼
-       │                                               ┌────────────┐              ┌────────────┐
-       │                                               │  Builtins  │              │  Pipeline  │
-       │                                               └──────┬─────┘              └──────┬─────┘
-       │                                                      │                           │
-       └──────────────────────────────────────────────────────┴───────────────────────────┘
-```
+![overview-diagram](./assets/overview.svg)
 
----
+### Command Trace
+
+The following diagram traces a real command through every stage of the shell:
+
+![command-trace](./assets/example.svg)
 
 ### 1. Tokenization: Splitting the input into recognizable tokens
 
