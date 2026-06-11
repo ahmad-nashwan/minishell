@@ -10,12 +10,12 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-# include "minishell.h"
+#include "minishell.h"
 
 void	exit_child(t_shell *shell, int exit_state)
 {
 	if (!shell)
-		return;
+		return ;
 	free_shell_state(shell);
 	exit(exit_state);
 }

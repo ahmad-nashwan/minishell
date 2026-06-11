@@ -6,7 +6,7 @@
 /*   By: anashwan <anashwan@student.42amman.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/26 21:40:48 by anashwan          #+#    #+#             */
-/*   Updated: 2026/05/26 21:46:47 by anashwan         ###   ########.fr       */
+/*   Updated: 2026/06/10 14:29:42 by anashwan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 
 void	error_exit(char *error)
 {
-	ft_putstr_fd("nash: ", 2);
-	ft_putstr_fd(error, 2);
+	ft_putstr_fd("nash: ", STDERR_FILENO);
+	ft_putstr_fd(error, STDERR_FILENO);
 	exit(EXIT_FAILURE);
 }
 
@@ -40,8 +40,8 @@ void	report_error(t_shell *shell, t_code e, char *msg)
 		shell->should_exit = 1;
 	if (msg)
 	{
-		ft_putstr_fd("nash: ", 2);
-		ft_putendl_fd(msg, 2);
+		ft_putstr_fd("nash: ", STDERR_FILENO);
+		ft_putendl_fd(msg, STDERR_FILENO);
 	}
 }
 

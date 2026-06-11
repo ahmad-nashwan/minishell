@@ -6,7 +6,7 @@
 /*   By: anashwan <anashwan@student.42amman.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/26 21:21:13 by anashwan          #+#    #+#             */
-/*   Updated: 2026/05/27 03:13:58 by anashwan         ###   ########.fr       */
+/*   Updated: 2026/06/10 14:31:18 by anashwan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,17 @@
 
 t_code	report_syntax_error(char *bad_token)
 {
+<<<<<<< HEAD
 	ft_putstr_fd("nash: syntax error near unexpected token `", 2);
+=======
+	ft_putstr_fd("minishell: syntax error near unexpected token `",
+		STDERR_FILENO);
+>>>>>>> main
 	if (bad_token)
-		ft_putstr_fd(bad_token, 2);
+		ft_putstr_fd(bad_token, STDERR_FILENO);
 	else
-		ft_putstr_fd("newline", 2);
-	ft_putendl_fd("'", 2);
+		ft_putstr_fd("newline", STDERR_FILENO);
+	ft_putendl_fd("'", STDERR_FILENO);
 	return (SYNTAX_ERROR);
 }
 

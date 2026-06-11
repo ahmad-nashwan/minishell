@@ -33,7 +33,7 @@ static t_code	export_without_value(t_list **env_list, char *arg)
 	t_env_var	*var;
 
 	if (find_env_var(*env_list, arg))
-		return (OK); // Do nothing
+		return (OK);
 	var = new_env_var(arg, NULL);
 	if (!var)
 		return (ERR);
@@ -52,11 +52,10 @@ static t_code	export_with_value(t_list **env_list, char *arg, char *eq)
 	if (var)
 	{
 		free(key);
-		return (update_env_value(var, eq + 1)); // eq + 1 is the value
+		return (update_env_value(var, eq + 1));
 	}
-	var = new_env_var(key, eq + 1); // Helper handles the key/value copy
+	var = new_env_var(key, eq + 1);
 	free(key);
-	// new_env_var should have strdup'd the key already
 	if (!var)
 		return (ERR);
 	return (add_env_var(env_list, var));

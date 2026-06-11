@@ -16,8 +16,9 @@ volatile sig_atomic_t	g_signal = 0;
 
 int	main(int argc, char **argv, char **envp)
 {
-	t_shell shell;
-	int exit_status;
+	int		exit_status;
+	t_shell	shell;
+
 	if (argc > 1)
 		error_exit("usage: ./minishell\n");
 	init_shell(&shell, envp);

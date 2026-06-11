@@ -10,18 +10,18 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-# include "minishell.h"
+#include "minishell.h"
 
 static int	get_fd(t_redir *redir)
 {
 	int	fd;
 
 	fd = -1;
-	if (redir->type == IN_RED) // <
+	if (redir->type == IN_RED)
 		fd = open(redir->target, O_RDONLY);
-	else if (redir->type == OUT_RED) // >
+	else if (redir->type == OUT_RED)
 		fd = open(redir->target, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-	else if (redir->type == APPEND) // >>
+	else if (redir->type == APPEND)
 		fd = open(redir->target, O_WRONLY | O_CREAT | O_APPEND, 0644);
 	if (fd == -1)
 	{

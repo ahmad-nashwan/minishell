@@ -71,35 +71,35 @@ static t_code	normal_mode(t_shell *shell, t_string *line, t_string *word,
 	return (result);
 }
 
-static t_code   add_word_token(t_shell *shell, t_string *word, int q, int moved)
+static t_code	add_word_token(t_shell *shell, t_string *word, int q, int moved)
 {
-    if (word->len == 0 && !q)
-    {
-        if (moved)
-            return (add_token(&shell->tokens, word->str, WORD, 0));
-        return (NONE);
-    }
-    return (add_token(&shell->tokens, word->str, WORD, q));
+	if (word->len == 0 && !q)
+	{
+		if (moved)
+			return (add_token(&shell->tokens, word->str, WORD, 0));
+		return (NONE);
+	}
+	return (add_token(&shell->tokens, word->str, WORD, q));
 }
 
-t_code  scan_word(t_shell *shell, t_string *line)
+t_code	scan_word(t_shell *shell, t_string *line)
 {
-    int         quoted;
-    size_t      start;
-    t_string    *word;
-    t_code      rc;
+	int			quoted;
+	size_t		start;
+	t_string	*word;
+	t_code		rc;
 
-    start = line->index;
-    quoted = 0;
-    word = create_empty_string(1024);
-    if (!word)
-        return (INTERNAL_ERROR);
-    rc = normal_mode(shell, line, word, &quoted);
-    if (rc == OK)
-        rc = add_word_token(shell, word, quoted, line->index > start);
-    if (rc != OK)
-        free_t_string(word);
-    else
-        free(word);
-    return (rc);
+	start = line->index;
+	quoted = 0;
+	word = create_empty_string(1024);
+	if (!word)
+		return (INTERNAL_ERROR);
+	rc = normal_mode(shell, line, word, &quoted);
+	if (rc == OK)
+		rc = add_word_token(shell, word, quoted, line->index > start);
+	if (rc != OK)
+		free_t_string(word);
+	else
+		free(word);
+	return (rc);
 }

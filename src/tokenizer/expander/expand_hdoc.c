@@ -26,7 +26,7 @@ static t_code	hdoc_expand_var(t_shell *shell, t_string *line, t_string *buff)
 	value = get_env_value(shell->env_list, key->str);
 	free_t_string(key);
 	if (!value)
-		return (OK); // expand nothing
+		return (OK);
 	if (append_str(buff, value) != OK)
 	{
 		report_error(shell, INTERNAL_ERROR, "Malloc failure");
@@ -54,9 +54,9 @@ static t_code	hdoc_expand_exit(t_shell *shell, t_string *line, t_string *buff)
 
 t_code	expand_hdoc(t_shell *shell, t_string *line, t_string *buff)
 {
-	char c;
+	char	c;
 
-	advance(line); // skip $
+	advance(line);
 	c = peek(line);
 	if (c == '?')
 		return (hdoc_expand_exit(shell, line, buff));

@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-# include "minishell.h"
+#include "minishell.h"
 
 char	*get_valid_path(char **paths, char *cmd)
 {
@@ -53,7 +53,8 @@ t_code	is_dir(char *path)
 	return (ERR);
 }
 
-void	free_argv_envp_exit(t_shell *shell, char **argv, char **envp, int exit_code)
+void	free_argv_envp_exit(t_shell *shell, char **argv, char **envp,
+		int exit_code)
 {
 	if (argv)
 	{

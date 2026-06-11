@@ -28,13 +28,13 @@ t_list	*node_from_env_str(char *env_str)
 		if (!key)
 			return (NULL);
 		var = new_env_var(key, eq_pos + 1);
-		free(key); // MUST FREE OR WE DIE
+		free(key);
 	}
 	if (!var)
 		return (NULL);
 	node = ft_lstnew(var);
 	if (!node)
-		free_env_var(var); // ALSO MUST FREE OR WE DIE
+		free_env_var(var);
 	return (node);
 }
 

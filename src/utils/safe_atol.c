@@ -25,7 +25,7 @@ static int	check_overflow(unsigned long result, int digit, int sign)
 	return (1);
 }
 
-static void pre_process_str(const char *str, int *i,int *sign)
+static void	pre_process_str(const char *str, int *i, int *sign)
 {
 	while ((str[*i] >= 9 && str[*i] <= 13) || str[*i] == 32)
 		(*i)++;
@@ -39,8 +39,8 @@ static void pre_process_str(const char *str, int *i,int *sign)
 
 int	safe_atol(const char *str, long *out)
 {
-	int			i;
-	int			sign;
+	int				i;
+	int				sign;
 	unsigned long	result;
 	int				digit;
 

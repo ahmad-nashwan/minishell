@@ -14,7 +14,7 @@
 
 static t_code	scan_append_redir(t_shell *shell, t_string *line)
 {
-	advance(line); // consume first '>'
+	advance(line);
 	if (peek(line) == '>')
 	{
 		advance(line);
@@ -31,7 +31,7 @@ static t_code	scan_append_redir(t_shell *shell, t_string *line)
 
 static t_code	scan_input_redir(t_shell *shell, t_string *line)
 {
-	advance(line); // consume '<'
+	advance(line);
 	if (peek(line) == '<')
 	{
 		advance(line);

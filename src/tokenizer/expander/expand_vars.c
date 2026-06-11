@@ -23,9 +23,9 @@ t_code	expand_var(t_shell *shell, t_string *word, char *value, int quoted)
 t_code	find_var_expand(t_shell *shell, t_string *line, t_string *word,
 		int quoted)
 {
-	t_string *name;
-	char *value;
-	t_code rc;
+	char		*value;
+	t_code		rc;
+	t_string	*name;
 
 	name = get_var_name(line);
 	if (!name)
