@@ -3,22 +3,6 @@
 #include <unistd.h>
 #include <stdio.h>
 
-/*
-** TOTAL_WIDTH is the only value you need to change to resize the banner.
-** Everything else adapts automatically.
-**
-** INNER_WIDTH = TOTAL_WIDTH - 2  (the two border chars ┌ and ┐)
-**
-** Top border:    ┌ ─── [ username ] ─── ... ─── ┐
-** Bottom border: └ ─── ... ─── [ distro ] ─── ┘
-** Fixed parts in both = 7 visual chars (corners + brackets + 3 dashes)
-** Fill dashes = TOTAL_WIDTH - 7 - visual_len(label)
-**
-** visual_len counts Unicode codepoints not bytes, so multibyte chars
-** like · (U+00B7, 2 bytes) and box-drawing chars (3 bytes) are counted
-** as 1 visual column each.
-*/
-
 #define TOTAL_WIDTH		60
 #define INNER_WIDTH		(TOTAL_WIDTH - 2)
 #define COLOR			"\033[38;5;111m"
