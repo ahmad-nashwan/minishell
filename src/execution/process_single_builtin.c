@@ -34,30 +34,6 @@ static void	restore_fds(int saved_stdout, int saved_stdin, t_shell *shell)
 	}
 }
 
-<<<<<<< HEAD
-    saved_stdout = dup(STDOUT_FILENO);
-    saved_stdin = dup(STDIN_FILENO);
-    if (saved_stdout == -1 || saved_stdin == -1)
-    {
-        report_error(shell, INTERNAL_ERROR, "dup failed");
-        close_saved_fds(saved_stdout, saved_stdin);
-        return ;
-    }
-    if (handle_redirections(cmd) == ERR)
-    {
-        close_saved_fds(saved_stdout, saved_stdin);
-        return ;
-    }
-    run_builtin(shell, cmd);
-    if (dup2(saved_stdout, STDOUT_FILENO) == -1
-        || dup2(saved_stdin, STDIN_FILENO) == -1)
-    {
-        perror("nash: dup2");
-        report_error(shell, INTERNAL_ERROR, NULL);
-    }
-    close_saved_fds(saved_stdout, saved_stdin);
-}
-=======
 void	process_single_builtin(t_shell *shell, t_cmd *cmd)
 {
 	int	saved_stdout;
@@ -82,4 +58,3 @@ void	process_single_builtin(t_shell *shell, t_cmd *cmd)
 	restore_fds(saved_stdout, saved_stdin, shell);
 	close_saved_fds(saved_stdout, saved_stdin);
 }
->>>>>>> main
