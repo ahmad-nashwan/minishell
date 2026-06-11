@@ -1,5 +1,11 @@
 *This project has been created as part of the 42 curriculum by anashwan, masad*
 # minishell
+<div align="center">
+
+![demo](./assets/demo.gif)
+
+</div>
+
 ## Description
 
 minishell is a re-implementation of the fundamental functionality of `bash`. It's our deep dive into understanding the complete lifecycle of command-line interpretation — from reading user input and tokenizing it, through expansion and parsing, to executing different external and built-in processes, while managing file descriptors, signals, and the various edge cases a shell encounters in the wild.
