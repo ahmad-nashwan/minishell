@@ -11,7 +11,7 @@
 /* ************************************************************************** */
 
 #include "minishell.h"
-#define THIN_SP "\xE2\x80\x89"
+
 void	init_shell(t_shell *shell, char **envp)
 {
 	shell->env_list = NULL;
