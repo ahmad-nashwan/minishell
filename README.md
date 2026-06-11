@@ -1,9 +1,7 @@
 *This project has been created as part of the 42 curriculum by anashwan, masad*
 # minishell
 <div align="center">
-
-![demo](./assets/demo.gif)
-
+  <img src="./assets/demo.gif" width="600">
 </div>
 
 ## Description
