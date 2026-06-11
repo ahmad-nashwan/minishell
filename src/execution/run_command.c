@@ -18,18 +18,18 @@ static void	exec_absolute_path(t_shell *shell, char **argv, char **envp)
 		free_argv_envp_exit(shell, argv, envp, 126);
 	if (access(argv[0], F_OK) == -1)
 	{
-		ft_putstr_fd("minishell: ", STDERR_FILENO);
+		ft_putstr_fd("nash: ", STDERR_FILENO);
 		perror(argv[0]);
 		free_argv_envp_exit(shell, argv, envp, 127);
 	}
 	if (access(argv[0], X_OK) == -1)
 	{
-		ft_putstr_fd("minishell: ", STDERR_FILENO);
+		ft_putstr_fd("nash: ", STDERR_FILENO);
 		perror(argv[0]);
 		free_argv_envp_exit(shell, argv, envp, 126);
 	}
 	execve(argv[0], argv, envp);
-	ft_putstr_fd("minishell: ", STDERR_FILENO);
+	ft_putstr_fd("nash: ", STDERR_FILENO);
 	perror(argv[0]);
 	free_argv_envp_exit(shell, argv, envp, 126);
 }

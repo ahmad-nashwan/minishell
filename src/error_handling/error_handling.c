@@ -14,7 +14,7 @@
 
 void	error_exit(char *error)
 {
-	ft_putstr_fd("minishell: ", STDERR_FILENO);
+	ft_putstr_fd("nash: ", STDERR_FILENO);
 	ft_putstr_fd(error, STDERR_FILENO);
 	exit(EXIT_FAILURE);
 }
@@ -40,14 +40,14 @@ void	report_error(t_shell *shell, t_code e, char *msg)
 		shell->should_exit = 1;
 	if (msg)
 	{
-		ft_putstr_fd("minishell: ", STDERR_FILENO);
+		ft_putstr_fd("nash: ", STDERR_FILENO);
 		ft_putendl_fd(msg, STDERR_FILENO);
 	}
 }
 
 void	print_cmd_error(char *cmd, char *msg)
 {
-	ft_putstr_fd("minishell: ", STDERR_FILENO);
+	ft_putstr_fd("nash: ", STDERR_FILENO);
 	ft_putstr_fd(cmd, STDERR_FILENO);
 	ft_putstr_fd(msg, STDERR_FILENO);
 }

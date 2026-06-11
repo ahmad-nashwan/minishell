@@ -32,6 +32,6 @@ void	pwd(t_shell *shell)
 		shell->exit_status = 0;
 		return ;
 	}
-	perror("minishell: pwd");
+	perror("nash: pwd");
 	shell->exit_status = 1;
 }

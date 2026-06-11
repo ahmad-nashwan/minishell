@@ -14,7 +14,7 @@
 
 static void	exit_non_numerial(t_shell *shell, char *arg)
 {
-	ft_putstr_fd("minishell: exit: ", STDERR_FILENO);
+	ft_putstr_fd("nash: exit: ", STDERR_FILENO);
 	ft_putstr_fd(arg, STDERR_FILENO);
 	ft_putstr_fd(": numeric argument required\n", STDERR_FILENO);
 	report_error(shell, ERR, NULL);
