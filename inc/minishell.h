@@ -319,6 +319,7 @@ int								ft_strcmp(const char *s1, const char *s2);
 char							**list_to_string_array(t_list *list);
 void							free_strings_array(char **arr);
 void							free_array(char **arr, int elements);
+<<<<<<< HEAD
 
 /* ************************************************************************** */
 /*                                                                            */
@@ -327,5 +328,9 @@ void							free_array(char **arr, int elements);
 /* ************************************************************************** */
 void    print_banner(t_shell *shell);
 void	print_prompt_line(t_shell *shell);
+=======
+void 							check_shell_level(t_list *env_list);
+// we may remove this
+>>>>>>> ef418e3 (fix : readded the check_shlvl function and fixed the SHLVL env)
 
 #endif
