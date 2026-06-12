@@ -10,6 +10,14 @@ minishell is a re-implementation of the fundamental functionality of `bash`. It'
 
 At its core, it is a multi-stage pipeline where each component has a clear responsibility and a well-defined interface, yet all share the same state and cooperate to produce a single, cohesive program.
 
+## Overview
+
+<div align="center">
+
+  ![overview-diagram](./assets/overview.svg)
+
+</div>
+
 ## Features
 
 ### Builtins
@@ -55,14 +63,6 @@ At its core, it is a multi-stage pipeline where each component has a clear respo
 
 ## Implementation
 
-### Overview
-
-<div align="center">
-
-  ![overview-diagram](./assets/overview.svg)
-
-</div>
-
 ### Command Trace
 
 The following diagram traces a real command through every stage of the shell:
@@ -70,7 +70,7 @@ The following diagram traces a real command through every stage of the shell:
 <div align="center">
 
   ![command-trace](./assets/example.svg)
-  
+
 </div>
 
 ### Data Structures
@@ -124,7 +124,7 @@ Two important rules govern expansion behavior:
 
 ---
 
-### 3. Parser: Giving the input it's context
+### 3. Parser: Giving the input its context
 
 The parser walks the token list produced by the tokenizer and has two responsibilities: validating syntax and constructing the command list.
 
