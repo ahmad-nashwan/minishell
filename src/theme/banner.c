@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   env_list_utils.c                                   :+:      :+:    :+:   */
+/*   banner.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: anashwan <anashwan@student.42amman.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/26 21:40:54 by anashwan          #+#    #+#             */
-/*   Updated: 2026/05/26 21:40:55 by anashwan         ###   ########.fr       */
+/*   Updated: 2026/06/12 23:54:11 by anashwan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,14 +73,15 @@ void	print_banner(t_shell *shell)
 	print_top_border(username);
 	usleep(30000);
 	print_empty_line();
-	print_centered_line("nash", BOLD VIOLET);
+	print_centered_line("                     __  ", BOLD VIOLET);
+	print_centered_line("   ____  ____ ______/ /_ ", BOLD VIOLET);
+	print_centered_line("  / __ \\/ __ `/ ___/ __ \\", BOLD VIOLET);
+	print_centered_line(" / / / / /_/ (__  ) / / /", BOLD VIOLET);
+	print_centered_line("/_/ /_/\\__,_/____/_/ /_/ ", BOLD VIOLET);
+	print_centered_line("", STEEL_BLUE);
 	usleep(40000);
-	print_centered_line("42 amman", STEEL_BLUE);
-	usleep(40000);
-	print_centered_line("· 2026 ·", STEEL_BLUE);
-	usleep(40000);
+	print_centered_line("NotAnotherSHELL", STEEL_BLUE);
 	print_empty_line();
-	usleep(40000);
 	print_bottom_border(distro);
 	usleep(90000);
 	ft_putstr_fd("\n", STDOUT_FILENO);
