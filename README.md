@@ -57,13 +57,21 @@ At its core, it is a multi-stage pipeline where each component has a clear respo
 
 ### Overview
 
-![overview-diagram](./assets/overview.svg)
+<div align="center">
+
+  ![overview-diagram](./assets/overview.svg)
+
+</div>
 
 ### Command Trace
 
 The following diagram traces a real command through every stage of the shell:
 
-![command-trace](./assets/example.svg)
+<div align="center">
+
+  ![command-trace](./assets/example.svg)
+  
+</div>
 
 ### Data Structures
 
@@ -188,15 +196,17 @@ make fclean
 
 | Type | Resource |
 |------|----------|
-| Article | [Minishell: Building a mini-bash — MannBell](https://m4nnb3ll.medium.com/minishell-building-a-mini-bash-a-42-project-b55a10598218) |
+| Reference | Bash itself & [Bash Manual](https://www.gnu.org/software/bash/manual/bash.html) |
 | Book | [Crafting Interpreters — Scanning](https://craftinginterpreters.com/scanning.html) |
+| Article | [Minishell: Building a mini-bash — MannBell](https://m4nnb3ll.medium.com/minishell-building-a-mini-bash-a-42-project-b55a10598218) |
 | Article | [Bash Heredoc — Linuxize](https://linuxize.com/post/bash-heredoc/) |
+| Article | [dup, dup2 — GeeksforGeeks](https://www.geeksforgeeks.org/c/dup-dup2-linux-system-call/) |
+| Man page | [fork(2)](https://man7.org/linux/man-pages/man2/fork.2.html) |
+| Man page | [readline(3)](https://man7.org/linux/man-pages/man3/readline.3.html) |
+| Man page | [sigaction(2)](https://www.ibm.com/docs/en/zos/2.5.0?topic=functions-sigaction-examine-change-signal-action) |
+| Man page | [waitpid(2)](https://www.ibm.com/docs/en/zvm/7.4.0?topic=descriptions-waitpid-wait-specific-child-process-end) |
 | Man page | `man 2 pipe` |
-| Video | [dup2 in C](https://www.youtube.com/watch?v=5fnVr-zH-SE) |
-| Video | [fork in C](https://www.youtube.com/watch?v=cex9XrZCU14) |
-| Video | [waitpid](https://www.youtube.com/watch?v=tcYo6hipaSA) |
-| Video | [wait and waitpid](https://www.youtube.com/watch?v=kCGaRdArSnA) |
-| Reference | [Bash manual](https://www.gnu.org/software/bash/manual/bash.html) — the ultimate reference |
+| Playlist | [Unix System Calls](https://www.youtube.com/watch?v=cex9XrZCU14&list=PLfqABt5AS4FkW5mOn2Tn9ZZLLDwA3kZUY) |
 
 ### AI Usage
 
