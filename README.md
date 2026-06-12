@@ -50,7 +50,8 @@ At its core, it is a multi-stage pipeline where each component has a clear respo
 | ------- | --------------------------------------- |
 | `$VAR`  | Expand environment variable             |
 | `$?`    | Expand last command's exit status       |
-| `$0`    | Expands to `minishell`                  |
+| `$0`    | Expands to `nash`                       |
+| `$$`    | Expands to the shell's PID              |
 | `~`     | Expands to `$HOME`                      |
 | `'...'` | Single quotes — no expansion            |
 | `"..."` | Double quotes — variable expansion only |
