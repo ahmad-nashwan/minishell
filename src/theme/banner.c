@@ -6,7 +6,7 @@
 /*   By: anashwan <anashwan@student.42amman.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/26 21:40:54 by anashwan          #+#    #+#             */
-/*   Updated: 2026/06/12 23:54:11 by anashwan         ###   ########.fr       */
+/*   Updated: 2026/06/13 00:06:58 by anashwan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,18 +71,18 @@ void	print_banner(t_shell *shell)
 	get_distro(distro, sizeof(distro));
 	write(STDOUT_FILENO, "\033[2J\033[H", 7);
 	print_top_border(username);
-	usleep(30000);
+	usleep(15000);
 	print_empty_line();
 	print_centered_line("                     __  ", BOLD VIOLET);
 	print_centered_line("   ____  ____ ______/ /_ ", BOLD VIOLET);
 	print_centered_line("  / __ \\/ __ `/ ___/ __ \\", BOLD VIOLET);
 	print_centered_line(" / / / / /_/ (__  ) / / /", BOLD VIOLET);
 	print_centered_line("/_/ /_/\\__,_/____/_/ /_/ ", BOLD VIOLET);
-	print_centered_line("", STEEL_BLUE);
-	usleep(40000);
+	usleep(25000);
+	print_empty_line();
 	print_centered_line("NotAnotherSHELL", STEEL_BLUE);
 	print_empty_line();
 	print_bottom_border(distro);
-	usleep(90000);
+	usleep(40000);
 	ft_putstr_fd("\n", STDOUT_FILENO);
 }
