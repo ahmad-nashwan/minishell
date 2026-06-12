@@ -6,7 +6,7 @@
 /*   By: anashwan <anashwan@student.42amman.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/26 21:19:47 by anashwan          #+#    #+#             */
-/*   Updated: 2026/05/26 21:19:48 by anashwan         ###   ########.fr       */
+/*   Updated: 2026/06/13 00:10:41 by anashwan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ t_code	expand_hdoc(t_shell *shell, t_string *line, t_string *buff)
 	if (c == '0')
 	{
 		advance(line);
-		return (append_str(buff, "minishell"));
+		return (append_str(buff, "nash"));
 	}
 	if (ft_isdigit(c))
 	{

@@ -6,7 +6,7 @@
 /*   By: anashwan <anashwan@student.42amman.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/26 21:40:41 by anashwan          #+#    #+#             */
-/*   Updated: 2026/05/27 02:29:15 by anashwan         ###   ########.fr       */
+/*   Updated: 2026/06/13 00:11:51 by anashwan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ static void	execute_valid_path(t_shell *shell, char *path, char **argv,
 		free_argv_envp_exit(shell, argv, envp, 126);
 	}
 	execve(path, argv, envp);
-	perror("minishell");
+	perror("nash");
 	free(path);
 	free_argv_envp_exit(shell, argv, envp, 126);
 }

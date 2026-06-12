@@ -6,7 +6,7 @@
 /*   By: anashwan <anashwan@student.42amman.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/26 21:40:54 by anashwan          #+#    #+#             */
-/*   Updated: 2026/05/26 21:40:55 by anashwan         ###   ########.fr       */
+/*   Updated: 2026/06/13 00:10:09 by anashwan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ void	check_shell_level(t_list *env_list)
 		shlvl = 0;
 	else if (shlvl >= 999)
 	{
-		fprintf(stderr, "minishell: warning: shell level (%d)", shlvl + 1);
+		fprintf(stderr, "nash: warning: shell level (%d)", shlvl + 1);
 		fprintf(stderr, "too high,resetting to 1\n");
 		shlvl = 1;
 	}

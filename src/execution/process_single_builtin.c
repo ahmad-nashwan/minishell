@@ -6,7 +6,7 @@
 /*   By: anashwan <anashwan@student.42amman.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/26 21:40:35 by anashwan          #+#    #+#             */
-/*   Updated: 2026/06/10 13:38:00 by anashwan         ###   ########.fr       */
+/*   Updated: 2026/06/13 00:10:20 by anashwan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,12 +24,12 @@ static void	restore_fds(int saved_stdout, int saved_stdin, t_shell *shell)
 {
 	if (dup2(saved_stdout, STDOUT_FILENO) == -1)
 	{
-		perror("minishell: dup2");
+		perror("nash: dup2");
 		report_error(shell, INTERNAL_ERROR, NULL);
 	}
 	if (dup2(saved_stdin, STDIN_FILENO) == -1)
 	{
-		perror("minishell: dup2");
+		perror("nash: dup2");
 		report_error(shell, INTERNAL_ERROR, NULL);
 	}
 }
