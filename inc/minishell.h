@@ -14,15 +14,16 @@
 # define MINISHELL_H
 
 # include "libft.h"
-# include <stdio.h>
 # include <fcntl.h>
 # include <limits.h>
 # include <readline/history.h>
 # include <readline/readline.h>
 # include <signal.h>
+# include <stdio.h>
 # include <stdlib.h>
 # include <sys/stat.h>
 # include <sys/types.h>
+# include <sys/utsname.h>
 # include <sys/wait.h>
 # include <unistd.h>
 
@@ -32,16 +33,19 @@
 /*                                                                            */
 /* ************************************************************************** */
 /* Basic */
-#define CLEAR       	"\033[2J\033[H"
-#define RESET       	"\033[0m"
-#define BOLD        	"\033[1m"
-#define DIM         	"\033[2m"
+# define CLEAR "\033[2J\033[H"
+# define RESET "\033[0m"
+# define BOLD "\033[1m"
+# define DIM "\033[2m"
 
+# define CYAN "\033[38;5;87m"
+# define STEEL_BLUE "\033[38;5;111m"
+# define VIOLET "\033[38;5;141m"
 
-#define CYAN        "\033[38;5;87m"
-#define STEEL_BLUE      	"\033[38;5;111m"
-#define VIOLET         	"\033[38;5;141m"
-
+/* Banner */
+# define TOTAL_WIDTH 60
+# define INNER_WIDTH (TOTAL_WIDTH - 2)
+# define COLOR "\033[38;5;111m"
 
 /* ************************************************************************** */
 /*                                                                            */
@@ -319,18 +323,22 @@ int								ft_strcmp(const char *s1, const char *s2);
 char							**list_to_string_array(t_list *list);
 void							free_strings_array(char **arr);
 void							free_array(char **arr, int elements);
-<<<<<<< HEAD
+void							check_shell_level(t_list *env_list);
 
 /* ************************************************************************** */
 /*                                                                            */
 /*                                     Theme                                  */
 /*                                                                            */
 /* ************************************************************************** */
-void    print_banner(t_shell *shell);
-void	print_prompt_line(t_shell *shell);
-=======
-void 							check_shell_level(t_list *env_list);
-// we may remove this
->>>>>>> ef418e3 (fix : readded the check_shlvl function and fixed the SHLVL env)
+int								visual_len(char *s);
+void							get_distro(char *out, size_t size);
+void							print_banner(t_shell *shell);
+void							print_prompt_line(t_shell *shell);
+void							print_dashes(int n);
+void							print_top_border(char *username);
+void							print_bottom_border(char *distro);
+void							print_empty_line(void);
+void							print_centered_line(char *text,
+									char *text_color);
 
 #endif

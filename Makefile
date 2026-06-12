@@ -98,7 +98,8 @@ SRC = \
 	src/utils/t_string_methods.c \
 	\
 	src/theme/banner.c \
-	src/theme/prompt_line_theme.c
+	src/theme/prompt_line_theme.c \
+	src/theme/printers.c 
 
 
 # ============================================================

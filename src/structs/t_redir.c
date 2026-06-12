@@ -46,8 +46,8 @@ void	redir_free(void *p)
 
 int	is_hdoc_target(t_list *tokens)
 {
-	t_list		*last;
-	t_token		*t;
+	t_list	*last;
+	t_token	*t;
 
 	if (!tokens)
 		return (0);

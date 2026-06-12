@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   env_list_utils.c                                   :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: anashwan <anashwan@student.42amman.com>    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/05/26 21:40:54 by anashwan          #+#    #+#             */
+/*   Updated: 2026/05/26 21:40:55 by anashwan         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 #define PATH_MAX 4096
@@ -8,8 +20,8 @@ static void	shorten_path(char *cwd, char *out)
 	int		i;
 
 	home = getenv("HOME");
-    i = 0;
-    (void)i;
+	i = 0;
+	(void)i;
 	if (home && ft_strncmp(cwd, home, ft_strlen(home)) == 0)
 	{
 		out[0] = '~';

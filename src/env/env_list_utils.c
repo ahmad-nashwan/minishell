@@ -12,27 +12,28 @@
 
 #include "minishell.h"
 
-void check_shell_level(t_list *env_list)
+void	check_shell_level(t_list *env_list)
 {
-    t_env_var   *shlvl_var;
-    int         shlvl;
-    char        *shlvl_str;
+	t_env_var	*shlvl_var;
+	int			shlvl;
+	char		*shlvl_str;
 
-    shlvl_var = find_env_var(env_list, "SHLVL");
-    shlvl = ft_atoi(shlvl_var->value);
-    if (shlvl < 0)
-        shlvl = 0;
-    else if (shlvl >= 999)
-    {
-        fprintf(stderr, "minishell: warning: shell level (%d) too high, resetting to 1\n", shlvl + 1);
-        shlvl = 1;
-    }
-    else
-        shlvl++;
-    shlvl_str = ft_itoa(shlvl);
-    if (update_env_value(shlvl_var, shlvl_str) != OK)
-        error_exit("Malloc failure.");
-    free(shlvl_str);
+	shlvl_var = find_env_var(env_list, "SHLVL");
+	shlvl = ft_atoi(shlvl_var->value);
+	if (shlvl < 0)
+		shlvl = 0;
+	else if (shlvl >= 999)
+	{
+		fprintf(stderr, "minishell: warning: shell level (%d)", shlvl + 1);
+		fprintf(stderr, "too high,resetting to 1\n");
+		shlvl = 1;
+	}
+	else
+		shlvl++;
+	shlvl_str = ft_itoa(shlvl);
+	if (update_env_value(shlvl_var, shlvl_str) != OK)
+		error_exit("Malloc failure.");
+	free(shlvl_str);
 }
 
 t_list	*node_from_env_str(char *env_str)

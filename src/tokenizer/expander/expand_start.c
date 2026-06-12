@@ -30,6 +30,20 @@ t_string	*get_var_name(t_string *line)
 	return (name);
 }
 
+t_code	expand_pid(t_string *line, t_string *word)
+{
+	char	*pid_str;
+	t_code	rc;
+
+	advance(line);
+	pid_str = ft_itoa(getpid());
+	if (!pid_str)
+		return (INTERNAL_ERROR);
+	rc = append_str(word, pid_str);
+	free(pid_str);
+	return (rc);
+}
+
 t_code	expand_tilde(t_shell *shell, t_string *line, t_string *word)
 {
 	char	*home;
@@ -53,6 +67,8 @@ t_code	expand_start(t_shell *shell, t_string *line, t_string *word, int quoted)
 	c = peek(line);
 	if (c == '?')
 		return (expand_exit_status(shell, line, word, quoted));
+	if (c == '$')
+		return (expand_pid(line, word));
 	if (!quoted && (c == '"' || c == '\''))
 		return (OK);
 	if (c == '0')
