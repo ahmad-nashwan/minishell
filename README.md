@@ -3,7 +3,7 @@ _This project has been created as part of the 42 curriculum by anashwan, masad_
 # minishell
 
 <div align="center">
-  <img src="./assets/demo.gif" width="600">
+  <img src="./assets/demo.gif" width="1000">
 </div>
 
 ## Description
