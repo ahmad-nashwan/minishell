@@ -113,7 +113,7 @@ The `t_string` struct is the shared interface across all scanners, wrapping a ra
 
 ---
 
-### 2. Expansion: Bridging static input with the dynamic state of the shell
+### 2. Expansion: Adding support for environment variables
 
 The expander is triggered during tokenization whenever a `$` or `~` is encountered in a valid position. It looks up the variable name in the shell's environment list and appends its value to the current word being built. If the variable is not found, nothing is appended — consistent with standard shell behavior.
 
@@ -121,7 +121,8 @@ The expander is triggered during tokenization whenever a `$` or `~` is encounter
 
 - **`$VARIABLE`** — Expands to the variable's value from the environment
 - **`$?`** — Expands to the last command's exit status
-- **`$0`** — Expands to `minishell`
+- **`$0`** — Expands to `nash`
+- **`$$`** — Expands to the shell's PID
 - **`~`** — Expands to `$HOME`
 
 Two important rules govern expansion behavior:
@@ -131,7 +132,7 @@ Two important rules govern expansion behavior:
 
 ---
 
-### 3. Parser: Giving the input its context
+### 3. Parser: Constructing the command list
 
 The parser walks the token list produced by the tokenizer and has two responsibilities: validating syntax and constructing the command list.
 
